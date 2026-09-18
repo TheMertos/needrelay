@@ -1,0 +1,9 @@
+---
+description: OpenAPI as single source of truth
+globs: **/*.controller.ts,**/dto/**
+alwaysApply: false
+---
+
+- Every endpoint documented; OpenAPI is the single source of truth.
+- Each endpoint: request DTO, response DTO, errors 400/401/403/404/409/429/500, ApiOkResponse/ApiCreatedResponse, ApiBearerAuth on protected routes.
+- Whenever a controller or DTO changes, regenerate the OpenAPI spec and the frontend client(s) before considering the backend task done — don't leave a consuming frontend (04/05) on a stale contract. If the project doesn't yet have a `generate:openapi` / `generate:client` script, set one up once and document the exact command here rather than running ad-hoc codegen each time.

@@ -1,0 +1,23 @@
+# Start: docker compose up -d
+# Postgres is reachable on localhost:5432 (host ports).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: needrelay-postgres
+    environment:
+      POSTGRES_DB: needrelay
+      POSTGRES_USER: needrelay
+      POSTGRES_PASSWORD: needrelay
+    ports:
+      - "5432:5432"
+    volumes:
+      - needrelay_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U needrelay -d needrelay"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  needrelay_pg_data:

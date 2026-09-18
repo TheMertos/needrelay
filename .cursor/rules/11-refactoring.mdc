@@ -1,0 +1,14 @@
+---
+description: Code quality & refactoring discipline
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
+---
+
+- Before adding code to an existing file, read it first (or use Graphify, per 07-graphify) — match its existing patterns instead of introducing a new style next to the old one.
+- Duplicated logic in 2+ places → extract immediately (ties to 00-core); don't wait for a 3rd occurrence to justify it.
+- If a function exceeds ~40-50 lines, or a component file exceeds ~200-250 lines and is doing more than one job, split it before moving on — don't let it grow silently across tasks.
+- When a task requires touching a messy/legacy area to add a feature, do the minimal refactor needed to add the feature cleanly (rename, extract, type it properly). Don't expand into an unrelated full-file rewrite without flagging it first.
+- If a larger refactor is genuinely needed (a module mixing unrelated concerns, duplicated business logic across services), stop and propose it as a separate task before doing it — don't bundle a silent rewrite into an unrelated feature change.
+- No commented-out dead code, no bare TODOs without context, no leftover `console.log`/`debugger` in code reported as done.
+- Naming: descriptive, no cryptic abbreviations (exceptions: id, url, dto); casing follows the existing project convention — check it, don't assume.
+- After any non-trivial refactor, re-run build/lint/tests (see 08-verification) before reporting it done — refactors are exactly where silent regressions hide.

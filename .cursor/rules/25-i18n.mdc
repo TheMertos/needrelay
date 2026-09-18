@@ -1,0 +1,11 @@
+---
+description: Internationalization (next-intl / i18n) conventions
+globs: **/*.json,**/locales/**,**/messages/**
+alwaysApply: false
+---
+
+- All user-facing strings go through the i18n layer (`next-intl` or equivalent) from the start of a feature — no hardcoded strings added "temporarily" that need a later sweep.
+- One source language file is the reference (whichever the project's primary market is); other locales are derived from it. Don't let locale files drift out of sync silently — a missing key falling back to the source language is acceptable, but should be flagged, not assumed fine.
+- Dynamic/user-generated content translation (e.g. DeepL auto-translation) is kept clearly separate from static UI string translation — different update cadence, different review needs.
+- Dates, numbers, and currency are formatted via the i18n library's locale-aware formatters, never manually concatenated strings.
+- Pluralization and gendered strings use the i18n library's plural/select syntax, not manual string concatenation with count checks.

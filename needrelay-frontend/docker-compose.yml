@@ -1,0 +1,12 @@
+# Start: docker compose up -d --build
+# Frontend talks to the API via the host-published port (localhost:8080).
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8080}
+    container_name: needrelay-frontend
+    ports:
+      - "3000:80"

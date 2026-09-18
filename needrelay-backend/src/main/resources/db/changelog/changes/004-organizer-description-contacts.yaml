@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-organizer-description-contacts
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: organizers
+            columns:
+              - column:
+                  name: description
+                  type: text
+        - createTable:
+            tableName: organizer_contacts
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: organizer_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(320)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: text
+              - column:
+                  name: sort_order
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: organizer_contacts
+            baseColumnNames: organizer_id
+            referencedTableName: organizers
+            referencedColumnNames: id
+            constraintName: fk_organizer_contacts_organizer
+            onDelete: CASCADE
+        - createIndex:
+            tableName: organizer_contacts
+            indexName: idx_organizer_contacts_organizer_id
+            columns:
+              - column:
+                  name: organizer_id

@@ -1,0 +1,12 @@
+---
+description: Test/seed data — give the system real data to verify against, not an empty DB
+globs: **/seed*.ts,**/fixtures/**,prisma/seed.ts,e2e/**
+alwaysApply: false
+---
+
+- Every project keeps a seed script (Prisma: `prisma/seed.ts` wired to `prisma db seed`; TypeORM: a dedicated seed command/CLI script) that populates a dev/test database with realistic sample data — enough rows per entity to exercise pagination, empty states, and relations, not just one token record.
+- Before writing a Playwright test (09-playwright-e2e) for a flow that needs existing data (login, listing, detail page, search/filter), check the seed data already covers it; if not, extend the seed script rather than hardcoding ad-hoc data inside the test itself.
+- Seed data must be clearly fake/synthetic — no real user data, no scraped real content, no real secrets (ties to 14-env-secrets) — and deterministic: the same seed run produces the same dataset, so tests stay reproducible.
+- Destructive E2E tests (create/update/delete flows) run against a disposable test database, separate from the dev DB used for manual browsing, reset and reseeded before each run — never run destructive tests against shared dev data.
+- When verifying a feature manually or via the `verifier` subagent, prefer using/extending seed data over manually clicking through the UI to recreate state each time.
+- The seed script itself falls under 08-verification: if seeding fails or leaves inconsistent state, that blocks marking the task `DONE` the same as a failing test would.

@@ -1,0 +1,17 @@
+---
+description: Playwright E2E — write and actually run tests against the running app
+globs: **/*.e2e.ts,**/*.e2e.spec.ts,e2e/**,playwright.config.*
+alwaysApply: false
+---
+
+- Playwright is the E2E tool for this project. Tests live in `e2e/`, one file per user flow (not per component).
+- After implementing a page or flow, write its Playwright test in the same task — never defer to a later prompt.
+- Test real user flows end-to-end: navigate, fill forms, click, assert resulting UI state and/or network response. Don't test implementation details (internal state, class names).
+- Use `data-testid` for selectors when text/role isn't unique enough; never select on CSS classes alone.
+- Tests rely on seed data (see 19-test-data-seeding) for realistic state — don't write a test that only works against whatever happens to currently be in the dev DB.
+- Before adding a new test, check whether an existing one already covers the flow — extend it instead of duplicating.
+- After writing/changing a test, run it: `npx playwright test <file>` (or the project's configured script). Report the real pass/fail output — never assume green.
+- On failure: open the trace/error output, fix the actual cause (app bug or wrong test), re-run until green. A task is not done with a red or skipped test — see 08-verification.
+- Auth flows, checkout/payment-like flows, and any multi-step form get a Playwright test, not just a one-off manual check.
+- Headless by default. Use `--headed` / `--debug` only when actively investigating a failure, not for routine runs.
+- Don't soft-skip a flaky test with `.skip()` or arbitrary retries to mask a real bug — fix the race condition or report it explicitly.

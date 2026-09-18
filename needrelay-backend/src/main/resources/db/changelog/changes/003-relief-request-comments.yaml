@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-relief-request-comments
+      author: needrelay
+      changes:
+        - createTable:
+            tableName: relief_request_comments
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: relief_request_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: body
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: relief_request_comments
+            baseColumnNames: relief_request_id
+            referencedTableName: relief_requests
+            referencedColumnNames: id
+            constraintName: fk_comments_relief_request
+        - addForeignKeyConstraint:
+            baseTableName: relief_request_comments
+            baseColumnNames: author_id
+            referencedTableName: organizers
+            referencedColumnNames: id
+            constraintName: fk_comments_author
+        - createIndex:
+            tableName: relief_request_comments
+            indexName: idx_comments_relief_request_id
+            columns:
+              - column:
+                  name: relief_request_id

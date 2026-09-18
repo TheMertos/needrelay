@@ -1,0 +1,12 @@
+# NeedRelay root ignores
+
+.superpowers/
+.cursor/active-task.md
+.idea/
+*.log
+.env
+**/.env
+!**/.env.example
+graphify-out/
+*.iml
+.DS_Store

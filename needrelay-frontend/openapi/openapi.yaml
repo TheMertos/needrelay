@@ -1,0 +1,1071 @@
+openapi: 3.0.3
+info:
+  title: NeedRelay API
+  version: 0.1.0
+  description: Crisis and emergency resource coordination API
+servers:
+  - url: /
+tags:
+  - name: auth
+  - name: admin
+  - name: invites
+  - name: relief-requests
+  - name: needs
+  - name: comments
+  - name: public
+paths:
+  /api/auth/register:
+    post:
+      tags: [auth]
+      operationId: register
+      summary: Register with invite token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Validation error
+        '409':
+          description: Conflict
+  /api/auth/login:
+    post:
+      tags: [auth]
+      operationId: login
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+        '429':
+          description: Too many login attempts
+  /api/auth/refresh:
+    post:
+      tags: [auth]
+      operationId: refresh
+      summary: Refresh tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/auth/logout:
+    post:
+      tags: [auth]
+      operationId: logout
+      summary: Logout
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '204':
+          description: Logged out
+  /api/auth/forgot-password:
+    post:
+      tags: [auth]
+      operationId: forgotPassword
+      summary: Request password reset email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+      responses:
+        '204':
+          description: Accepted
+  /api/auth/reset-password:
+    post:
+      tags: [auth]
+      operationId: resetPassword
+      summary: Reset password with token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        '204':
+          description: Password updated
+  /api/auth/me:
+    get:
+      tags: [auth]
+      operationId: me
+      summary: Current organizer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerResponse'
+    put:
+      tags: [auth]
+      operationId: updateProfile
+      summary: Update profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerResponse'
+  /api/auth/change-password:
+    post:
+      tags: [auth]
+      operationId: changePassword
+      summary: Change password
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '204':
+          description: Password changed
+  /api/admin/organizers:
+    get:
+      tags: [admin]
+      operationId: listOrganizers
+      summary: List organizers
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Organizers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizerResponse'
+  /api/admin/organizers/{organizerId}/ban:
+    post:
+      tags: [admin]
+      operationId: banOrganizer
+      summary: Ban organizer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Banned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerResponse'
+  /api/admin/organizers/{organizerId}/unban:
+    post:
+      tags: [admin]
+      operationId: unbanOrganizer
+      summary: Unban organizer
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Unbanned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerResponse'
+  /api/invites:
+    get:
+      tags: [invites]
+      operationId: listInvites
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Invites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InviteResponse'
+    post:
+      tags: [invites]
+      operationId: createInvite
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteResponse'
+  /api/relief-requests:
+    get:
+      tags: [relief-requests]
+      operationId: listReliefRequests
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dashboard summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReliefRequestSummaryResponse'
+    post:
+      tags: [relief-requests]
+      operationId: createReliefRequest
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReliefRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReliefRequestResponse'
+  /api/relief-requests/{requestId}:
+    get:
+      tags: [relief-requests]
+      operationId: getReliefRequest
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReliefRequestResponse'
+    put:
+      tags: [relief-requests]
+      operationId: updateReliefRequest
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReliefRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReliefRequestResponse'
+  /api/relief-requests/{requestId}/needs:
+    get:
+      tags: [needs]
+      operationId: listNeeds
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Needs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NeedResponse'
+    post:
+      tags: [needs]
+      operationId: createNeed
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNeedRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedResponse'
+  /api/relief-requests/{requestId}/needs/{needId}:
+    put:
+      tags: [needs]
+      operationId: updateNeed
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - $ref: '#/components/parameters/needId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNeedRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedResponse'
+  /api/relief-requests/{requestId}/needs/{needId}/close:
+    post:
+      tags: [needs]
+      operationId: closeNeed
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - $ref: '#/components/parameters/needId'
+      responses:
+        '200':
+          description: Closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NeedResponse'
+  /api/relief-requests/{requestId}/offers:
+    get:
+      tags: [relief-requests]
+      operationId: listOffers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferResponse'
+  /api/relief-requests/{requestId}/offers/{offerId}:
+    put:
+      tags: [relief-requests]
+      operationId: updateOffer
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOfferRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+    delete:
+      tags: [relief-requests]
+      operationId: deleteOffer
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+  /api/relief-requests/{requestId}/offers/{offerId}/coming:
+    post:
+      tags: [relief-requests]
+      operationId: markOfferComing
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Marked coming
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '409':
+          description: Invalid status
+  /api/relief-requests/{requestId}/offers/{offerId}/received:
+    post:
+      tags: [relief-requests]
+      operationId: markOfferReceived
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiveOfferRequest'
+      responses:
+        '200':
+          description: Marked received
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '409':
+          description: Invalid status
+  /api/relief-requests/{requestId}/offers/{offerId}/cancel:
+    post:
+      tags: [relief-requests]
+      operationId: cancelOffer
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '409':
+          description: Not cancellable
+  /api/relief-requests/{requestId}/comments:
+    get:
+      tags: [comments]
+      operationId: listComments
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponse'
+    post:
+      tags: [comments]
+      operationId: createComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentResponse'
+  /api/relief-requests/{requestId}/comments/{commentId}:
+    delete:
+      tags: [comments]
+      operationId: deleteComment
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: commentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+  /api/me/contacts:
+    get:
+      tags: [contacts]
+      operationId: listContacts
+      summary: List organization contacts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizerContactResponse'
+    post:
+      tags: [contacts]
+      operationId: createContact
+      summary: Create organization contact
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertOrganizerContactRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerContactResponse'
+  /api/me/contacts/{contactId}:
+    put:
+      tags: [contacts]
+      operationId: updateContact
+      summary: Update organization contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertOrganizerContactRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerContactResponse'
+    delete:
+      tags: [contacts]
+      operationId: deleteContact
+      summary: Delete organization contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+  /api/public/discovery:
+    get:
+      tags: [public]
+      operationId: getPublicDiscovery
+      responses:
+        '200':
+          description: Discovery payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicDiscoveryResponse'
+  /api/public/relief-requests/{slug}:
+    get:
+      tags: [public]
+      operationId: getPublicReliefRequest
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Public page payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicReliefRequestResponse'
+        '404':
+          description: Not found
+  /api/public/needs/{needId}/offers:
+    post:
+      tags: [public]
+      operationId: createPublicOffer
+      parameters:
+        - $ref: '#/components/parameters/needId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOfferRequest'
+      responses:
+        '201':
+          description: Offer created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferResponse'
+        '409':
+          description: Exceeds remaining or closed
+        '429':
+          description: Too many offers from this IP
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    needId:
+      name: needId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [inviteToken, email, password, displayName]
+      properties:
+        inviteToken: { type: string }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+        displayName: { type: string }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+    RefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
+    LogoutRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
+    TokenResponse:
+      type: object
+      required: [accessToken, refreshToken, expiresInSeconds, organizer]
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        expiresInSeconds: { type: integer, format: int64 }
+        organizer:
+          $ref: '#/components/schemas/OrganizerResponse'
+    OrganizerResponse:
+      type: object
+      required: [id, email, displayName, role, active, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string }
+        displayName: { type: string }
+        description: { type: string, nullable: true }
+        role: { type: string, enum: [ADMIN, ORGANIZER] }
+        active: { type: boolean }
+        createdAt: { type: string, format: date-time }
+    UpsertOrganizerContactRequest:
+      type: object
+      required: [name, role, phone, email]
+      properties:
+        name: { type: string }
+        role: { type: string }
+        phone: { type: string }
+        email: { type: string, format: email }
+        note: { type: string, nullable: true }
+    OrganizerContactResponse:
+      type: object
+      required: [id, name, role, phone, email, sortOrder]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        role: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        note: { type: string, nullable: true }
+        sortOrder: { type: integer }
+    ForgotPasswordRequest:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+    ResetPasswordRequest:
+      type: object
+      required: [token, newPassword]
+      properties:
+        token: { type: string }
+        newPassword: { type: string, minLength: 8 }
+    ChangePasswordRequest:
+      type: object
+      required: [currentPassword, newPassword]
+      properties:
+        currentPassword: { type: string }
+        newPassword: { type: string, minLength: 8 }
+    UpdateProfileRequest:
+      type: object
+      required: [displayName]
+      properties:
+        displayName: { type: string }
+        description: { type: string, nullable: true }
+    CreateInviteRequest:
+      type: object
+      properties:
+        email: { type: string, format: email, nullable: true }
+        daysValid: { type: integer, minimum: 1, maximum: 90, default: 7 }
+    InviteResponse:
+      type: object
+      required: [id, token, expiresAt, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        token: { type: string }
+        email: { type: string, nullable: true }
+        expiresAt: { type: string, format: date-time }
+        usedAt: { type: string, format: date-time, nullable: true }
+        createdAt: { type: string, format: date-time }
+    CreateReliefRequest:
+      type: object
+      required: [title, description, locationLabel, latitude, longitude]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        locationLabel: { type: string }
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+    UpdateReliefRequest:
+      type: object
+      required: [title, description, locationLabel, latitude, longitude]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        locationLabel: { type: string }
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+    ReliefRequestResponse:
+      type: object
+      required: [id, title, description, locationLabel, latitude, longitude, publicSlug, status, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string }
+        locationLabel: { type: string }
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+        publicSlug: { type: string }
+        status: { type: string, enum: [ACTIVE, ARCHIVED] }
+        createdAt: { type: string, format: date-time }
+    ReliefRequestSummaryResponse:
+      type: object
+      required: [id, title, locationLabel, publicSlug, openNeeds, criticalNeeds, coveredNeeds]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        locationLabel: { type: string }
+        publicSlug: { type: string }
+        openNeeds: { type: integer }
+        criticalNeeds: { type: integer }
+        coveredNeeds: { type: integer }
+    CreateNeedRequest:
+      type: object
+      required: [title, category, quantityRequired, unit, priority]
+      properties:
+        title: { type: string }
+        description: { type: string, nullable: true }
+        category:
+          $ref: '#/components/schemas/NeedCategory'
+        quantityRequired: { type: number }
+        unit: { type: string }
+        priority:
+          $ref: '#/components/schemas/NeedPriority'
+    UpdateNeedRequest:
+      type: object
+      required: [title, category, quantityRequired, unit, priority]
+      properties:
+        title: { type: string }
+        description: { type: string, nullable: true }
+        category:
+          $ref: '#/components/schemas/NeedCategory'
+        quantityRequired: { type: number }
+        unit: { type: string }
+        priority:
+          $ref: '#/components/schemas/NeedPriority'
+    NeedResponse:
+      type: object
+      required: [id, title, category, quantityRequired, quantityOffered, quantityPending, remaining, unit, priority, status]
+      properties:
+        id: { type: string, format: uuid }
+        reliefRequestId: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string, nullable: true }
+        category:
+          $ref: '#/components/schemas/NeedCategory'
+        quantityRequired: { type: number }
+        quantityOffered: { type: number }
+        quantityPending: { type: number }
+        remaining: { type: number }
+        unit: { type: string }
+        priority:
+          $ref: '#/components/schemas/NeedPriority'
+        status:
+          $ref: '#/components/schemas/NeedStatus'
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    ReceiveOfferRequest:
+      type: object
+      required: [quantityReceived]
+      properties:
+        quantityReceived: { type: number }
+    OfferStatus:
+      type: string
+      enum: [PENDING, COMING, RECEIVED, CANCELLED]
+    CreateOfferRequest:
+      type: object
+      required: [providerName, quantity, firstName, lastName, phone, email]
+      properties:
+        providerName: { type: string }
+        quantity: { type: number }
+        firstName: { type: string, maxLength: 100 }
+        lastName: { type: string, maxLength: 100 }
+        phone: { type: string, maxLength: 80 }
+        email: { type: string, format: email, maxLength: 320 }
+        note: { type: string, nullable: true }
+    UpdateOfferRequest:
+      type: object
+      required: [providerName, quantity, firstName, lastName, phone, email]
+      properties:
+        providerName: { type: string }
+        quantity: { type: number }
+        firstName: { type: string, maxLength: 100 }
+        lastName: { type: string, maxLength: 100 }
+        phone: { type: string, maxLength: 80 }
+        email: { type: string, format: email, maxLength: 320 }
+        note: { type: string, nullable: true }
+    CreateCommentRequest:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string, maxLength: 4000 }
+    CommentResponse:
+      type: object
+      required: [id, reliefRequestId, authorId, authorDisplayName, body, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        reliefRequestId: { type: string, format: uuid }
+        authorId: { type: string, format: uuid }
+        authorDisplayName: { type: string }
+        body: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    OfferResponse:
+      type: object
+      required: [id, needId, providerName, quantity, status, firstName, lastName, phone, email, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        needId: { type: string, format: uuid }
+        providerName: { type: string }
+        quantity: { type: number }
+        quantityReceived: { type: number, nullable: true }
+        status: { $ref: '#/components/schemas/OfferStatus' }
+        firstName: { type: string }
+        lastName: { type: string }
+        phone: { type: string }
+        email: { type: string, format: email }
+        note: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+    PublicReliefRequestResponse:
+      type: object
+      required:
+        [
+          title,
+          description,
+          locationLabel,
+          latitude,
+          longitude,
+          publicSlug,
+          needs,
+          organizationName,
+          contacts,
+        ]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        description: { type: string }
+        locationLabel: { type: string }
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+        publicSlug: { type: string }
+        status: { type: string, enum: [ACTIVE, ARCHIVED] }
+        needs:
+          type: array
+          items:
+            $ref: '#/components/schemas/NeedResponse'
+        organizationName: { type: string }
+        organizationDescription: { type: string, nullable: true }
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizerContactResponse'
+        createdAt: { type: string, format: date-time }
+    DiscoveryPointResponse:
+      type: object
+      required: [id, title, locationLabel, latitude, longitude, publicSlug]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        locationLabel: { type: string }
+        latitude: { type: number, format: double }
+        longitude: { type: number, format: double }
+        publicSlug: { type: string }
+    DiscoveryNeedResponse:
+      type: object
+      required: [id, title, priority, status, requestId, publicSlug, locationLabel, organizationName]
+      properties:
+        id: { type: string, format: uuid }
+        title: { type: string }
+        priority: { $ref: '#/components/schemas/NeedPriority' }
+        status: { $ref: '#/components/schemas/NeedStatus' }
+        requestId: { type: string, format: uuid }
+        publicSlug: { type: string }
+        locationLabel: { type: string }
+        organizationName: { type: string }
+    PublicDiscoveryResponse:
+      type: object
+      required: [points, needs]
+      properties:
+        points:
+          type: array
+          items: { $ref: '#/components/schemas/DiscoveryPointResponse' }
+        needs:
+          type: array
+          items: { $ref: '#/components/schemas/DiscoveryNeedResponse' }
+    NeedCategory:
+      type: string
+      enum: [FOOD, WATER, CLOTHING, SUPPLIES, EQUIPMENT, MACHINERY, VEHICLES, SHELTER, SERVICES, OTHER]
+    NeedPriority:
+      type: string
+      enum: [CRITICAL, HIGH, NORMAL, LOW]
+    NeedStatus:
+      type: string
+      enum: [OPEN, PARTIALLY_COVERED, COVERED, CLOSED]

@@ -1,0 +1,11 @@
+---
+description: Global defaults, always active
+globs:
+alwaysApply: true
+---
+
+- English only (code, comments, commits, explanations) unless explicitly told otherwise.
+- Multi-file output: list filenames first, then each file. Never invent structure not requested.
+- Zero unused code (imports/vars/methods). Extract logic used 2+ places; no premature abstraction.
+- Every function: JSDoc (what/inputs/outputs).
+- If unsure and a reference implementation exists, copy its pattern — don't invent a new one.

@@ -1,0 +1,10 @@
+---
+description: Testing conventions
+globs: **/*.spec.ts,**/*.test.ts,**/*.test.tsx
+alwaysApply: false
+---
+
+- Backend: Jest + Nest TestingModule. Frontend: Vitest + Testing Library. E2E: Playwright (see 09-playwright-e2e) for auth flows and other critical multi-step flows.
+- Every new/changed endpoint requires a unit test covering the success path and at least one error path.
+- Every new/changed page or component requires a render/interaction test (renders without crashing, key elements present, primary interaction works).
+- Tests are written in the same task as the implementation, not deferred to a later prompt.

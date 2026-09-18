@@ -1,0 +1,15 @@
+---
+description: Vite + React frontend conventions (non-Next.js projects)
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+Stack: Vite + React + TypeScript.
+
+- API client generated from OpenAPI into src/api/generated — no hand-written clients. Manual code only in client.ts and hooks/. Workflow: backend DTO change → regenerate OpenAPI → regenerate client.
+- Tailwind only, no unfinished/random UI, responsive + accessible.
+- All UI via src/components/ui (CVA for variants), no inline one-off components.
+- Forms: react-hook-form + zod.
+- All API calls through src/api/client.ts; detect network/server errors, no silent failures; backend failures shown to user in plain language with retry where applicable.
+- Backend errors arrive as `{ code, message, details?, correlationId? }` (see 01-backend-nestjs). Display `message` (or a code→copy mapping for known codes) to the user; never render raw `details` or `correlationId` in the UI.
+- No native alert/confirm/prompt — modal system only.

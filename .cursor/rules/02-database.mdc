@@ -1,0 +1,25 @@
+---
+description: PostgreSQL ORM conventions — detect existing ORM, follow whichever the project uses
+globs: **/prisma/**,**/*.entity.ts,**/migrations/**,**/*.service.ts
+alwaysApply: false
+---
+
+Before writing any DB code, detect which ORM the project actually uses:
+- `prisma/schema.prisma` present → Prisma.
+- `**/*.entity.ts` + `typeorm` in package.json / `ormconfig.*` → TypeORM.
+
+Follow that project's existing convention. Don't introduce the other ORM into an existing codebase, and don't mix both in one project. If the project has no ORM set up yet (genuinely new project), default to Prisma (user's preference) unless told otherwise.
+
+### Prisma mode
+- `prisma/schema.prisma` is the single source of truth for the DB shape. Never edit the generated client, never run `prisma db push` on a project that has migrations — only `migrate dev` (local) and `migrate deploy` (CI/prod).
+- Migrations only, no manual schema drift: every model change goes through `prisma migrate dev --name <change>`. Review the generated SQL before committing, not just the schema diff.
+- Index every FK and every column used in `WHERE`/`ORDER BY` via `@@index` — Prisma does not auto-index FKs.
+- Never modify the DB directly outside a migration. If drift is suspected, run `prisma migrate status` / `prisma db pull` before writing new code against it.
+
+### TypeORM mode
+- Migrations only, `synchronize: false`, no schema drift. Migrations must be reversible. Run on startup; app must not start if migrations fail.
+- No SQL string concatenation — repository/QueryBuilder only. Index FKs and filter columns explicitly.
+
+### Both modes
+- PK = `bigint`/`BigInt` with autoincrement, never UUID as PK. Add a separate `uuid` field (unique, indexed) for anything exposed externally — internal joins use `id`, external/public APIs use `uuid`.
+- No raw SQL string concatenation in either ORM; if a raw query is unavoidable, always use parameterized/tagged-template form, never string interpolation.

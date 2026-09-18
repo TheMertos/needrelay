@@ -1,0 +1,19 @@
+---
+description: Definition of done — verification required before any task is marked complete
+globs:
+alwaysApply: true
+---
+
+A task is NOT done because the code compiles or "looks right". It is done only when:
+
+- Build passes and lint passes for every affected package. Run the actual commands; report real output, not an assumption that it would pass.
+- All relevant tests pass (new tests required by 06-testing, plus any existing tests touched by the change).
+- Backend endpoint changes: verified against OpenAPI (03-openapi) — request/response DTO present and documented, error codes covered, no entity leaked in the response.
+- Frontend page/component changes (Vite or Next.js): verified via a Playwright test (see 09-playwright-e2e) that navigates to the page and exercises the primary interaction — not just a visual glance or "should render" assumption.
+- Multi-step or cross-stack features (backend + frontend in one task): break into checkpoints, verify each checkpoint before moving to the next. Do not verify only at the very end.
+
+If any check fails: fix it and re-run the check. Never report partial success as success, and never silently skip a check because "it's probably fine."
+
+For non-trivial or cross-cutting tasks, do not self-grade — delegate the final check to the `verifier` subagent (see project's `.cursor/agents/verifier.md`) and report its findings as-is, including anything it flags as incomplete or broken.
+
+**Checklist discipline** (ties to the project's `.cursor/hooks.json` stop hook): check off each item in `.cursor/active-task.md` only after actually running the relevant check — never check an item because it "should" pass. Only write `DONE` at the bottom of that file after every item is checked AND the full build/lint/test/Playwright pass has actually been run and confirmed. The stop hook will keep nudging you to continue otherwise — that's intentional, don't try to bypass it by writing DONE early.

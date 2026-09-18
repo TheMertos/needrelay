@@ -1,0 +1,13 @@
+---
+description: File upload handling — validation, storage, security
+globs: **/*.controller.ts,**/upload/**,**/media/**
+alwaysApply: false
+---
+
+- Validate every upload: enforce a max file size (reject before reading the full body when possible) and an allow-list of mime-types/extensions per use case. Don't trust the client-provided mime-type header alone — check the actual file signature/magic bytes.
+- Never store uploads inside the web-served app directory. Use a dedicated storage layer (S3-compatible bucket, or a non-public volume) and serve via signed URLs or a controlled proxy endpoint — not direct static serving of user-supplied content.
+- Generate a new filename (UUID-based) on storage — never trust or reuse the client's original filename.
+- Strip EXIF/metadata from images before storage where privacy matters.
+- For any public-facing upload feature, malware/virus scanning (e.g. a ClamAV sidecar) should be in place — if it isn't yet, flag this explicitly rather than skipping it silently.
+- Large/video uploads (e.g. live-streaming platforms): handle via chunked/multipart upload and background processing (see 22-background-jobs), never block the request thread on a large synchronous upload.
+- Document upload size/type limits in OpenAPI (03-openapi).

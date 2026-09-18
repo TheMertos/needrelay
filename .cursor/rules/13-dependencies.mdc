@@ -1,0 +1,11 @@
+---
+description: Dependency verification — never assume a package or API exists from memory
+globs: package.json,**/*.ts,**/*.tsx
+alwaysApply: false
+---
+
+- Before importing a new npm package, check it's actually installed: run `npm list <package>` or check `package.json`. Never assume a package exists, or guess its API, purely from training data/memory.
+- Before adding a new dependency, check whether an existing one already covers the need — don't introduce a second library for the same job (e.g. two date libraries, two HTTP clients).
+- When using a framework API you're not fully certain about (React/Next.js/NestJS/TypeORM version-specific behavior), verify against the actually installed version in `package.json` rather than the most commonly remembered version — APIs change across majors (ties to 05-frontend-nextjs version-awareness).
+- Adding a genuinely new dependency (not just using an existing one) requires a one-line reason — what it does that existing deps don't.
+- Don't add a package that looks unmaintained or has known unresolved critical vulnerabilities without flagging it first.

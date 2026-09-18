@@ -1,0 +1,18 @@
+---
+description: Visual design system — single source of truth so design isn't re-explained every prompt
+globs: src/**/*.tsx,src/**/*.css,tailwind.config.*,app/**/*.tsx
+alwaysApply: false
+---
+
+- Design tokens (colors, spacing, radius, shadows, typography scale) live in one place: `tailwind.config` + a `tokens.css`/`globals.css` with CSS variables. Never hardcode raw hex/px values directly in a component — reference the token.
+- Before styling anything new, read the existing `DESIGN.md`/tokens file first — if it exists, use it, don't re-research.
+- If the project has no design system yet, research before designing: look at 3-5 real, well-designed products/sites in the same category (e.g. SaaS dashboard, marketplace, content platform — match the project's actual domain), using web/image search or the browser tool. Identify recurring patterns: layout conventions, color usage, type hierarchy, spacing rhythm, component shapes for that category — not a single site to clone, but the common ground across several.
+- Synthesize those patterns into this project's own direction and write it down in a short `DESIGN.md`: primary/neutral/accent colors, font pairing, spacing scale, radius scale, shadow levels, with a one-line rationale tied to the category research. Once written, it is the source of truth — don't re-derive it on the next page.
+- Copyright/IP boundary on research (non-negotiable): take only structural/stylistic cues — general layout conventions (e.g. "SaaS dashboards in this category commonly use a left sidebar + top stat cards"), typical type-hierarchy patterns, common spacing rhythms. Never copy a specific company's exact color values, logo, icon set, illustrations, photography, copy/text, or a literally identifiable layout 1:1. If asked to "make it look exactly like <specific real product>", treat that as a request to build something in the same general style — not to reproduce their actual design assets.
+- Only ask the user directly when the domain itself is ambiguous (e.g. could be either a playful consumer app or a formal enterprise tool) and that choice would change the whole direction — otherwise proceed autonomously from the research.
+- If the user gives a reference (screenshot, Figma, an existing site to match), that overrides research — match it directly instead.
+- Avoid the generic "AI-default" look (indigo-600 + centered white card + drop shadow on everything) unless that genuinely is the chosen direction. Stay consistent across pages: same button shapes, same spacing rhythm, same type scale everywhere.
+- Reuse existing components from `src/components/ui` (per 04-frontend-vite-react) before creating a new variant; a new visual pattern needs a stated reason, not just convenience.
+- Typography: max 2 font families, fixed scale (text-sm/base/lg/xl/2xl/3xl) — no arbitrary `text-[17px]`.
+- Spacing: stick to the Tailwind default scale (4/8/12/16/24/32...) unless matching an external spec exactly.
+- Dark mode (if used): driven by the same token set, not separate hardcoded colors per component.

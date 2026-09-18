@@ -1,0 +1,17 @@
+:root {
+  --nr-ink: #0f172a;
+  --nr-ink-2: #1e293b;
+  --nr-surface: #f1f5f9;
+  --nr-card: #ffffff;
+  --nr-border: #e2e8f0;
+  --nr-signal: #e11d48;
+  --nr-warn: #d97706;
+  --nr-ok: #16a34a;
+  --nr-muted: #64748b;
+}
+
+body {
+  margin: 0;
+  background: var(--nr-surface);
+  color: var(--nr-ink);
+}

@@ -1,0 +1,24 @@
+---
+description: DB performance — avoid N+1 and unbounded queries (Prisma or TypeORM, match project)
+globs: **/*.service.ts,**/prisma/**,**/*.entity.ts,**/*.repository.ts
+alwaysApply: false
+---
+
+Use whichever ORM the project already uses (see 02-database detection step).
+
+### Prisma mode
+- Never trigger N+1 queries: fetch relations upfront with `include`/`select` in the original query — never call `prisma.<model>.findUnique` for a relation inside a `.map()` or loop.
+- Use `select` over `include` when only specific fields are needed, to avoid over-fetching.
+- Pagination: `skip`/`take` for offset, or `cursor`/`take` for large/frequently-changing tables — never an unbounded `findMany()` to the client.
+- Aggregates: use `aggregate` / `count` / `groupBy` — don't fetch all rows and count in application code.
+- Check generated SQL via query logging (`log: ['query']`) in dev when in doubt.
+
+### TypeORM mode
+- Never trigger N+1 queries: use `relations: [...]` or QueryBuilder `leftJoinAndSelect` instead of letting relations lazy-load per row.
+- Pagination: always paginate list endpoints, never an unbounded `find()`/`findAll()`.
+- Aggregates: use QueryBuilder `COUNT`/`GROUP BY` over fetching rows and counting in application code.
+- Check generated SQL via TypeORM logging in dev when in doubt.
+
+### Both modes
+- List endpoints always paginate (ties to 01-backend-nestjs Query DTO).
+- Index every column used in `WHERE`/`ORDER BY`/joins that isn't already a PK/FK.

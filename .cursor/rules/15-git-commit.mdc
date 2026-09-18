@@ -1,0 +1,12 @@
+---
+description: Git & commit discipline
+globs:
+alwaysApply: false
+---
+
+- Commit in small, logical units tied to one checkpoint (see 12-task-scoping) — not one giant commit for an entire feature.
+- Commit message: short imperative summary line describing what changed (not "fix" or "update"); body only if the why isn't obvious from the diff.
+- Never commit: `.env`, files containing real secrets/keys, `node_modules`, build output, or IDE-specific files not already in `.gitignore`.
+- Before committing, re-check the diff for accidentally included unrelated changes (debug code, `console.log`, commented-out blocks) — ties to 11-refactoring.
+- Don't force-push or rewrite shared/main branch history without explicit confirmation.
+- A commit should leave the repo in a working state (builds, lints) — don't commit a known-broken intermediate state, even mid-task; use a local stash/checkpoint instead if needed.

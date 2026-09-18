@@ -1,0 +1,14 @@
+---
+description: Next.js conventions — version-aware, App Router default
+globs: app/**,pages/**,next.config.*
+alwaysApply: false
+---
+
+- Check the Next.js version in package.json before writing code — don't default to memorized/older conventions; APIs and defaults change across majors.
+- Default: App Router + Server Components, Server Actions for mutations — unless project is already on Pages Router or user says otherwise. Don't mix paradigms in one feature.
+- Match existing project conventions (data fetching, caching, i18n, middleware) before introducing a newer pattern; propose migrations separately, never silently mixed.
+
+Two modes — determine which applies before writing data-access code, state the assumption if unclear:
+
+- **Frontend-only mode** (a separate NestJS backend exists, e.g. see 01-backend-nestjs/03-openapi): use the OpenAPI-generated client (same generated client as the Vite frontend, see 04-frontend-vite-react) — no hand-written fetch calls, including inside Server Components/Actions. Backend errors arrive as `{ code, message, details?, correlationId? }`; display `message` (or a code→copy mapping) to the user, never raw `details`/`correlationId`.
+- **Full-stack mode** (no separate backend — Server Actions / Route Handlers ARE the backend): OpenAPI is not required; there is no separate REST boundary to document. Type safety comes directly from shared TypeScript types between Server Actions and components. Still return a consistent error shape from Server Actions (e.g. `{ success, error? }`) rather than throwing raw errors into the UI.

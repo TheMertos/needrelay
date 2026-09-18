@@ -1,0 +1,26 @@
+# Start: docker compose up -d --build
+# Connects to Postgres via host port (localhost:5432).
+# On Docker Desktop use host.docker.internal; override DATABASE_URL if needed.
+
+services:
+  backend:
+    build: .
+    container_name: needrelay-backend
+    ports:
+      - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://host.docker.internal:5432/needrelay}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-needrelay}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-needrelay}
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-secret-at-least-32-chars}
+      JWT_ACCESS_MINUTES: ${JWT_ACCESS_MINUTES:-15}
+      JWT_REFRESH_DAYS: ${JWT_REFRESH_DAYS:-14}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@needrelay.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-ChangeMeAdmin123!}
+      ADMIN_DISPLAY_NAME: ${ADMIN_DISPLAY_NAME:-NeedRelay Admin}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:3000}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-NeedRelay <onboarding@resend.dev>}
+      APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-http://localhost:5173}

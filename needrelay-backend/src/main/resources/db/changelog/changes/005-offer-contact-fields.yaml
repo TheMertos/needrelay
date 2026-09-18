@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-offer-contact-fields
+      author: needrelay
+      changes:
+        - delete:
+            tableName: offers
+        - addColumn:
+            tableName: offers
+            columns:
+              - column:
+                  name: first_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(320)
+                  constraints:
+                    nullable: false
+        - dropColumn:
+            tableName: offers
+            columnName: contact

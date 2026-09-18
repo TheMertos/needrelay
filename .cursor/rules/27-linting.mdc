@@ -1,0 +1,12 @@
+---
+description: Strict linting — no unused imports, no import errors, no duplicated logic, shared UI components only
+globs: **/*.ts,**/*.tsx,eslint.config.*,.eslintrc*
+alwaysApply: false
+---
+
+- Lint is not advisory here. Per 08-verification, lint must pass with zero errors before a task counts as done — the rules below are configured as `error`, not `warning`, in the project's eslint config (see `eslint-strict-additions.md` for the exact setup).
+- No unused imports/variables: enforced via `eslint-plugin-unused-imports` instead of the default `no-unused-vars` (which only warns and misses unused imports). Remove the dead import/variable — never suppress with `eslint-disable`.
+- No broken imports: `import/no-unresolved` and `import/no-duplicates` as errors — an unresolved path or a duplicate import statement is treated as build-breaking, not a style nit.
+- No duplicated logic: a function with a near-identical body to another (same logic, different name) gets flagged by `sonarjs/no-identical-functions` and by `jscpd` (copy-paste detector) run as part of verification (`npx jscpd src`). If either flags a real duplicate, extract a shared function (ties to 00-core/11-refactoring) instead of leaving both copies in place.
+- Shared UI elements only: a raw `<button>`/`<input>` JSX element outside `src/components/ui/**` is a lint error (`no-restricted-syntax`) — always import `Button`/`Input` (etc.) from `src/components/ui` instead. If a genuinely new primitive is needed, add it to `components/ui` first, then use it everywhere — never inline a one-off styled element in a feature file.
+- Never use `// eslint-disable` to silence one of these rules instead of fixing the underlying issue. If a disable is genuinely justified, it needs a one-line comment explaining why, and should be rare enough to be worth a second look when it appears in review.

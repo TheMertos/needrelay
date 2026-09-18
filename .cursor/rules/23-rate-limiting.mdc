@@ -1,0 +1,11 @@
+---
+description: Global API rate limiting / abuse protection
+globs: **/*.controller.ts,**/main.ts
+alwaysApply: false
+---
+
+- Apply a global rate limiter (NestJS ThrottlerModule or equivalent) to all endpoints by default, not just auth — the auth-specific limits in 01-backend-nestjs are a stricter layer on top of this baseline, not a replacement for it.
+- Limits apply per-IP and, where the user is authenticated, also per-account — a shared IP (NAT, mobile carrier) shouldn't be over-penalized for one abusive account, and one IP shouldn't be able to hit many accounts unthrottled.
+- Return a clear `429` using the unified error shape (01-backend-nestjs) and a `Retry-After` header — don't make the client guess why it's being blocked.
+- Expensive endpoints (search, export, file generation) get a tighter limit than simple reads — don't apply one blanket number to every route.
+- Store rate-limit counters in Redis (see 24-caching) once running more than one backend instance — in-memory counters don't work across instances.

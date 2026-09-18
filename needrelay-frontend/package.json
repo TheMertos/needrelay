@@ -1,0 +1,48 @@
+{
+  "name": "needrelay-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "generate:api": "orval --config orval.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@mantine/core": "^9.6.1",
+    "@mantine/form": "^9.6.1",
+    "@mantine/hooks": "^9.6.1",
+    "@mantine/notifications": "^9.6.1",
+    "axios": "^1.20.0",
+    "i18next": "^26.4.2",
+    "leaflet": "^1.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-i18next": "^17.0.14",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/jsdom": "^30",
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "jsdom": "^30.1.0",
+    "orval": "^7.13.2",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.0",
+    "vitest": "^5.0.1"
+  },
+  "packageManager": "yarn@4.14.0+sha512.31053dd4c730c75e8665ad00bbfe07a7bed08aef54c5edfd8d484463680180b1c87035a61b9e15ff2cad310a329176cac433009e2d402ac69d1386f9445d7ccb"
+}

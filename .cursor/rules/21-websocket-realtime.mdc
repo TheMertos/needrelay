@@ -1,0 +1,12 @@
+---
+description: WebSocket / real-time (NestJS Gateway, LiveKit-style) conventions
+globs: **/*.gateway.ts,**/*.socket.ts
+alwaysApply: false
+---
+
+- Authenticate WebSocket connections at handshake (JWT in connection query/headers, validated before the connection is accepted) — never let an unauthenticated socket join a room/channel.
+- Define explicit event contracts: named events with typed payloads, mirrored client/server. No ad-hoc untyped `emit`/`on` with loose objects.
+- Handle reconnect/disconnect explicitly: clean up room membership and any associated resources (presence, locks) on disconnect; client reconnect logic re-authenticates and re-joins rather than assuming prior state survived.
+- Rate-limit and validate inbound socket messages the same as REST input — a socket handler is still an entrypoint, DTO validation (01-backend-nestjs) still applies.
+- For LiveKit/CoTURN-style media infra: keep signaling (auth, room creation) in the NestJS gateway; media transport itself stays in the dedicated media server — don't proxy media through the application server.
+- Test real-time flows with Playwright where feasible (multiple browser contexts simulating two connected clients) rather than only unit-testing the gateway in isolation.

@@ -1,0 +1,15 @@
+---
+description: Docker infrastructure — independent compose stacks, shared network, export/import per component
+globs: **/docker-compose*.yml,**/Dockerfile,**/infra/**
+alwaysApply: false
+---
+
+- Each service/component (backend, frontend, db, cache, etc.) gets its own `docker-compose.yml`, self-contained with its own Dockerfile and `.env.example` — never one monolithic compose file bundling unrelated services.
+- Cross-service communication happens over a shared **external** Docker network (create once: `docker network create <project>-net`; reference in every compose file as `networks: { default: { external: true, name: <project>-net } }`) — not an embedded per-stack network. This lets each stack start/stop independently while still reaching the others by service name.
+- Structure per component: `infra/<component>/{docker-compose.yml, Dockerfile, .env.example, export.sh, import.sh}`.
+- **export.sh**: produces a single `<component>-<date>.tar.gz` containing the built image (`docker save`), named volumes' data, and the compose/Dockerfile/.env.example. Never includes real secrets — secrets are excluded (per 14-env-secrets) and re-supplied at import time.
+- **import.sh**: takes that tar.gz, loads the image (`docker load`), restores volumes, joins the shared network, brings the stack up (`docker compose up -d`) — must work on a clean host with nothing but Docker installed.
+- After writing export/import scripts for a component, actually test the round-trip once (export, then import into a clean test location/host) before considering the task done — don't assume the scripts work, per 08-verification.
+- Tag images with a version or date, not only `latest`, so an exported tar.gz stays reproducible and traceable to a specific build.
+- Document the network name and any required external dependencies (e.g. shared Postgres, LiveKit, CoTURN) as a comment at the top of each component's `docker-compose.yml`, so a stack can be understood and redeployed without reading every other stack first.
+- For the backend's dev compose stack: run migrations then the seed script (see 19-test-data-seeding) automatically on container start (entrypoint script or compose `command`) so a freshly started stack always has testable data — never leave a fresh dev container with an empty DB.

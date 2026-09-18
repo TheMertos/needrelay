@@ -1,0 +1,11 @@
+---
+description: Redis caching conventions
+globs: **/*.service.ts,**/cache/**
+alwaysApply: false
+---
+
+- Cache read-heavy, rarely-changing data (lookup tables, computed aggregates, public listings) in Redis with an explicit TTL — never cache without an expiry "just in case."
+- Cache keys are namespaced and predictable (`<project>:<entity>:<id>`) so they can be inspected or cleared without guessing.
+- Invalidate explicitly on write: when an entity changes, delete/update its cache key in the same code path as the write — don't rely on TTL alone for data that must be fresh immediately after a user action.
+- Never cache per-user sensitive data under a shared/global key — scope the key to the user/session when the content is personalized.
+- Don't reach for caching before measuring that the underlying query/computation is actually slow — caching hides a slow query rather than fixing it, and adds invalidation complexity. Fix the query first (16-db-performance), cache only what's still slow afterward.

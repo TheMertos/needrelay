@@ -1,0 +1,11 @@
+---
+description: Task scoping — break work into checkpoints, don't generate full features in one pass
+globs:
+alwaysApply: true
+---
+
+- Default unit of work is one layer at a time: schema/types → API contract (DTO/OpenAPI) → implementation → tests — not "build the whole page/feature" in a single pass.
+- For a new page or feature, list the concrete steps before writing code (e.g. "1. entity+migration 2. DTO+endpoint 3. OpenAPI doc 4. regenerate client 5. page/component 6. Playwright test"). If a step depends on an unresolved decision (design direction, ambiguous requirement), resolve it before continuing — don't skip ahead and backfill later.
+- One task = one cohesive unit (one endpoint, one page, one component) unless explicitly asked for more. If a request implies several independent units ("build the whole admin panel"), break it into a numbered plan first, then execute one unit at a time, verifying each (see 08-verification) before moving to the next.
+- Don't silently expand scope — adding unrelated features or touching unrelated files — without flagging it first (the refactor-specific version of this is in 11-refactoring).
+- If a task is genuinely too large for one pass, say so explicitly and propose the breakdown rather than producing a rushed, partial result silently.

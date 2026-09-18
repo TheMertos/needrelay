@@ -1,0 +1,11 @@
+---
+description: Background jobs / queues (BullMQ or equivalent)
+globs: **/*.processor.ts,**/*.queue.ts,**/jobs/**
+alwaysApply: false
+---
+
+- Anything slow, externally-dependent, or retryable (email sending, video/image processing, webhooks, notifications) goes through a queue (BullMQ + Redis) — never fire-and-forget inside an HTTP request handler, and never block the response waiting on it.
+- Each job is idempotent (safe to run twice if retried), has a defined retry/backoff policy, and a dead-letter/failure path that's actually observed — logged with enough context to debug, never silently swallowed.
+- Job payloads carry IDs/references, not large blobs — fetch current data inside the job rather than serializing a stale snapshot into the queue.
+- Long-running jobs report progress, or at least a final status the UI can poll, rather than leaving the user with no feedback after triggering an action.
+- If the queue/worker runs as a separate process, it gets its own Docker component (ties to 18-docker-infra) with its own export/import scripts.

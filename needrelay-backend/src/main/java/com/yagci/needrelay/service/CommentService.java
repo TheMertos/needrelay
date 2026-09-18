@@ -1,0 +1,112 @@
+package com.yagci.needrelay.service;
+
+import com.yagci.needrelay.domain.Organizer;
+import com.yagci.needrelay.domain.ReliefRequest;
+import com.yagci.needrelay.domain.ReliefRequestComment;
+import com.yagci.needrelay.exception.ApiException;
+import com.yagci.needrelay.repository.OrganizerRepository;
+import com.yagci.needrelay.repository.ReliefRequestCommentRepository;
+import com.yagci.needrelay.web.dto.CommentResponse;
+import com.yagci.needrelay.web.dto.CreateCommentRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Notes/comments on relief requests for registered organizers.
+ */
+@Service
+public class CommentService {
+
+	private final ReliefRequestCommentRepository commentRepository;
+	private final OrganizerRepository organizerRepository;
+	private final ReliefRequestService reliefRequestService;
+
+	/**
+	 * @param commentRepository comments
+	 * @param organizerRepository authors
+	 * @param reliefRequestService ownership
+	 */
+	public CommentService(
+			ReliefRequestCommentRepository commentRepository,
+			OrganizerRepository organizerRepository,
+			ReliefRequestService reliefRequestService) {
+		this.commentRepository = commentRepository;
+		this.organizerRepository = organizerRepository;
+		this.reliefRequestService = reliefRequestService;
+	}
+
+	/**
+	 * Lists comments for an owned relief request.
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @return comments oldest-first
+	 */
+	@Transactional(readOnly = true)
+	public List<CommentResponse> list(UUID organizerId, UUID requestId) {
+		reliefRequestService.getOwnedEntity(organizerId, requestId);
+		return commentRepository.findByReliefRequestIdOrderByCreatedAtAsc(requestId).stream()
+				.map(this::toResponse)
+				.toList();
+	}
+
+	/**
+	 * Adds a comment as the owning organizer.
+	 *
+	 * @param organizerId author/owner id
+	 * @param requestId relief request id
+	 * @param request body
+	 * @return created comment
+	 */
+	@Transactional
+	public CommentResponse create(UUID organizerId, UUID requestId, CreateCommentRequest request) {
+		ReliefRequest reliefRequest = reliefRequestService.getOwnedEntity(organizerId, requestId);
+		Organizer author = organizerRepository.findById(organizerId)
+				.orElseThrow(() -> new ApiException("ORGANIZER_NOT_FOUND", "Organizer not found", HttpStatus.NOT_FOUND));
+		ReliefRequestComment comment = new ReliefRequestComment();
+		comment.setReliefRequest(reliefRequest);
+		comment.setAuthor(author);
+		comment.setBody(request.body().trim());
+		commentRepository.save(comment);
+		return toResponse(comment);
+	}
+
+	/**
+	 * Deletes a comment on an owned relief request (owner only).
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @param commentId comment id
+	 */
+	@Transactional
+	public void delete(UUID organizerId, UUID requestId, UUID commentId) {
+		reliefRequestService.getOwnedEntity(organizerId, requestId);
+		ReliefRequestComment comment = commentRepository.findById(commentId)
+				.orElseThrow(() -> new ApiException("COMMENT_NOT_FOUND", "Comment not found", HttpStatus.NOT_FOUND));
+		if (!comment.getReliefRequest().getId().equals(requestId)) {
+			throw new ApiException("COMMENT_NOT_FOUND", "Comment not found on this request", HttpStatus.NOT_FOUND);
+		}
+		commentRepository.delete(comment);
+	}
+
+	/**
+	 * Maps comment entity to response.
+	 *
+	 * @param comment entity
+	 * @return response
+	 */
+	private CommentResponse toResponse(ReliefRequestComment comment) {
+		return new CommentResponse(
+				comment.getId(),
+				comment.getReliefRequest().getId(),
+				comment.getAuthor().getId(),
+				comment.getAuthor().getDisplayName(),
+				comment.getBody(),
+				comment.getCreatedAt(),
+				comment.getUpdatedAt());
+	}
+}

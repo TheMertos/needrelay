@@ -1,0 +1,350 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initial-schema
+      author: needrelay
+      changes:
+        - createTable:
+            tableName: organizers
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(320)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_hash
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: invites
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: varchar(320)
+              - column:
+                  name: created_by_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expires_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: used_at
+                  type: timestamptz
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: invites
+            baseColumnNames: created_by_id
+            referencedTableName: organizers
+            referencedColumnNames: id
+            constraintName: fk_invites_created_by
+
+        - createTable:
+            tableName: refresh_tokens
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: organizer_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: token_hash
+                  type: varchar(128)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: expires_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: revoked_at
+                  type: timestamptz
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: refresh_tokens
+            baseColumnNames: organizer_id
+            referencedTableName: organizers
+            referencedColumnNames: id
+            constraintName: fk_refresh_tokens_organizer
+        - createIndex:
+            tableName: refresh_tokens
+            indexName: idx_refresh_tokens_organizer_id
+            columns:
+              - column:
+                  name: organizer_id
+
+        - createTable:
+            tableName: relief_requests
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: organizer_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location_label
+                  type: varchar(300)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: latitude
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: longitude
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: public_slug
+                  type: varchar(220)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: relief_requests
+            baseColumnNames: organizer_id
+            referencedTableName: organizers
+            referencedColumnNames: id
+            constraintName: fk_relief_requests_organizer
+        - createIndex:
+            tableName: relief_requests
+            indexName: idx_relief_requests_organizer_id
+            columns:
+              - column:
+                  name: organizer_id
+        - createIndex:
+            tableName: relief_requests
+            indexName: idx_relief_requests_public_slug
+            columns:
+              - column:
+                  name: public_slug
+
+        - createTable:
+            tableName: needs
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: relief_request_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: category
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity_required
+                  type: numeric(19, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity_offered
+                  type: numeric(19, 4)
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: priority
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: needs
+            baseColumnNames: relief_request_id
+            referencedTableName: relief_requests
+            referencedColumnNames: id
+            constraintName: fk_needs_relief_request
+        - createIndex:
+            tableName: needs
+            indexName: idx_needs_relief_request_id
+            columns:
+              - column:
+                  name: relief_request_id
+        - sql:
+            sql: ALTER TABLE needs ADD CONSTRAINT chk_needs_quantities CHECK (quantity_required > 0 AND quantity_offered >= 0 AND quantity_offered <= quantity_required)
+
+        - createTable:
+            tableName: offers
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: need_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: numeric(19, 4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contact
+                  type: varchar(300)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: offers
+            baseColumnNames: need_id
+            referencedTableName: needs
+            referencedColumnNames: id
+            constraintName: fk_offers_need
+        - createIndex:
+            tableName: offers
+            indexName: idx_offers_need_id
+            columns:
+              - column:
+                  name: need_id
+        - sql:
+            sql: ALTER TABLE offers ADD CONSTRAINT chk_offers_quantity CHECK (quantity > 0)

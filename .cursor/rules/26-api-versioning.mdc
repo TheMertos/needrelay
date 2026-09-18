@@ -1,0 +1,11 @@
+---
+description: API versioning — manage breaking changes without breaking existing consumers
+globs: **/*.controller.ts,**/main.ts
+alwaysApply: false
+---
+
+- A breaking change to a request/response shape (removing/renaming a field, changing a type, changing required-ness) requires a new API version (`/v2/...` or a version header) — it does not get silently patched into the existing version.
+- Additive, backward-compatible changes (new optional field, new endpoint) don't require a version bump.
+- Old versions stay functional until consumers (the project's own frontend(s), or external clients) have actually migrated — don't remove a version in the same task that introduces its replacement.
+- Document active version(s) and deprecation timelines in OpenAPI (03-openapi) — a deprecated endpoint is marked as such, not silently left undocumented.
+- When the project has only one frontend consumer under your own control, a full versioning scheme can be overkill — in that case, coordinate the breaking change as a single atomic deploy (backend + frontend together) instead, but say so explicitly rather than skipping the consideration silently.

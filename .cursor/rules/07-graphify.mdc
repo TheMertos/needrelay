@@ -1,0 +1,12 @@
+---
+description: Graphify-first codebase navigation
+globs:
+alwaysApply: true
+---
+
+- Before grepping an unfamiliar/large codebase area, use Graphify: `graphify query <term>` (find nodes), `graphify path <a> <b>` (relation between files), `graphify explain <node>` (role of a symbol).
+- Check availability first (config file / dev dependency / `graphify-out/`).
+  - Not installed → install + minimally configure it, report what was added, then proceed.
+  - Installed but no graph → run `graphify ./<project-root>` once.
+- Fall back to grep/ripgrep only if install genuinely fails, or for trivial literal-string searches.
+- Don't rebuild the graph every prompt — only after significant codebase changes.

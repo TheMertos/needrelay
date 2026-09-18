@@ -1,0 +1,21 @@
+---
+description: NestJS backend conventions
+globs: src/modules/**,**/*.controller.ts,**/*.service.ts,**/*.entity.ts,**/*.dto.ts,**/*.guard.ts
+alwaysApply: false
+---
+
+Stack: NestJS + TypeScript, strict mode, avoid `any`.
+
+Structure: src/modules/<feature>/{controllers,services,dto}/<feature>.module.ts — model shape lives in `prisma/schema.prisma` (Prisma) or in `*.entity.ts` classes under an `entities/` subfolder (TypeORM), matching whichever ORM the project already uses (see 02-database).
+
+- Prisma projects: inject a shared `PrismaService` (global module) into services. Wrap it in a thin repository class per feature only if you need to mock DB calls in unit tests.
+- Global ValidationPipe: whitelist, forbidNonWhitelisted, transform, enableImplicitConversion — all true.
+- DTO IN / DTO OUT only: every endpoint accepts a request DTO, returns a response DTO. Never return a raw entity/model instance or accept raw body.
+- One DTO class per file. Naming: create-*.dto.ts, update-*.dto.ts, *-response.dto.ts, *-query.dto.ts.
+- Services: Receive Object / Return Object (RORO), prefer interfaces internally.
+- Auth: JwtAuthGuard + RolesGuard + @Roles on sensitive endpoints, enforced again in service layer. Argon2 hashing, JWT access+refresh rotation, refresh tokens stored hashed, time-limited reset tokens, rate limiting, lockout, generic error messages only.
+- Helmet on, strict CORS.
+- Errors: unified shape `{ code, message, details?, correlationId? }` via global exception filter. No internals leaked.
+- Correlation ID per request, structured logging.
+- Multi-write ops → DB transaction.
+- List endpoints: Query DTO (page, pageSize, sortBy, sortDir, filters) → response `{ items, meta }`.

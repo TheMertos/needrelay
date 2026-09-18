@@ -1,0 +1,23 @@
+---
+description: Planning — produce a short plan before writing code for non-trivial tasks (new feature, multi-file change, schema/API change, or resuming a half-finished project). Use this before starting implementation, not after.
+globs:
+alwaysApply: false
+---
+
+**Resuming a half-finished or unfamiliar project**: before planning the next step, audit first.
+- Map the codebase via Graphify (07-graphify): what modules/endpoints/pages exist, what's stubbed (empty functions, TODO comments, unimplemented handlers), what's broken.
+- Actually run it: build, lint, existing tests, and migration status — don't infer the project's state from reading code alone; broken/incomplete things often only surface when you try to run them.
+- Write the audit findings into `.cursor/active-task.md` as the first section, before the plan/checklist for the actual work — this is the baseline the rest of the task is measured against, and it's what tells you which parts of 08-verification already pass vs. don't.
+- Only then move to the normal planning flow below for whatever you've been asked to finish or fix.
+
+**Normal planning flow:**
+- For any task touching more than one file, introducing a new feature, or changing the data model/API contract: write a short plan before writing code, AND write it as a literal checklist in `.cursor/active-task.md` using markdown checkboxes (`- [ ] step`). This file is what the stop hook reads — an empty or missing checklist means nothing stops you from declaring done prematurely.
+- Plan format:
+  1. **Layers touched** — schema → API contract → frontend → tests (per 12-task-scoping), in order.
+  2. **States & edge cases** — empty state, loading state, error state, validation failure, unauthorized/forbidden, concurrent/duplicate submission. Enumerate these now, not while coding.
+  3. **Open assumptions** — what's ambiguous vs what you're deciding autonomously and why (ties to 10-design-system's "research and decide, don't ask unless truly ambiguous").
+- Before finalizing the plan, check it against existing code/patterns (via Graphify, per 07-graphify) — a new endpoint or page should follow the shape of similar existing ones unless there's a stated reason to diverge.
+- Surface risk explicitly in the plan (e.g. "this touches the payment flow", "this changes a shared type used in 3 places") rather than discovering it mid-implementation.
+- For a large or multi-session feature, persist the plan as a file (e.g. `.cursor/plans/<feature>.md`) instead of only in chat — this survives context resets and lets work resume cleanly across sessions.
+- Only pause for user confirmation when a decision genuinely changes direction (architecture choice, conflicting requirement); otherwise state the plan and proceed.
+- The plan's enumerated states/cases become the checklist for 08-verification — each one listed here should be verifiable later, not forgotten.
