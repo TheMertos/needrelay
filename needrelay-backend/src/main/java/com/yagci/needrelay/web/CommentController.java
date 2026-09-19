@@ -52,7 +52,7 @@ public class CommentController {
 	@ApiResponse(responseCode = "200", description = "Comments")
 	public List<CommentResponse> list(@PathVariable UUID requestId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return commentService.list(principal.getId(), requestId);
+		return commentService.list(SecurityUtils.requireOrganizationId(principal), requestId);
 	}
 
 	/**
@@ -70,7 +70,8 @@ public class CommentController {
 			@PathVariable UUID requestId,
 			@Valid @RequestBody CreateCommentRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return commentService.create(principal.getId(), requestId, request);
+		return commentService.create(
+				SecurityUtils.requireOrganizationId(principal), principal.getId(), requestId, request);
 	}
 
 	/**
@@ -85,6 +86,6 @@ public class CommentController {
 	@ApiResponse(responseCode = "204", description = "Deleted")
 	public void delete(@PathVariable UUID requestId, @PathVariable UUID commentId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		commentService.delete(principal.getId(), requestId, commentId);
+		commentService.delete(SecurityUtils.requireOrganizationId(principal), requestId, commentId);
 	}
 }

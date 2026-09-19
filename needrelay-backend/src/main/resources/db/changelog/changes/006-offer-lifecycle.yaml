@@ -15,8 +15,7 @@ databaseChangeLog:
               - column:
                   name: quantity_received
                   type: numeric(19, 4)
-        - dropCheckConstraint:
-            tableName: needs
-            constraintName: chk_needs_quantities
+        - sql:
+            sql: ALTER TABLE needs DROP CONSTRAINT chk_needs_quantities
         - sql:
             sql: ALTER TABLE needs ADD CONSTRAINT chk_needs_quantities CHECK (quantity_required > 0 AND quantity_offered >= 0)

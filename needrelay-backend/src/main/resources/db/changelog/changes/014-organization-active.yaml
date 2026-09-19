@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-organization-active
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: organizations
+            columns:
+              - column:
+                  name: active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false

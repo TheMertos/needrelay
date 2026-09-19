@@ -35,6 +35,18 @@ const listInvites = (
     },
       options);
     }
-  return {listInvites,createInvite}};
+  /**
+ * @summary Revoke invite
+ */
+const revokeInvite = (
+    inviteId: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/invites/${inviteId}`, method: 'DELETE'
+    },
+      options);
+    }
+  return {listInvites,createInvite,revokeInvite}};
 export type ListInvitesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getInvites>['listInvites']>>>
 export type CreateInviteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getInvites>['createInvite']>>>
+export type RevokeInviteResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getInvites>['revokeInvite']>>>

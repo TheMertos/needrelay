@@ -23,6 +23,7 @@
     "loadError": "بارگذاری مناطق کمک ممکن نشد.",
     "retry": "تلاش مجدد",
     "openRequest": "باز کردن صفحه کمک",
+    "openDetails": "باز کردن جزئیات",
     "org": "سازمان",
     "location": "موقعیت",
     "priority": "اولویت"
@@ -49,7 +50,8 @@
     "backToLogin": "بازگشت به ورود",
     "resetTitle": "رمز عبور جدید انتخاب کنید",
     "resetSubmit": "به‌روزرسانی رمز عبور",
-    "resetSuccess": "رمز عبور به‌روز شد. اکنون می‌توانید وارد شوید."
+    "resetSuccess": "رمز عبور به‌روز شد. اکنون می‌توانید وارد شوید.",
+    "organizationDisabled": "سازمان شما غیرفعال شده است. با یک مدیر تماس بگیرید."
   },
   "account": {
     "title": "تنظیمات حساب",
@@ -70,18 +72,46 @@
     "contactRole": "نقش / وظیفه",
     "contactPhone": "تلفن",
     "contactEmail": "ایمیل",
-    "contactNote": "یادداشت (اختیاری)"
+    "contactNote": "یادداشت (اختیاری)",
+    "confirmDeleteContact": "این تماس حذف شود؟",
+    "myName": "نام من"
   },
   "publicPage": {
     "organization": "سازمان",
-    "contacts": "مخاطبین"
+    "contacts": "مخاطبین",
+    "backToList": "بازگشت به فهرست",
+    "deactivated": "این تلاش امدادی دیگر فعال نیست.",
+    "getDirections": "دریافت مسیر"
   },
   "admin": {
     "title": "حساب‌های برگزارکننده",
     "active": "فعال",
     "banned": "مسدود",
     "ban": "مسدود کردن",
-    "unban": "رفع مسدودیت"
+    "unban": "رفع مسدودیت",
+    "confirmBan": "این برگزارکننده مسدود شود؟ دیگر نمی‌تواند وارد شود.",
+    "confirmUnban": "مسدودیت این برگزارکننده برداشته شود؟ دوباره می‌تواند وارد شود.",
+    "role": "نقش",
+    "status": "وضعیت",
+    "organization": "سازمان",
+    "roleValues": {
+      "ADMIN": "مدیر پلتفرم",
+      "ORGANIZER": "سازمان‌دهنده"
+    },
+    "organizationsTitle": "سازمان‌ها",
+    "createOrganization": "ایجاد سازمان",
+    "organizationName": "نام",
+    "organizationDescription": "توضیحات",
+    "editOrganization": "ویرایش سازمان",
+    "deactivateOrganization": "غیرفعال‌سازی",
+    "activateOrganization": "فعال‌سازی",
+    "confirmDeactivateOrganization": "این سازمان غیرفعال شود؟ اعضای آن دیگر نمی‌توانند وارد شوند.",
+    "confirmActivateOrganization": "این سازمان دوباره فعال شود؟ اعضای آن می‌توانند دوباره وارد شوند.",
+    "orgRole": "نقش سازمانی",
+    "settingsTitle": "تنظیمات پلتفرم",
+    "defaultLanguage": "زبان پیش‌فرض",
+    "defaultLanguageHint": "تا زمانی که بازدیدکنندگان زبان خود را انتخاب نکنند، به آن‌ها نمایش داده می‌شود و در ایمیل‌های دعوت/بازنشانی استفاده می‌شود.",
+    "settingsSaved": "تنظیمات ذخیره شد."
   },
   "dashboard": {
     "title": "عملیات",
@@ -93,7 +123,12 @@
     "kpiOpen": "باز",
     "kpiCovered": "پوشش‌داده‌شده",
     "manage": "مدیریت",
-    "publicLink": "صفحه عمومی"
+    "publicLink": "صفحه عمومی",
+    "tabActive": "فعال",
+    "tabDeactivated": "غیرفعال",
+    "emptyActive": "هیچ درخواست کمک فعالی وجود ندارد.",
+    "emptyDeactivated": "هیچ درخواست کمک غیرفعالی وجود ندارد.",
+    "searchPlaceholder": "جستجو بر اساس عنوان یا مکان…"
   },
   "request": {
     "title": "عنوان",
@@ -105,6 +140,7 @@
     "locationSaved": "مکان به‌روز شد",
     "save": "ذخیره",
     "needs": "نیازها در این مکان",
+    "needsWithOffers": "نیازها و کمک‌های ورودی",
     "offers": "پیشنهادهای عمومی (کمک ورودی)",
     "offersHint": "بازدیدکنندگان بدون حساب ارسال می‌کنند. اینجا می‌توانید ویرایش یا حذف کنید.",
     "offersEmpty": "هنوز پیشنهادی نیست.",
@@ -115,9 +151,31 @@
     "closeNeed": "بستن نیاز",
     "requiredMinHint": "نمی‌تواند کمتر از پیشنهادشده باشد: {{offered}} {{unit}}",
     "share": "اشتراک لینک عمومی",
-    "detailsMeta": "جزئیات درخواست و یادداشت‌ها",
+    "copyLink": "کپی پیوند",
+    "linkCopied": "پیوند در کلیپ‌بورد کپی شد.",
+    "detailsMeta": "جزئیات درخواست",
+    "editDetails": "ویرایش جزئیات",
+    "backToDashboard": "بازگشت به داشبورد",
+    "deactivate": "غیرفعال‌سازی",
+    "reactivate": "فعال‌سازی مجدد",
+    "confirmDeactivate": "این درخواست کمک غیرفعال شود؟ دیگر پیشنهادهای جدید پذیرفته نمی‌شود و صفحه عمومی فقط نشان می‌دهد که دیگر فعال نیست.",
+    "confirmReactivate": "این درخواست کمک دوباره فعال شود؟ دوباره پیشنهادها پذیرفته می‌شود و صفحه عمومی همه جزئیات را نشان می‌دهد.",
+    "deactivated": "درخواست کمک غیرفعال شد.",
+    "reactivated": "درخواست کمک دوباره فعال شد.",
+    "deactivatedNotice": "این درخواست کمک غیرفعال است. دیگر پیشنهاد جدیدی نمی‌پذیرد و صفحه عمومی آن فقط یک اعلان نشان می‌دهد.",
     "addFirstNeed": "افزودن اولین نیاز (اختیاری)",
-    "firstNeedTitle": "عنوان اولین نیاز"
+    "firstNeedTitle": "عنوان اولین نیاز",
+    "confirmCloseNeed": "این نیاز بسته شود؟ دیگر پیشنهاد جدید نمی‌پذیرد.",
+    "confirmCancelOffer": "این پیشنهاد لغو شود؟ دیگر انتظار تامین‌کننده نمی‌رود.",
+    "confirmDeleteOffer": "این پیشنهاد برای همیشه حذف شود؟",
+    "confirmDeleteComment": "این یادداشت حذف شود؟",
+    "offerSortNewest": "جدیدترین",
+    "offerSortOldest": "قدیمی‌ترین",
+    "offerSortStatus": "بر اساس وضعیت",
+    "offerSortQuantity": "بیشترین مقدار",
+    "offerPage": "صفحه {{page}} از {{total}}",
+    "contacts": "مخاطبین",
+    "contactsHint": "مخصوص این درخواست کمک است. همراه با مخاطبین سازمان شما در صفحه عمومی آن نمایش داده می‌شود."
   },
   "comments": {
     "title": "یادداشت‌های داخلی",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "تا حدی پوشش‌داده‌شده",
       "COVERED": "پوشش‌داده‌شده",
       "CLOSED": "بسته"
+    },
+    "priorityValues": {
+      "CRITICAL": "بحرانی",
+      "HIGH": "بالا",
+      "NORMAL": "معمولی",
+      "LOW": "پایین"
+    },
+    "categoryValues": {
+      "FOOD": "غذا",
+      "WATER": "آب",
+      "CLOTHING": "پوشاک",
+      "SUPPLIES": "ملزومات",
+      "EQUIPMENT": "تجهیزات",
+      "MACHINERY": "ماشین‌آلات",
+      "VEHICLES": "وسایل نقلیه",
+      "SHELTER": "سرپناه",
+      "SERVICES": "خدمات",
+      "OTHER": "سایر"
     }
   },
   "offer": {
     "title": "پیشنهاد منابع",
     "providerName": "نام / سازمان",
+    "providerType": "نوع",
+    "searchPlaceholder": "نام، تلفن یا ایمیل",
+    "providerTypeValues": {
+      "PERSON": "شخص حقیقی",
+      "ORGANIZATION": "سازمان"
+    },
     "quantity": "مقدار مورد انتظار",
     "firstName": "نام",
     "lastName": "نام خانوادگی",
@@ -163,12 +245,64 @@
       "RECEIVED": "دریافت‌شده",
       "CANCELLED": "لغو شده"
     },
-    "cancel": "لغو پیشنهاد"
+    "cancel": "لغو پیشنهاد",
+    "contact": "تماس",
+    "distance": "فاصله",
+    "distanceKm": "{{km}} کیلومتر",
+    "statusLabel": "وضعیت",
+    "actions": "اقدامات",
+    "locationHint": "ما موقعیت شما را می‌پرسیم تا به سازمان‌دهندگان نشان دهیم چقدر فاصله دارید. دستگاه شما باید آن را به اشتراک بگذارد تا بتوانید پیشنهاد ارسال کنید — فقط فاصلهٔ محاسبه‌شده ذخیره می‌شود، هرگز موقعیت دقیق شما.",
+    "locationRequesting": "در حال درخواست موقعیت شما…",
+    "locationGranted": "موقعیت به اشتراک گذاشته شد.",
+    "locationDenied": "برای ارسال پیشنهاد، دسترسی به موقعیت مکانی لازم است.",
+    "retryLocation": "اشتراک‌گذاری موقعیت",
+    "changeStatus": "تغییر وضعیت",
+    "confirmMarkComing": "این پیشنهاد به‌عنوان در راه علامت‌گذاری شود؟ از ارائه‌دهنده انتظار می‌رود آن را تحویل دهد."
   },
   "common": {
+    "refresh": "بازخوانی",
     "loading": "در حال بارگذاری…",
     "error": "مشکلی پیش آمد.",
     "cancel": "لغو",
-    "delete": "حذف"
+    "delete": "حذف",
+    "confirm": "تأیید",
+    "confirmTitle": "تأیید",
+    "confirmBody": "مطمئن هستید؟",
+    "prev": "قبلی",
+    "next": "بعدی",
+    "all": "همه",
+    "min": "حداقل",
+    "max": "حداکثر",
+    "search": "جستجو",
+    "filters": "فیلترها",
+    "clearFilters": "پاک کردن فیلترها",
+    "perPage": "در هر صفحه"
+  },
+  "organization": {
+    "title": "سازمان",
+    "name": "نام",
+    "description": "توضیحات",
+    "save": "ذخیره",
+    "saved": "سازمان ذخیره شد",
+    "membersTitle": "اعضا",
+    "invite": "دعوت",
+    "remove": "حذف",
+    "confirmRemoveMember": "این عضو حذف شود؟ دسترسی او بلافاصله قطع می‌شود.",
+    "roleValues": {
+      "ADMIN": "مدیر",
+      "USER": "عضو"
+    }
+  },
+  "invites": {
+    "create": "ایجاد دعوت",
+    "organization": "سازمان",
+    "role": "نقش",
+    "tokenLink": "توکن / لینک",
+    "expires": "انقضا",
+    "usedColumn": "استفاده‌شده",
+    "used": "بله",
+    "unused": "خیر",
+    "revoke": "لغو",
+    "confirmRevoke": "این دعوت لغو شود؟ لینک دیگر کار نخواهد کرد."
   }
 }

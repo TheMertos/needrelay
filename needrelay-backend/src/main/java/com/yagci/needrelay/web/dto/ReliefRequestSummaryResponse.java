@@ -13,9 +13,9 @@ import java.util.UUID;
  * @param locationLabel location label
  * @param publicSlug public slug
  * @param status status
- * @param openNeedsCount OPEN + PARTIALLY_COVERED needs
- * @param criticalNeedsCount critical open/partial needs
- * @param coveredNeedsCount COVERED needs
+ * @param openNeeds OPEN + PARTIALLY_COVERED needs
+ * @param criticalNeeds critical open/partial needs
+ * @param coveredNeeds COVERED needs
  * @param createdAt created at
  * @param updatedAt updated at
  */
@@ -25,9 +25,9 @@ public record ReliefRequestSummaryResponse(
 		String locationLabel,
 		String publicSlug,
 		ReliefRequestStatus status,
-		long openNeedsCount,
-		long criticalNeedsCount,
-		long coveredNeedsCount,
+		long openNeeds,
+		long criticalNeeds,
+		long coveredNeeds,
 		Instant createdAt,
 		Instant updatedAt
 ) {

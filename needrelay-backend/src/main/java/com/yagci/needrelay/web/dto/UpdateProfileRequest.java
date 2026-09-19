@@ -4,13 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * Updates the current organizer profile.
+ * Updates the current person's own profile.
  *
- * @param displayName organization / display name
- * @param description optional organization description
+ * @param displayName person's display name
  */
 public record UpdateProfileRequest(
-		@NotBlank @Size(max = 200) String displayName,
-		@Size(max = 5000) String description
+		@NotBlank @Size(max = 200) String displayName
 ) {
 }

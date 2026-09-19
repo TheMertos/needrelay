@@ -8,6 +8,4 @@
 
 export interface UpdateProfileRequest {
   displayName: string;
-  /** @nullable */
-  description?: string | null;
 }

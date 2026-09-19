@@ -1,7 +1,9 @@
-import { Badge, Button, Group, Stack, Text, Title } from '@mantine/core';
+import { Button, Group, Stack, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import type { NeedResponse } from '../api/generated/models';
 import { NeedPriority, NeedStatus } from '../api/generated/models';
+import { NeedCategoryBadge } from './NeedCategoryBadge';
+import { NeedPriorityBadge } from './NeedPriorityBadge';
 import { NeedStatusBadge } from './NeedStatusBadge';
 import { SurfaceCard } from './SurfaceCard';
 import './NeedOfferRow.css';
@@ -44,8 +46,8 @@ export function NeedOfferRow({
             <Title order={4}>{need.title}</Title>
             <Group gap="xs" mt={4}>
               <NeedStatusBadge status={need.status} />
-              <Badge variant="outline">{need.priority}</Badge>
-              <Badge variant="light">{need.category}</Badge>
+              <NeedPriorityBadge priority={need.priority} />
+              <NeedCategoryBadge category={need.category} />
             </Group>
           </div>
           <Button

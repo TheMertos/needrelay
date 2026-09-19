@@ -95,4 +95,4 @@ Repository secrets required:
 
 - Host networking means Compose `ports:` mappings are unused; processes bind host ports directly.
 - Keep `.env` off git; only `.env.example` is committed.
-- For a local all-in-one build without Caddy, use the repo-root `docker-compose.app.yml` instead of this folder.
+- For a local all-in-one build without Caddy, use the repo-root `docker-compose.yml` (`docker compose up -d --build`).

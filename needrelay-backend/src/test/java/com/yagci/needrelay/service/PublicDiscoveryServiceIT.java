@@ -4,11 +4,14 @@ import com.yagci.needrelay.domain.Need;
 import com.yagci.needrelay.domain.NeedCategory;
 import com.yagci.needrelay.domain.NeedPriority;
 import com.yagci.needrelay.domain.NeedStatus;
+import com.yagci.needrelay.domain.Organization;
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.Organizer;
 import com.yagci.needrelay.domain.OrganizerRole;
 import com.yagci.needrelay.domain.ReliefRequest;
 import com.yagci.needrelay.domain.ReliefRequestStatus;
 import com.yagci.needrelay.repository.NeedRepository;
+import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.repository.ReliefRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +35,9 @@ class PublicDiscoveryServiceIT {
 	private OrganizerRepository organizerRepository;
 
 	@Autowired
+	private OrganizationRepository organizationRepository;
+
+	@Autowired
 	private ReliefRequestRepository reliefRequestRepository;
 
 	@Autowired
@@ -42,16 +48,23 @@ class PublicDiscoveryServiceIT {
 		needRepository.deleteAll();
 		reliefRequestRepository.deleteAll();
 		organizerRepository.deleteAll();
+		organizationRepository.deleteAll();
+
+		Organization organization = new Organization();
+		organization.setName("Aid Org");
+		organizationRepository.save(organization);
 
 		Organizer organizer = new Organizer();
 		organizer.setEmail("disc@example.com");
 		organizer.setPasswordHash("hash");
 		organizer.setDisplayName("Aid Org");
 		organizer.setRole(OrganizerRole.ORGANIZER);
+		organizer.setOrganization(organization);
+		organizer.setOrganizationRole(OrganizationRole.ADMIN);
 		organizerRepository.save(organizer);
 
 		ReliefRequest active = new ReliefRequest();
-		active.setOrganizer(organizer);
+		active.setOrganization(organization);
 		active.setTitle("Active Camp");
 		active.setDescription("d");
 		active.setLocationLabel("Aleppo North");
@@ -62,7 +75,7 @@ class PublicDiscoveryServiceIT {
 		reliefRequestRepository.save(active);
 
 		ReliefRequest archived = new ReliefRequest();
-		archived.setOrganizer(organizer);
+		archived.setOrganization(organization);
 		archived.setTitle("Archived Camp");
 		archived.setDescription("d");
 		archived.setLocationLabel("Elsewhere");
@@ -118,14 +131,88 @@ class PublicDiscoveryServiceIT {
 	}
 
 	@Test
-	void returnsOnlyActivePointsAndOpenOrPartialNeeds() {
-		var result = publicDiscoveryService.getDiscovery();
-		assertThat(result.points()).hasSize(1);
-		assertThat(result.points().getFirst().publicSlug()).isEqualTo("active-camp");
-		assertThat(result.points().getFirst().locationLabel()).isEqualTo("Aleppo North");
-		assertThat(result.needs()).hasSize(1);
-		assertThat(result.needs().getFirst().title()).isEqualTo("Water");
-		assertThat(result.needs().getFirst().organizationName()).isEqualTo("Aid Org");
-		assertThat(result.needs().getFirst().publicSlug()).isEqualTo("active-camp");
+	void returnsOnlyActivePoints() {
+		var result = publicDiscoveryService.getDiscovery(null, 0, 20);
+		assertThat(result.items()).hasSize(1);
+		assertThat(result.items().getFirst().publicSlug()).isEqualTo("active-camp");
+		assertThat(result.items().getFirst().locationLabel()).isEqualTo("Aleppo North");
+		assertThat(result.totalElements()).isEqualTo(1);
+		assertThat(result.totalPages()).isEqualTo(1);
+	}
+
+	@Test
+	void searchMatchesLocationLabel() {
+		var result = publicDiscoveryService.getDiscovery("aleppo", 0, 20);
+		assertThat(result.items()).hasSize(1);
+		assertThat(result.items().getFirst().publicSlug()).isEqualTo("active-camp");
+	}
+
+	@Test
+	void searchMatchesNeedTitleOnDiscoverableNeeds() {
+		var matches = publicDiscoveryService.getDiscovery("water", 0, 20);
+		assertThat(matches.items()).hasSize(1);
+		assertThat(matches.items().getFirst().publicSlug()).isEqualTo("active-camp");
+
+		var noMatches = publicDiscoveryService.getDiscovery("old", 0, 20);
+		assertThat(noMatches.items()).isEmpty();
+	}
+
+	@Test
+	void searchWithNoMatchReturnsEmptyPage() {
+		var result = publicDiscoveryService.getDiscovery("no-such-place", 0, 20);
+		assertThat(result.items()).isEmpty();
+		assertThat(result.totalElements()).isEqualTo(0);
+	}
+
+	@Test
+	void pagesPointsCappedAtFiftyPerPage() {
+		for (int i = 0; i < 5; i++) {
+			ReliefRequest extra = new ReliefRequest();
+			extra.setOrganization(reliefRequestRepository.findByPublicSlug("active-camp").orElseThrow().getOrganization());
+			extra.setTitle("Extra Point " + i);
+			extra.setDescription("d");
+			extra.setLocationLabel("Somewhere " + i);
+			extra.setLatitude(1);
+			extra.setLongitude(2);
+			extra.setPublicSlug("extra-point-" + i);
+			extra.setStatus(ReliefRequestStatus.ACTIVE);
+			reliefRequestRepository.save(extra);
+		}
+
+		var firstPage = publicDiscoveryService.getDiscovery(null, 0, 100);
+		assertThat(firstPage.items()).hasSize(6);
+		assertThat(firstPage.size()).isEqualTo(50);
+		assertThat(firstPage.totalElements()).isEqualTo(6);
+		assertThat(firstPage.totalPages()).isEqualTo(1);
+
+		var firstOfTwo = publicDiscoveryService.getDiscovery(null, 0, 4);
+		assertThat(firstOfTwo.items()).hasSize(4);
+		assertThat(firstOfTwo.totalPages()).isEqualTo(2);
+	}
+
+	@Test
+	void pagesPointNeedsCappedAtTwentyPerPage() {
+		ReliefRequest active = reliefRequestRepository.findByPublicSlug("active-camp").orElseThrow();
+		for (int i = 0; i < 25; i++) {
+			Need extra = new Need();
+			extra.setReliefRequest(active);
+			extra.setTitle("Extra " + i);
+			extra.setCategory(NeedCategory.SUPPLIES);
+			extra.setQuantityRequired(new BigDecimal("1"));
+			extra.setQuantityOffered(BigDecimal.ZERO);
+			extra.setUnit("x");
+			extra.setPriority(NeedPriority.NORMAL);
+			extra.setStatus(NeedStatus.OPEN);
+			needRepository.save(extra);
+		}
+
+		var firstPage = publicDiscoveryService.getPointNeeds(active.getId(), 0, 100);
+		assertThat(firstPage.items()).hasSize(20);
+		assertThat(firstPage.size()).isEqualTo(20);
+		assertThat(firstPage.totalElements()).isEqualTo(26);
+		assertThat(firstPage.totalPages()).isEqualTo(2);
+
+		var secondPage = publicDiscoveryService.getPointNeeds(active.getId(), 1, 20);
+		assertThat(secondPage.items()).hasSize(6);
 	}
 }

@@ -2,11 +2,11 @@ import { expect, test } from '@playwright/test';
 
 test.describe('mobile shell', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('**/api/public/discovery', async (route) => {
+    await page.route('**/api/public/discovery*', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ points: [], needs: [] }),
+        body: JSON.stringify({ items: [], page: 0, size: 20, totalElements: 0, totalPages: 1 }),
       });
     });
   });

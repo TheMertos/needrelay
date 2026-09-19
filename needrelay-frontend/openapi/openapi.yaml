@@ -13,6 +13,7 @@ tags:
   - name: needs
   - name: comments
   - name: public
+  - name: settings
 paths:
   /api/auth/register:
     post:
@@ -225,6 +226,229 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganizerResponse'
+  /api/admin/organizers/{organizerId}/role:
+    patch:
+      tags: [admin]
+      operationId: adminUpdateOrganizerRole
+      summary: Update organization member role
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerResponse'
+  /api/admin/organizations:
+    get:
+      tags: [admin]
+      operationId: listOrganizations
+      summary: List organizations
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationResponse'
+    post:
+      tags: [admin]
+      operationId: createOrganization
+      summary: Create organization
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /api/admin/organizations/{organizationId}:
+    put:
+      tags: [admin]
+      operationId: updateOrganization
+      summary: Update organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /api/admin/organizations/{organizationId}/deactivate:
+    post:
+      tags: [admin]
+      operationId: deactivateOrganization
+      summary: Deactivate organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Deactivated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /api/admin/organizations/{organizationId}/activate:
+    post:
+      tags: [admin]
+      operationId: activateOrganization
+      summary: Activate organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Activated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /api/me/organization:
+    get:
+      tags: [organization]
+      operationId: getMyOrganization
+      summary: Get my organization
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+    put:
+      tags: [organization]
+      operationId: updateMyOrganization
+      summary: Update my organization
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+  /api/me/organization/members:
+    get:
+      tags: [organization]
+      operationId: listOrganizationMembers
+      summary: List organization members
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationMemberResponse'
+  /api/me/organization/members/{organizerId}:
+    patch:
+      tags: [organization]
+      operationId: updateMemberRole
+      summary: Update member role
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMemberRoleRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMemberResponse'
+    delete:
+      tags: [organization]
+      operationId: removeMember
+      summary: Remove member
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Removed
   /api/invites:
     get:
       tags: [invites]
@@ -258,6 +482,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InviteResponse'
+  /api/invites/{inviteId}:
+    delete:
+      tags: [invites]
+      operationId: revokeInvite
+      summary: Revoke invite
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: inviteId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Revoked
   /api/relief-requests:
     get:
       tags: [relief-requests]
@@ -409,15 +650,71 @@ paths:
         - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/requestId'
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: createdAt,desc
+            enum:
+              - createdAt,desc
+              - createdAt,asc
+              - status,asc
+              - status,desc
+              - quantity,desc
+              - quantity,asc
+              - providerName,asc
+              - providerName,desc
+              - providerType,asc
+              - providerType,desc
+              - distanceKm,asc
+              - distanceKm,desc
+              - firstName,asc
+              - firstName,desc
+              - lastName,asc
+              - lastName,desc
+              - phone,asc
+              - phone,desc
+              - email,asc
+              - email,desc
+        - name: needId
+          in: query
+          description: Scopes the page/filter/sort to a single need's independent table.
+          schema: { type: string, format: uuid }
+        - name: status
+          in: query
+          schema: { $ref: '#/components/schemas/OfferStatus' }
+        - name: providerType
+          in: query
+          schema: { $ref: '#/components/schemas/ProviderType' }
+        - name: q
+          in: query
+          description: Free-text search across provider/first/last name, phone and email.
+          schema: { type: string }
+        - name: minQuantity
+          in: query
+          schema: { type: number }
+        - name: maxQuantity
+          in: query
+          schema: { type: number }
+        - name: minDistanceKm
+          in: query
+          schema: { type: number }
+        - name: maxDistanceKm
+          in: query
+          schema: { type: number }
       responses:
         '200':
-          description: Offers
+          description: Offers page
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OfferResponse'
+                $ref: '#/components/schemas/OfferPageResponse'
   /api/relief-requests/{requestId}/offers/{offerId}:
     put:
       tags: [relief-requests]
@@ -590,6 +887,90 @@ paths:
       responses:
         '204':
           description: Deleted
+  /api/relief-requests/{requestId}/contacts:
+    get:
+      tags: [contacts]
+      operationId: listRequestContacts
+      summary: List relief request contacts
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      responses:
+        '200':
+          description: Contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizerContactResponse'
+    post:
+      tags: [contacts]
+      operationId: createRequestContact
+      summary: Create relief request contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertOrganizerContactRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerContactResponse'
+  /api/relief-requests/{requestId}/contacts/{contactId}:
+    put:
+      tags: [contacts]
+      operationId: updateRequestContact
+      summary: Update relief request contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertOrganizerContactRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizerContactResponse'
+    delete:
+      tags: [contacts]
+      operationId: deleteRequestContact
+      summary: Delete relief request contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: contactId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
   /api/me/contacts:
     get:
       tags: [contacts]
@@ -668,17 +1049,78 @@ paths:
       responses:
         '204':
           description: Deleted
+  /api/settings:
+    get:
+      tags: [settings]
+      operationId: getPublicSettings
+      summary: Get public platform settings
+      responses:
+        '200':
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemSettingsResponse'
+  /api/admin/settings:
+    put:
+      tags: [admin]
+      operationId: updateSystemSettings
+      summary: Update platform settings
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSystemSettingsRequest'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemSettingsResponse'
   /api/public/discovery:
     get:
       tags: [public]
       operationId: getPublicDiscovery
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
       responses:
         '200':
           description: Discovery payload
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicDiscoveryResponse'
+                $ref: '#/components/schemas/DiscoveryPointPageResponse'
+  /api/public/discovery/points/{requestId}/needs:
+    get:
+      tags: [public]
+      operationId: getDiscoveryPointNeeds
+      parameters:
+        - $ref: '#/components/parameters/requestId'
+        - name: page
+          in: query
+          schema: { type: integer, minimum: 0, default: 0 }
+        - name: size
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 20, default: 20 }
+      responses:
+        '200':
+          description: Needs page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryNeedPageResponse'
   /api/public/relief-requests/{slug}:
     get:
       tags: [public]
@@ -783,10 +1225,64 @@ components:
         id: { type: string, format: uuid }
         email: { type: string }
         displayName: { type: string }
-        description: { type: string, nullable: true }
         role: { type: string, enum: [ADMIN, ORGANIZER] }
         active: { type: boolean }
+        organizationId: { type: string, format: uuid, nullable: true }
+        organizationName: { type: string, nullable: true }
+        organizationRole:
+          allOf: [{ $ref: '#/components/schemas/OrganizationRole' }]
+          nullable: true
         createdAt: { type: string, format: date-time }
+    SystemSettingsResponse:
+      type: object
+      required: [defaultLanguage, createdAt, updatedAt]
+      properties:
+        defaultLanguage: { type: string }
+        createdAt: { type: string, format: date-time, nullable: true }
+        updatedAt: { type: string, format: date-time, nullable: true }
+    UpdateSystemSettingsRequest:
+      type: object
+      required: [defaultLanguage]
+      properties:
+        defaultLanguage: { type: string }
+    OrganizationResponse:
+      type: object
+      required: [id, name, active, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        description: { type: string, nullable: true }
+        active: { type: boolean }
+        createdAt: { type: string, format: date-time }
+    UpdateOrganizationRequest:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+    CreateOrganizationRequest:
+      type: object
+      required: [name]
+      properties:
+        name: { type: string }
+        description: { type: string, nullable: true }
+    OrganizationMemberResponse:
+      type: object
+      required: [id, email, displayName, organizationRole, active, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        email: { type: string }
+        displayName: { type: string }
+        organizationRole:
+          $ref: '#/components/schemas/OrganizationRole'
+        active: { type: boolean }
+        createdAt: { type: string, format: date-time }
+    UpdateMemberRoleRequest:
+      type: object
+      required: [organizationRole]
+      properties:
+        organizationRole:
+          $ref: '#/components/schemas/OrganizationRole'
     UpsertOrganizerContactRequest:
       type: object
       required: [name, role, phone, email]
@@ -829,22 +1325,31 @@ components:
       required: [displayName]
       properties:
         displayName: { type: string }
-        description: { type: string, nullable: true }
     CreateInviteRequest:
       type: object
       properties:
         email: { type: string, format: email, nullable: true }
         daysValid: { type: integer, minimum: 1, maximum: 90, default: 7 }
+        organizationId: { type: string, format: uuid, nullable: true }
+        organizationRole:
+          allOf: [{ $ref: '#/components/schemas/OrganizationRole' }]
+          nullable: true
     InviteResponse:
       type: object
-      required: [id, token, expiresAt, createdAt]
+      required: [id, token, expiresAt, createdAt, organizationRole]
       properties:
         id: { type: string, format: uuid }
         token: { type: string }
         email: { type: string, nullable: true }
+        organizationId: { type: string, format: uuid, nullable: true }
+        organizationName: { type: string, nullable: true }
+        organizationRole:
+          $ref: '#/components/schemas/OrganizationRole'
         expiresAt: { type: string, format: date-time }
         usedAt: { type: string, format: date-time, nullable: true }
         createdAt: { type: string, format: date-time }
+        emailSentAt: { type: string, format: date-time, nullable: true }
+        emailError: { type: string, nullable: true }
     CreateReliefRequest:
       type: object
       required: [title, description, locationLabel, latitude, longitude]
@@ -856,13 +1361,14 @@ components:
         longitude: { type: number, format: double }
     UpdateReliefRequest:
       type: object
-      required: [title, description, locationLabel, latitude, longitude]
+      required: [title, description, locationLabel, latitude, longitude, status]
       properties:
         title: { type: string }
         description: { type: string }
         locationLabel: { type: string }
         latitude: { type: number, format: double }
         longitude: { type: number, format: double }
+        status: { type: string, enum: [ACTIVE, ARCHIVED] }
     ReliefRequestResponse:
       type: object
       required: [id, title, description, locationLabel, latitude, longitude, publicSlug, status, createdAt]
@@ -878,12 +1384,13 @@ components:
         createdAt: { type: string, format: date-time }
     ReliefRequestSummaryResponse:
       type: object
-      required: [id, title, locationLabel, publicSlug, openNeeds, criticalNeeds, coveredNeeds]
+      required: [id, title, locationLabel, publicSlug, status, openNeeds, criticalNeeds, coveredNeeds]
       properties:
         id: { type: string, format: uuid }
         title: { type: string }
         locationLabel: { type: string }
         publicSlug: { type: string }
+        status: { type: string, enum: [ACTIVE, ARCHIVED] }
         openNeeds: { type: integer }
         criticalNeeds: { type: integer }
         coveredNeeds: { type: integer }
@@ -940,22 +1447,40 @@ components:
     OfferStatus:
       type: string
       enum: [PENDING, COMING, RECEIVED, CANCELLED]
+    ProviderType:
+      type: string
+      enum: [PERSON, ORGANIZATION]
+    OrganizationRole:
+      type: string
+      enum: [ADMIN, USER]
     CreateOfferRequest:
       type: object
-      required: [providerName, quantity, firstName, lastName, phone, email]
+      required: [providerName, providerType, quantity, firstName, lastName, phone, email]
       properties:
         providerName: { type: string }
+        providerType: { $ref: '#/components/schemas/ProviderType' }
         quantity: { type: number }
         firstName: { type: string, maxLength: 100 }
         lastName: { type: string, maxLength: 100 }
         phone: { type: string, maxLength: 80 }
         email: { type: string, format: email, maxLength: 320 }
         note: { type: string, nullable: true }
+        latitude:
+          type: number
+          format: double
+          nullable: true
+          description: Offerer's current latitude from an optional browser geolocation share; used only to compute distanceKm and never persisted.
+        longitude:
+          type: number
+          format: double
+          nullable: true
+          description: Offerer's current longitude, see latitude.
     UpdateOfferRequest:
       type: object
-      required: [providerName, quantity, firstName, lastName, phone, email]
+      required: [providerName, providerType, quantity, firstName, lastName, phone, email]
       properties:
         providerName: { type: string }
+        providerType: { $ref: '#/components/schemas/ProviderType' }
         quantity: { type: number }
         firstName: { type: string, maxLength: 100 }
         lastName: { type: string, maxLength: 100 }
@@ -978,13 +1503,39 @@ components:
         body: { type: string }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+    OfferPageResponse:
+      type: object
+      required: [items, page, size, totalElements, totalPages]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfferResponse'
+        page: { type: integer }
+        size: { type: integer }
+        totalElements: { type: integer, format: int64 }
+        totalPages: { type: integer }
     OfferResponse:
       type: object
-      required: [id, needId, providerName, quantity, status, firstName, lastName, phone, email, createdAt]
+      required:
+        [
+          id,
+          needId,
+          providerName,
+          providerType,
+          quantity,
+          status,
+          firstName,
+          lastName,
+          phone,
+          email,
+          createdAt,
+        ]
       properties:
         id: { type: string, format: uuid }
         needId: { type: string, format: uuid }
         providerName: { type: string }
+        providerType: { $ref: '#/components/schemas/ProviderType' }
         quantity: { type: number }
         quantityReceived: { type: number, nullable: true }
         status: { $ref: '#/components/schemas/OfferStatus' }
@@ -993,6 +1544,10 @@ components:
         phone: { type: string }
         email: { type: string, format: email }
         note: { type: string, nullable: true }
+        distanceKm:
+          type: number
+          nullable: true
+          description: Distance in km from the offerer's shared location to the relief request, null when no location was shared.
         createdAt: { type: string, format: date-time }
     PublicReliefRequestResponse:
       type: object
@@ -1040,26 +1595,62 @@ components:
         publicSlug: { type: string }
     DiscoveryNeedResponse:
       type: object
-      required: [id, title, priority, status, requestId, publicSlug, locationLabel, organizationName]
+      required:
+        [
+          id,
+          title,
+          category,
+          quantityRequired,
+          quantityOffered,
+          quantityPending,
+          remaining,
+          unit,
+          priority,
+          status,
+          requestId,
+          publicSlug,
+          locationLabel,
+          organizationName,
+        ]
       properties:
         id: { type: string, format: uuid }
         title: { type: string }
+        category: { $ref: '#/components/schemas/NeedCategory' }
+        quantityRequired: { type: number }
+        quantityOffered: { type: number }
+        quantityPending: { type: number }
+        remaining: { type: number }
+        unit: { type: string }
         priority: { $ref: '#/components/schemas/NeedPriority' }
         status: { $ref: '#/components/schemas/NeedStatus' }
         requestId: { type: string, format: uuid }
         publicSlug: { type: string }
         locationLabel: { type: string }
         organizationName: { type: string }
-    PublicDiscoveryResponse:
+    DiscoveryPointPageResponse:
       type: object
-      required: [points, needs]
+      required: [items, page, size, totalElements, totalPages]
       properties:
-        points:
+        items:
           type: array
-          items: { $ref: '#/components/schemas/DiscoveryPointResponse' }
-        needs:
+          items:
+            $ref: '#/components/schemas/DiscoveryPointResponse'
+        page: { type: integer }
+        size: { type: integer }
+        totalElements: { type: integer, format: int64 }
+        totalPages: { type: integer }
+    DiscoveryNeedPageResponse:
+      type: object
+      required: [items, page, size, totalElements, totalPages]
+      properties:
+        items:
           type: array
-          items: { $ref: '#/components/schemas/DiscoveryNeedResponse' }
+          items:
+            $ref: '#/components/schemas/DiscoveryNeedResponse'
+        page: { type: integer }
+        size: { type: integer }
+        totalElements: { type: integer, format: int64 }
+        totalPages: { type: integer }
     NeedCategory:
       type: string
       enum: [FOOD, WATER, CLOTHING, SUPPLIES, EQUIPMENT, MACHINERY, VEHICLES, SHELTER, SERVICES, OTHER]

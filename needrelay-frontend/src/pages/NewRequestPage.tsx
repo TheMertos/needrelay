@@ -132,12 +132,18 @@ export function NewRequestPage() {
                     />
                     <Select
                       label={t('need.category')}
-                      data={Object.values(NeedCategory)}
+                      data={Object.values(NeedCategory).map((value) => ({
+                        value,
+                        label: t(`need.categoryValues.${value}`),
+                      }))}
                       {...form.getInputProps('firstNeedCategory')}
                     />
                     <Select
                       label={t('need.priority')}
-                      data={Object.values(NeedPriority)}
+                      data={Object.values(NeedPriority).map((value) => ({
+                        value,
+                        label: t(`need.priorityValues.${value}`),
+                      }))}
                       {...form.getInputProps('firstNeedPriority')}
                     />
                     <NumberInput

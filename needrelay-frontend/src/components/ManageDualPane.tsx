@@ -1,18 +1,18 @@
-import { Box, SimpleGrid } from '@mantine/core';
+import { Box, Stack } from '@mantine/core';
 import type { ReactNode } from 'react';
 
 /**
- * Manage-request dual pane: left triage, right offer inbox.
+ * Manage-request stacked layout: needs above, offer inbox below.
  *
- * @param props.left needs and map column
- * @param props.right offer inbox column
+ * @param props.left needs and map section
+ * @param props.right offer inbox section
  * @returns layout wrapper
  */
 export function ManageDualPane({ left, right }: { left: ReactNode; right: ReactNode }) {
   return (
-    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md" data-testid="manage-dual-pane">
+    <Stack gap="md" data-testid="manage-dual-pane">
       <Box data-testid="manage-left">{left}</Box>
       <Box data-testid="manage-right">{right}</Box>
-    </SimpleGrid>
+    </Stack>
   );
 }

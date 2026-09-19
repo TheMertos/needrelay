@@ -1,10 +1,11 @@
 package com.yagci.needrelay.service;
 
-import com.yagci.needrelay.domain.Organizer;
+import com.yagci.needrelay.domain.Organization;
 import com.yagci.needrelay.domain.OrganizerContact;
+import com.yagci.needrelay.domain.ReliefRequest;
 import com.yagci.needrelay.exception.ApiException;
+import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerContactRepository;
-import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.web.dto.OrganizerContactResponse;
 import com.yagci.needrelay.web.dto.UpsertOrganizerContactRequest;
 import org.springframework.http.HttpStatus;
@@ -15,89 +16,185 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * CRUD for organizer organization contacts.
+ * CRUD for organizer organization contacts, both organization-wide and relief-request-specific.
  */
 @Service
 public class OrganizerContactService {
 
 	private static final int MAX_CONTACTS = 20;
+	private static final int MAX_REQUEST_CONTACTS = 10;
 
 	private final OrganizerContactRepository contactRepository;
-	private final OrganizerRepository organizerRepository;
+	private final OrganizationRepository organizationRepository;
+	private final ReliefRequestService reliefRequestService;
 
 	/**
 	 * @param contactRepository contact persistence
-	 * @param organizerRepository organizer persistence
+	 * @param organizationRepository organization persistence
+	 * @param reliefRequestService relief request ownership lookup
 	 */
 	public OrganizerContactService(
 			OrganizerContactRepository contactRepository,
-			OrganizerRepository organizerRepository) {
+			OrganizationRepository organizationRepository,
+			ReliefRequestService reliefRequestService) {
 		this.contactRepository = contactRepository;
-		this.organizerRepository = organizerRepository;
+		this.organizationRepository = organizationRepository;
+		this.reliefRequestService = reliefRequestService;
 	}
 
 	/**
-	 * Lists contacts for an organizer.
+	 * Lists organization-wide contacts for an organization.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @return contacts
 	 */
 	@Transactional(readOnly = true)
-	public List<OrganizerContactResponse> list(UUID organizerId) {
-		return contactRepository.findByOrganizerIdOrderBySortOrderAscCreatedAtAsc(organizerId).stream()
+	public List<OrganizerContactResponse> list(UUID organizationId) {
+		return contactRepository
+				.findByOrganizationIdAndReliefRequestIsNullOrderBySortOrderAscCreatedAtAsc(organizationId)
+				.stream()
 				.map(OrganizerContactService::toResponse)
 				.toList();
 	}
 
 	/**
-	 * Creates a contact for the organizer.
+	 * Creates an organization-wide contact.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param request payload
 	 * @return created contact
 	 */
 	@Transactional
-	public OrganizerContactResponse create(UUID organizerId, UpsertOrganizerContactRequest request) {
-		if (contactRepository.countByOrganizerId(organizerId) >= MAX_CONTACTS) {
+	public OrganizerContactResponse create(UUID organizationId, UpsertOrganizerContactRequest request) {
+		if (contactRepository.countByOrganizationIdAndReliefRequestIsNull(organizationId) >= MAX_CONTACTS) {
 			throw new ApiException("CONTACT_LIMIT", "Maximum of " + MAX_CONTACTS + " contacts allowed", HttpStatus.BAD_REQUEST);
 		}
-		Organizer organizer = organizerRepository.findById(organizerId)
-				.orElseThrow(() -> new ApiException("ORGANIZER_NOT_FOUND", "Organizer not found", HttpStatus.NOT_FOUND));
+		Organization organization = organizationRepository.findById(organizationId)
+				.orElseThrow(() -> new ApiException("ORGANIZATION_NOT_FOUND", "Organization not found", HttpStatus.NOT_FOUND));
 		OrganizerContact contact = new OrganizerContact();
-		contact.setOrganizer(organizer);
+		contact.setOrganization(organization);
 		apply(contact, request);
-		contact.setSortOrder((int) contactRepository.countByOrganizerId(organizerId));
+		contact.setSortOrder((int) contactRepository.countByOrganizationIdAndReliefRequestIsNull(organizationId));
 		return toResponse(contactRepository.save(contact));
 	}
 
 	/**
-	 * Updates an owned contact.
+	 * Updates an owned organization-wide contact.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param contactId contact id
 	 * @param request payload
 	 * @return updated contact
 	 */
 	@Transactional
 	public OrganizerContactResponse update(
-			UUID organizerId,
+			UUID organizationId,
 			UUID contactId,
 			UpsertOrganizerContactRequest request) {
-		OrganizerContact contact = requireOwned(organizerId, contactId);
+		OrganizerContact contact = requireOwned(organizationId, contactId);
 		apply(contact, request);
 		return toResponse(contactRepository.save(contact));
 	}
 
 	/**
-	 * Deletes an owned contact.
+	 * Deletes an owned organization-wide contact.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param contactId contact id
 	 */
 	@Transactional
-	public void delete(UUID organizerId, UUID contactId) {
-		OrganizerContact contact = requireOwned(organizerId, contactId);
+	public void delete(UUID organizationId, UUID contactId) {
+		OrganizerContact contact = requireOwned(organizationId, contactId);
 		contactRepository.delete(contact);
+	}
+
+	/**
+	 * Lists contacts specific to an owned relief request.
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @return contacts
+	 */
+	@Transactional(readOnly = true)
+	public List<OrganizerContactResponse> listForRequest(UUID organizerId, UUID requestId) {
+		reliefRequestService.getOwnedEntity(organizerId, requestId);
+		return contactRepository.findByReliefRequestIdOrderBySortOrderAscCreatedAtAsc(requestId).stream()
+				.map(OrganizerContactService::toResponse)
+				.toList();
+	}
+
+	/**
+	 * Creates a contact specific to an owned relief request.
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @param request payload
+	 * @return created contact
+	 */
+	@Transactional
+	public OrganizerContactResponse createForRequest(
+			UUID organizerId,
+			UUID requestId,
+			UpsertOrganizerContactRequest request) {
+		ReliefRequest reliefRequest = reliefRequestService.getOwnedEntity(organizerId, requestId);
+		if (contactRepository.countByReliefRequestId(requestId) >= MAX_REQUEST_CONTACTS) {
+			throw new ApiException(
+					"CONTACT_LIMIT", "Maximum of " + MAX_REQUEST_CONTACTS + " contacts allowed", HttpStatus.BAD_REQUEST);
+		}
+		OrganizerContact contact = new OrganizerContact();
+		contact.setOrganization(reliefRequest.getOrganization());
+		contact.setReliefRequest(reliefRequest);
+		apply(contact, request);
+		contact.setSortOrder((int) contactRepository.countByReliefRequestId(requestId));
+		return toResponse(contactRepository.save(contact));
+	}
+
+	/**
+	 * Updates a contact specific to an owned relief request.
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @param contactId contact id
+	 * @param request payload
+	 * @return updated contact
+	 */
+	@Transactional
+	public OrganizerContactResponse updateForRequest(
+			UUID organizerId,
+			UUID requestId,
+			UUID contactId,
+			UpsertOrganizerContactRequest request) {
+		reliefRequestService.getOwnedEntity(organizerId, requestId);
+		OrganizerContact contact = requireOwnedByRequest(requestId, contactId);
+		apply(contact, request);
+		return toResponse(contactRepository.save(contact));
+	}
+
+	/**
+	 * Deletes a contact specific to an owned relief request.
+	 *
+	 * @param organizerId owner id
+	 * @param requestId relief request id
+	 * @param contactId contact id
+	 */
+	@Transactional
+	public void deleteForRequest(UUID organizerId, UUID requestId, UUID contactId) {
+		reliefRequestService.getOwnedEntity(organizerId, requestId);
+		OrganizerContact contact = requireOwnedByRequest(requestId, contactId);
+		contactRepository.delete(contact);
+	}
+
+	/**
+	 * Lists contacts specific to a relief request for public display (no ownership check).
+	 *
+	 * @param requestId relief request id
+	 * @return contacts
+	 */
+	@Transactional(readOnly = true)
+	public List<OrganizerContactResponse> listForRequestPublic(UUID requestId) {
+		return contactRepository.findByReliefRequestIdOrderBySortOrderAscCreatedAtAsc(requestId).stream()
+				.map(OrganizerContactService::toResponse)
+				.toList();
 	}
 
 	/**
@@ -115,14 +212,26 @@ public class OrganizerContactService {
 	}
 
 	/**
-	 * Requires a contact owned by the organizer.
+	 * Requires an organization-wide contact owned by the organization.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param contactId contact id
 	 * @return contact
 	 */
-	private OrganizerContact requireOwned(UUID organizerId, UUID contactId) {
-		return contactRepository.findByIdAndOrganizerId(contactId, organizerId)
+	private OrganizerContact requireOwned(UUID organizationId, UUID contactId) {
+		return contactRepository.findByIdAndOrganizationIdAndReliefRequestIsNull(contactId, organizationId)
+				.orElseThrow(() -> new ApiException("CONTACT_NOT_FOUND", "Contact not found", HttpStatus.NOT_FOUND));
+	}
+
+	/**
+	 * Requires a contact scoped to the given relief request.
+	 *
+	 * @param requestId relief request id
+	 * @param contactId contact id
+	 * @return contact
+	 */
+	private OrganizerContact requireOwnedByRequest(UUID requestId, UUID contactId) {
+		return contactRepository.findByIdAndReliefRequestId(contactId, requestId)
 				.orElseThrow(() -> new ApiException("CONTACT_NOT_FOUND", "Contact not found", HttpStatus.NOT_FOUND));
 	}
 

@@ -1622,6 +1622,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tabler/icons-react@npm:^3.47.0":
+  version: 3.47.0
+  resolution: "@tabler/icons-react@npm:3.47.0"
+  dependencies:
+    "@tabler/icons": "npm:3.47.0"
+  peerDependencies:
+    react: ">= 16"
+  checksum: 10c0/815da64aab2d3537345c4512eefe7c83efe281ce6445750b823d09444da741ca8512a77b4d6cadd2be8731dbe5d06dadf81dd58ebb1e8397dedec73459b5e358
+  languageName: node
+  linkType: hard
+
+"@tabler/icons@npm:3.47.0":
+  version: 3.47.0
+  resolution: "@tabler/icons@npm:3.47.0"
+  checksum: 10c0/168be8925522fd04892f722957e4cb7ef134f58e6a78940a01da042f55d2e9b62f333b0c0cf7199decd4df17a8a076188c82f24a8a0e961a19b7e7bf29b61c51
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^10.4.2":
   version: 10.4.2
   resolution: "@testing-library/dom@npm:10.4.2"
@@ -4190,6 +4208,7 @@ __metadata:
     "@mantine/hooks": "npm:^9.6.1"
     "@mantine/notifications": "npm:^9.6.1"
     "@playwright/test": "npm:^1.63.0"
+    "@tabler/icons-react": "npm:^3.47.0"
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^7.0.1"
     "@testing-library/react": "npm:^16.3.3"

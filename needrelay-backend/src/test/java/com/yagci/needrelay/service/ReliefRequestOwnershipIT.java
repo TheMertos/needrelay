@@ -1,10 +1,13 @@
 package com.yagci.needrelay.service;
 
+import com.yagci.needrelay.domain.Organization;
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.Organizer;
 import com.yagci.needrelay.domain.OrganizerRole;
 import com.yagci.needrelay.domain.ReliefRequest;
 import com.yagci.needrelay.domain.ReliefRequestStatus;
 import com.yagci.needrelay.exception.ApiException;
+import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.repository.ReliefRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,21 +31,27 @@ class ReliefRequestOwnershipIT {
 	private OrganizerRepository organizerRepository;
 
 	@Autowired
+	private OrganizationRepository organizationRepository;
+
+	@Autowired
 	private ReliefRequestRepository reliefRequestRepository;
 
-	private Organizer other;
+	private Organization otherOrganization;
 	private ReliefRequest request;
 
 	@BeforeEach
 	void setUp() {
 		reliefRequestRepository.deleteAll();
 		organizerRepository.deleteAll();
+		organizationRepository.deleteAll();
 
-		Organizer owner = saveOrganizer("owner@example.com", "Owner");
-		other = saveOrganizer("other@example.com", "Other");
+		Organization ownerOrganization = saveOrganization("Owner Org");
+		otherOrganization = saveOrganization("Other Org");
+		saveOrganizer("owner@example.com", "Owner", ownerOrganization);
+		saveOrganizer("other@example.com", "Other", otherOrganization);
 
 		request = new ReliefRequest();
-		request.setOrganizer(owner);
+		request.setOrganization(ownerOrganization);
 		request.setTitle("Owned request");
 		request.setDescription("desc");
 		request.setLocationLabel("Hatay");
@@ -55,24 +64,39 @@ class ReliefRequestOwnershipIT {
 
 	@Test
 	void forbidsAccessToForeignReliefRequest() {
-		assertThatThrownBy(() -> reliefRequestService.getOwned(other.getId(), request.getId()))
+		assertThatThrownBy(() -> reliefRequestService.getOwned(otherOrganization.getId(), request.getId()))
 				.isInstanceOf(ApiException.class)
 				.satisfies(ex -> assertThat(((ApiException) ex).getStatus()).isEqualTo(HttpStatus.FORBIDDEN));
 	}
 
 	/**
-	 * Persists a minimal organizer.
+	 * Persists a minimal organization.
+	 *
+	 * @param name organization name
+	 * @return saved organization
+	 */
+	private Organization saveOrganization(String name) {
+		Organization organization = new Organization();
+		organization.setName(name);
+		return organizationRepository.save(organization);
+	}
+
+	/**
+	 * Persists a minimal organizer belonging to the given organization.
 	 *
 	 * @param email email
 	 * @param name display name
+	 * @param organization owning organization
 	 * @return saved organizer
 	 */
-	private Organizer saveOrganizer(String email, String name) {
+	private Organizer saveOrganizer(String email, String name, Organization organization) {
 		Organizer organizer = new Organizer();
 		organizer.setEmail(email);
 		organizer.setPasswordHash("hash");
 		organizer.setDisplayName(name);
 		organizer.setRole(OrganizerRole.ORGANIZER);
+		organizer.setOrganization(organization);
+		organizer.setOrganizationRole(OrganizationRole.ADMIN);
 		return organizerRepository.save(organizer);
 	}
 }

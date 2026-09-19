@@ -19,6 +19,7 @@
     "@mantine/form": "^9.6.1",
     "@mantine/hooks": "^9.6.1",
     "@mantine/notifications": "^9.6.1",
+    "@tabler/icons-react": "^3.47.0",
     "axios": "^1.20.0",
     "i18next": "^26.4.2",
     "leaflet": "^1.9.4",

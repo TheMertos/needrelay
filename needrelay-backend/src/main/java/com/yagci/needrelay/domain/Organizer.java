@@ -5,7 +5,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -15,7 +18,9 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Organizer account that owns relief requests.
+ * Login account for a person. Platform-wide {@link OrganizerRole#ADMIN} accounts have no
+ * organization; regular accounts belong to exactly one {@link Organization} with a per-org
+ * {@link OrganizationRole}.
  */
 @Getter
 @Setter
@@ -35,12 +40,17 @@ public class Organizer {
 	@Column(name = "display_name", nullable = false, length = 200)
 	private String displayName;
 
-	@Column(columnDefinition = "text")
-	private String description;
-
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 32)
 	private OrganizerRole role;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "organization_id")
+	private Organization organization;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "organization_role", length = 32)
+	private OrganizationRole organizationRole;
 
 	@Column(nullable = false)
 	private boolean active = true;

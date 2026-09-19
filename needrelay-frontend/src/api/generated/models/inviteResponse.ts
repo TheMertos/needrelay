@@ -5,14 +5,24 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { OrganizationRole } from './organizationRole';
 
 export interface InviteResponse {
   id: string;
   token: string;
   /** @nullable */
   email?: string | null;
+  /** @nullable */
+  organizationId?: string | null;
+  /** @nullable */
+  organizationName?: string | null;
+  organizationRole: OrganizationRole;
   expiresAt: string;
   /** @nullable */
   usedAt?: string | null;
   createdAt: string;
+  /** @nullable */
+  emailSentAt?: string | null;
+  /** @nullable */
+  emailError?: string | null;
 }

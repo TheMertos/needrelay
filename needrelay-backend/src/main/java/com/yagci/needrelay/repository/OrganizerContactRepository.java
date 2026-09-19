@@ -13,27 +13,53 @@ import java.util.UUID;
 public interface OrganizerContactRepository extends JpaRepository<OrganizerContact, UUID> {
 
 	/**
-	 * Lists contacts for an organizer ordered by sort order then creation.
+	 * Lists organization-wide contacts (not tied to a specific relief request) for an
+	 * organization, ordered by sort order then creation.
 	 *
-	 * @param organizerId organizer id
+	 * @param organizationId organization id
 	 * @return contacts
 	 */
-	List<OrganizerContact> findByOrganizerIdOrderBySortOrderAscCreatedAtAsc(UUID organizerId);
+	List<OrganizerContact> findByOrganizationIdAndReliefRequestIsNullOrderBySortOrderAscCreatedAtAsc(UUID organizationId);
 
 	/**
-	 * Counts contacts owned by an organizer.
+	 * Counts organization-wide contacts owned by an organization.
 	 *
-	 * @param organizerId organizer id
+	 * @param organizationId organization id
 	 * @return count
 	 */
-	long countByOrganizerId(UUID organizerId);
+	long countByOrganizationIdAndReliefRequestIsNull(UUID organizationId);
 
 	/**
-	 * Finds a contact owned by an organizer.
+	 * Finds an organization-wide contact owned by an organization.
 	 *
 	 * @param id contact id
-	 * @param organizerId organizer id
+	 * @param organizationId organization id
 	 * @return contact if present
 	 */
-	Optional<OrganizerContact> findByIdAndOrganizerId(UUID id, UUID organizerId);
+	Optional<OrganizerContact> findByIdAndOrganizationIdAndReliefRequestIsNull(UUID id, UUID organizationId);
+
+	/**
+	 * Lists contacts specific to a relief request, ordered by sort order then creation.
+	 *
+	 * @param reliefRequestId relief request id
+	 * @return contacts
+	 */
+	List<OrganizerContact> findByReliefRequestIdOrderBySortOrderAscCreatedAtAsc(UUID reliefRequestId);
+
+	/**
+	 * Counts contacts specific to a relief request.
+	 *
+	 * @param reliefRequestId relief request id
+	 * @return count
+	 */
+	long countByReliefRequestId(UUID reliefRequestId);
+
+	/**
+	 * Finds a contact specific to a relief request.
+	 *
+	 * @param id contact id
+	 * @param reliefRequestId relief request id
+	 * @return contact if present
+	 */
+	Optional<OrganizerContact> findByIdAndReliefRequestId(UUID id, UUID reliefRequestId);
 }

@@ -23,6 +23,7 @@
     "loadError": "支援エリアを読み込めませんでした。",
     "retry": "再試行",
     "openRequest": "支援ページを開く",
+    "openDetails": "詳細を開く",
     "org": "組織",
     "location": "場所",
     "priority": "優先度"
@@ -49,7 +50,8 @@
     "backToLogin": "ログインに戻る",
     "resetTitle": "新しいパスワードを選択",
     "resetSubmit": "パスワードを更新",
-    "resetSuccess": "パスワードを更新しました。ログインできます。"
+    "resetSuccess": "パスワードを更新しました。ログインできます。",
+    "organizationDisabled": "あなたの組織は無効化されています。管理者にお問い合わせください。"
   },
   "account": {
     "title": "アカウント設定",
@@ -70,18 +72,46 @@
     "contactRole": "役割 / 職種",
     "contactPhone": "電話",
     "contactEmail": "メール",
-    "contactNote": "メモ（任意）"
+    "contactNote": "メモ（任意）",
+    "confirmDeleteContact": "この連絡先を削除しますか？",
+    "myName": "自分の名前"
   },
   "publicPage": {
     "organization": "組織",
-    "contacts": "連絡先"
+    "contacts": "連絡先",
+    "backToList": "リストに戻る",
+    "deactivated": "この支援活動は現在活動していません。",
+    "getDirections": "ルートを表示"
   },
   "admin": {
     "title": "主催者アカウント",
     "active": "有効",
     "banned": "停止中",
     "ban": "停止",
-    "unban": "停止解除"
+    "unban": "停止解除",
+    "confirmBan": "この主催者をBanしますか？ログインできなくなります。",
+    "confirmUnban": "この主催者のBanを解除しますか？再びログインできます。",
+    "role": "役割",
+    "status": "ステータス",
+    "organization": "組織",
+    "roleValues": {
+      "ADMIN": "プラットフォーム管理者",
+      "ORGANIZER": "主催者"
+    },
+    "organizationsTitle": "組織一覧",
+    "createOrganization": "組織を作成",
+    "organizationName": "名前",
+    "organizationDescription": "説明",
+    "editOrganization": "組織を編集",
+    "deactivateOrganization": "無効化",
+    "activateOrganization": "有効化",
+    "confirmDeactivateOrganization": "この組織を無効化しますか?メンバーはサインインできなくなります。",
+    "confirmActivateOrganization": "この組織を再度有効化しますか?メンバーは再びサインインできるようになります。",
+    "orgRole": "組織内の役割",
+    "settingsTitle": "プラットフォーム設定",
+    "defaultLanguage": "デフォルト言語",
+    "defaultLanguageHint": "訪問者が自分の言語を選ぶまで、表示および招待・リセットメールに使用されます。",
+    "settingsSaved": "設定を保存しました。"
   },
   "dashboard": {
     "title": "運用",
@@ -93,7 +123,12 @@
     "kpiOpen": "未対応",
     "kpiCovered": "充足",
     "manage": "管理",
-    "publicLink": "公開ページ"
+    "publicLink": "公開ページ",
+    "tabActive": "進行中",
+    "tabDeactivated": "停止中",
+    "emptyActive": "進行中の支援要請はありません。",
+    "emptyDeactivated": "停止中の支援要請はありません。",
+    "searchPlaceholder": "タイトルまたは場所で検索…"
   },
   "request": {
     "title": "タイトル",
@@ -105,6 +140,7 @@
     "locationSaved": "場所を更新しました",
     "save": "保存",
     "needs": "この場所のニーズ",
+    "needsWithOffers": "ニーズと届いた支援",
     "offers": "公開オファー（届いた支援）",
     "offersHint": "訪問者はアカウントなしで送信します。ここで編集・削除できます。",
     "offersEmpty": "オファーはまだありません。",
@@ -115,9 +151,31 @@
     "closeNeed": "ニーズを閉じる",
     "requiredMinHint": "すでに提供された量より少なくできません: {{offered}} {{unit}}",
     "share": "公開リンクを共有",
-    "detailsMeta": "リクエスト詳細とメモ",
+    "copyLink": "リンクをコピー",
+    "linkCopied": "リンクをクリップボードにコピーしました。",
+    "detailsMeta": "リクエスト詳細",
+    "editDetails": "詳細を編集",
+    "backToDashboard": "ダッシュボードに戻る",
+    "deactivate": "無効化",
+    "reactivate": "再有効化",
+    "confirmDeactivate": "この支援リクエストを無効化しますか？新しい申し出を受け付けなくなり、公開ページには無効であることのみが表示されます。",
+    "confirmReactivate": "この支援リクエストを再度有効化しますか？再び申し出を受け付けるようになり、公開ページに詳細がすべて表示されます。",
+    "deactivated": "支援リクエストを無効化しました。",
+    "reactivated": "支援リクエストを再有効化しました。",
+    "deactivatedNotice": "この支援リクエストは無効化されています。新しい申し出は受け付けられず、公開ページには通知のみが表示されます。",
     "addFirstNeed": "最初のニーズを追加（任意）",
-    "firstNeedTitle": "最初のニーズのタイトル"
+    "firstNeedTitle": "最初のニーズのタイトル",
+    "confirmCloseNeed": "このニーズを閉じますか？新しい申し出は受け付けません。",
+    "confirmCancelOffer": "この申し出をキャンセルしますか？提供者は待たれなくなります。",
+    "confirmDeleteOffer": "この申し出を完全に削除しますか？",
+    "confirmDeleteComment": "このメモを削除しますか？",
+    "offerSortNewest": "新しい順",
+    "offerSortOldest": "古い順",
+    "offerSortStatus": "ステータス順",
+    "offerSortQuantity": "数量が多い順",
+    "offerPage": "{{page}} / {{total}} ページ",
+    "contacts": "連絡先",
+    "contactsHint": "この支援要請専用です。公開ページで組織の連絡先とあわせて表示されます。"
   },
   "comments": {
     "title": "内部メモ",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "一部充足",
       "COVERED": "充足",
       "CLOSED": "終了"
+    },
+    "priorityValues": {
+      "CRITICAL": "緊急",
+      "HIGH": "高",
+      "NORMAL": "通常",
+      "LOW": "低"
+    },
+    "categoryValues": {
+      "FOOD": "食料",
+      "WATER": "水",
+      "CLOTHING": "衣類",
+      "SUPPLIES": "物資",
+      "EQUIPMENT": "機材",
+      "MACHINERY": "機械",
+      "VEHICLES": "車両",
+      "SHELTER": "避難所",
+      "SERVICES": "サービス",
+      "OTHER": "その他"
     }
   },
   "offer": {
     "title": "資源を提供",
     "providerName": "名前 / 組織",
+    "providerType": "種別",
+    "searchPlaceholder": "名前・電話・メール",
+    "providerTypeValues": {
+      "PERSON": "個人",
+      "ORGANIZATION": "団体"
+    },
     "quantity": "予定数量",
     "firstName": "名",
     "lastName": "姓",
@@ -163,12 +245,64 @@
       "RECEIVED": "受領済み",
       "CANCELLED": "キャンセル済み"
     },
-    "cancel": "オファーをキャンセル"
+    "cancel": "オファーをキャンセル",
+    "contact": "連絡先",
+    "distance": "距離",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "ステータス",
+    "actions": "操作",
+    "locationHint": "主催者にどれくらい離れているかを示すため、位置情報をお尋ねします。オファーを送るにはデバイスで位置情報を共有する必要があります — 保存されるのは計算された距離のみで、正確な位置情報は保存されません。",
+    "locationRequesting": "位置情報を取得しています…",
+    "locationGranted": "位置情報を共有しました。",
+    "locationDenied": "オファーを送るには位置情報へのアクセスが必要です。",
+    "retryLocation": "位置情報を共有",
+    "changeStatus": "ステータスを変更",
+    "confirmMarkComing": "この提供を「到着予定」としてマークしますか?提供者は届けることが期待されます。"
   },
   "common": {
+    "refresh": "更新",
     "loading": "読み込み中…",
     "error": "問題が発生しました。",
     "cancel": "キャンセル",
-    "delete": "削除"
+    "delete": "削除",
+    "confirm": "確認",
+    "confirmTitle": "確認",
+    "confirmBody": "よろしいですか？",
+    "prev": "前へ",
+    "next": "次へ",
+    "all": "すべて",
+    "min": "最小",
+    "max": "最大",
+    "search": "検索",
+    "filters": "フィルター",
+    "clearFilters": "フィルターをクリア",
+    "perPage": "1ページあたり"
+  },
+  "organization": {
+    "title": "組織",
+    "name": "名前",
+    "description": "説明",
+    "save": "保存",
+    "saved": "組織を保存しました",
+    "membersTitle": "メンバー",
+    "invite": "招待",
+    "remove": "削除",
+    "confirmRemoveMember": "このメンバーを削除しますか?すぐにアクセス権を失います。",
+    "roleValues": {
+      "ADMIN": "管理者",
+      "USER": "メンバー"
+    }
+  },
+  "invites": {
+    "create": "招待を作成",
+    "organization": "組織",
+    "role": "役割",
+    "tokenLink": "トークン / リンク",
+    "expires": "有効期限",
+    "usedColumn": "使用済み",
+    "used": "はい",
+    "unused": "いいえ",
+    "revoke": "取り消す",
+    "confirmRevoke": "この招待を取り消しますか?リンクは無効になります。"
   }
 }

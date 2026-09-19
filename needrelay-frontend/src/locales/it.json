@@ -23,6 +23,7 @@
     "loadError": "Impossibile caricare le aree di aiuto.",
     "retry": "Riprova",
     "openRequest": "Apri pagina di aiuto",
+    "openDetails": "Apri dettagli",
     "org": "Organizzazione",
     "location": "Posizione",
     "priority": "Priorità"
@@ -49,7 +50,8 @@
     "backToLogin": "Torna al login",
     "resetTitle": "Scegli una nuova password",
     "resetSubmit": "Aggiorna password",
-    "resetSuccess": "Password aggiornata. Ora puoi accedere."
+    "resetSuccess": "Password aggiornata. Ora puoi accedere.",
+    "organizationDisabled": "La tua organizzazione è stata disattivata. Contatta un amministratore."
   },
   "account": {
     "title": "Impostazioni account",
@@ -70,18 +72,46 @@
     "contactRole": "Ruolo / funzione",
     "contactPhone": "Telefono",
     "contactEmail": "Email",
-    "contactNote": "Nota (opzionale)"
+    "contactNote": "Nota (opzionale)",
+    "confirmDeleteContact": "Eliminare questo contatto?",
+    "myName": "Il mio nome"
   },
   "publicPage": {
     "organization": "Organizzazione",
-    "contacts": "Contatti"
+    "contacts": "Contatti",
+    "backToList": "Torna all'elenco",
+    "deactivated": "Questa iniziativa di aiuto non è più attiva.",
+    "getDirections": "Ottieni indicazioni"
   },
   "admin": {
     "title": "Account organizzatori",
     "active": "Attivo",
     "banned": "Bannato",
     "ban": "Banna",
-    "unban": "Rimuovi ban"
+    "unban": "Rimuovi ban",
+    "confirmBan": "Bannare questo organizzatore? Non potrà più accedere.",
+    "confirmUnban": "Sbannare questo organizzatore? Potrà accedere di nuovo.",
+    "role": "Ruolo",
+    "status": "Stato",
+    "organization": "Organizzazione",
+    "roleValues": {
+      "ADMIN": "Amministratore della piattaforma",
+      "ORGANIZER": "Organizzatore"
+    },
+    "organizationsTitle": "Organizzazioni",
+    "createOrganization": "Crea organizzazione",
+    "organizationName": "Nome",
+    "organizationDescription": "Descrizione",
+    "editOrganization": "Modifica organizzazione",
+    "deactivateOrganization": "Disattiva",
+    "activateOrganization": "Attiva",
+    "confirmDeactivateOrganization": "Disattivare questa organizzazione? I suoi membri non potranno più accedere.",
+    "confirmActivateOrganization": "Riattivare questa organizzazione? I suoi membri potranno accedere di nuovo.",
+    "orgRole": "Ruolo nell'org.",
+    "settingsTitle": "Impostazioni della piattaforma",
+    "defaultLanguage": "Lingua predefinita",
+    "defaultLanguageHint": "Mostrata ai visitatori e usata nelle email di invito/reimpostazione finché non scelgono la propria lingua.",
+    "settingsSaved": "Impostazioni salvate."
   },
   "dashboard": {
     "title": "Operazioni",
@@ -93,7 +123,12 @@
     "kpiOpen": "Aperto",
     "kpiCovered": "Coperto",
     "manage": "Gestisci",
-    "publicLink": "Pagina pubblica"
+    "publicLink": "Pagina pubblica",
+    "tabActive": "Attive",
+    "tabDeactivated": "Disattivate",
+    "emptyActive": "Nessuna richiesta di aiuto attiva.",
+    "emptyDeactivated": "Nessuna richiesta di aiuto disattivata.",
+    "searchPlaceholder": "Cerca per titolo o luogo…"
   },
   "request": {
     "title": "Titolo",
@@ -105,6 +140,7 @@
     "locationSaved": "Posizione aggiornata",
     "save": "Salva",
     "needs": "Bisogni in questa posizione",
+    "needsWithOffers": "Bisogni e aiuti in arrivo",
     "offers": "Offerte pubbliche (aiuto in arrivo)",
     "offersHint": "I visitatori le inviano senza account. Qui puoi modificarle o rimuoverle.",
     "offersEmpty": "Nessuna offerta ancora.",
@@ -115,9 +151,31 @@
     "closeNeed": "Chiudi bisogno",
     "requiredMinHint": "Non può scendere sotto quanto già offerto: {{offered}} {{unit}}",
     "share": "Condividi link pubblico",
-    "detailsMeta": "Dettagli richiesta e note",
+    "copyLink": "Copia link",
+    "linkCopied": "Link copiato negli appunti.",
+    "detailsMeta": "Dettagli richiesta",
+    "editDetails": "Modifica dettagli",
+    "backToDashboard": "Torna alla dashboard",
+    "deactivate": "Disattiva",
+    "reactivate": "Riattiva",
+    "confirmDeactivate": "Disattivare questa richiesta di aiuto? Non accetterà più nuove offerte e la pagina pubblica mostrerà solo che non è più attiva.",
+    "confirmReactivate": "Riattivare questa richiesta di aiuto? Accetterà di nuovo le offerte e la pagina pubblica mostrerà tutti i dettagli.",
+    "deactivated": "Richiesta di aiuto disattivata.",
+    "reactivated": "Richiesta di aiuto riattivata.",
+    "deactivatedNotice": "Questa richiesta di aiuto è disattivata. Non accetta più nuove offerte e la sua pagina pubblica mostra solo un avviso.",
     "addFirstNeed": "Aggiungi primo bisogno (opzionale)",
-    "firstNeedTitle": "Titolo del primo bisogno"
+    "firstNeedTitle": "Titolo del primo bisogno",
+    "confirmCloseNeed": "Chiudere questo bisogno? Non accetterà più nuove offerte.",
+    "confirmCancelOffer": "Annullare questa offerta? Il fornitore non sarà più atteso.",
+    "confirmDeleteOffer": "Eliminare definitivamente questa offerta?",
+    "confirmDeleteComment": "Eliminare questa nota?",
+    "offerSortNewest": "Più recenti",
+    "offerSortOldest": "Più vecchie",
+    "offerSortStatus": "Per stato",
+    "offerSortQuantity": "Quantità più alta",
+    "offerPage": "Pagina {{page}} di {{total}}",
+    "contacts": "Contatti",
+    "contactsHint": "Specifico per questa richiesta di aiuto. Mostrato insieme ai contatti della tua organizzazione nella sua pagina pubblica."
   },
   "comments": {
     "title": "Note interne",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Parzialmente coperto",
       "COVERED": "Coperto",
       "CLOSED": "Chiuso"
+    },
+    "priorityValues": {
+      "CRITICAL": "Critica",
+      "HIGH": "Alta",
+      "NORMAL": "Normale",
+      "LOW": "Bassa"
+    },
+    "categoryValues": {
+      "FOOD": "Cibo",
+      "WATER": "Acqua",
+      "CLOTHING": "Abbigliamento",
+      "SUPPLIES": "Forniture",
+      "EQUIPMENT": "Attrezzatura",
+      "MACHINERY": "Macchinari",
+      "VEHICLES": "Veicoli",
+      "SHELTER": "Rifugio",
+      "SERVICES": "Servizi",
+      "OTHER": "Altro"
     }
   },
   "offer": {
     "title": "Offri risorse",
     "providerName": "Nome / organizzazione",
+    "providerType": "Tipo",
+    "searchPlaceholder": "Nome, telefono o email",
+    "providerTypeValues": {
+      "PERSON": "Privato",
+      "ORGANIZATION": "Organizzazione"
+    },
     "quantity": "Quantità prevista",
     "firstName": "Nome",
     "lastName": "Cognome",
@@ -163,12 +245,64 @@
       "RECEIVED": "Ricevuto",
       "CANCELLED": "Annullato"
     },
-    "cancel": "Annulla offerta"
+    "cancel": "Annulla offerta",
+    "contact": "Contatto",
+    "distance": "Distanza",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Stato",
+    "actions": "Azioni",
+    "locationHint": "Chiediamo la tua posizione per mostrare agli organizzatori quanto sei distante. Il tuo dispositivo deve condividerla per inviare un'offerta — viene salvata solo la distanza calcolata, mai la tua posizione esatta.",
+    "locationRequesting": "Richiesta della tua posizione…",
+    "locationGranted": "Posizione condivisa.",
+    "locationDenied": "L'accesso alla posizione è obbligatorio per inviare un'offerta.",
+    "retryLocation": "Condividi posizione",
+    "changeStatus": "Cambia stato",
+    "confirmMarkComing": "Contrassegnare questa offerta come in arrivo? Il fornitore sarà atteso per la consegna."
   },
   "common": {
+    "refresh": "Aggiorna",
     "loading": "Caricamento…",
     "error": "Qualcosa è andato storto.",
     "cancel": "Annulla",
-    "delete": "Elimina"
+    "delete": "Elimina",
+    "confirm": "Conferma",
+    "confirmTitle": "Conferma",
+    "confirmBody": "Sei sicuro?",
+    "prev": "Precedente",
+    "next": "Successivo",
+    "all": "Tutti",
+    "min": "Min",
+    "max": "Max",
+    "search": "Cerca",
+    "filters": "Filtri",
+    "clearFilters": "Cancella filtri",
+    "perPage": "Per pagina"
+  },
+  "organization": {
+    "title": "Organizzazione",
+    "name": "Nome",
+    "description": "Descrizione",
+    "save": "Salva",
+    "saved": "Organizzazione salvata",
+    "membersTitle": "Membri",
+    "invite": "Invita",
+    "remove": "Rimuovi",
+    "confirmRemoveMember": "Rimuovere questo membro? Perderà immediatamente l’accesso.",
+    "roleValues": {
+      "ADMIN": "Amministratore",
+      "USER": "Membro"
+    }
+  },
+  "invites": {
+    "create": "Crea invito",
+    "organization": "Organizzazione",
+    "role": "Ruolo",
+    "tokenLink": "Token / link",
+    "expires": "Scade",
+    "usedColumn": "Usato",
+    "used": "Sì",
+    "unused": "No",
+    "revoke": "Revoca",
+    "confirmRevoke": "Revocare questo invito? Il link smetterà di funzionare."
   }
 }

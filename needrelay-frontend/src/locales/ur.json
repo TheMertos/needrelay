@@ -23,6 +23,7 @@
     "loadError": "امدادی علاقے لوڈ نہیں ہو سکے۔",
     "retry": "دوبارہ کوشش",
     "openRequest": "امدادی صفحہ کھولیں",
+    "openDetails": "تفصیلات کھولیں",
     "org": "تنظیم",
     "location": "مقام",
     "priority": "ترجیح"
@@ -49,7 +50,8 @@
     "backToLogin": "لاگ ان پر واپس",
     "resetTitle": "نیا پاس ورڈ منتخب کریں",
     "resetSubmit": "پاس ورڈ اپ ڈیٹ کریں",
-    "resetSuccess": "پاس ورڈ اپ ڈیٹ ہو گیا۔ اب لاگ ان کر سکتے ہیں۔"
+    "resetSuccess": "پاس ورڈ اپ ڈیٹ ہو گیا۔ اب لاگ ان کر سکتے ہیں۔",
+    "organizationDisabled": "آپ کا ادارہ غیر فعال کر دیا گیا ہے۔ کسی منتظم سے رابطہ کریں۔"
   },
   "account": {
     "title": "اکاؤنٹ کی ترتیبات",
@@ -70,18 +72,46 @@
     "contactRole": "کردار / فریضہ",
     "contactPhone": "فون",
     "contactEmail": "ای میل",
-    "contactNote": "نوٹ (اختیاری)"
+    "contactNote": "نوٹ (اختیاری)",
+    "confirmDeleteContact": "یہ رابطہ حذف کریں؟",
+    "myName": "میرا نام"
   },
   "publicPage": {
     "organization": "تنظیم",
-    "contacts": "رابطے"
+    "contacts": "رابطے",
+    "backToList": "فہرست پر واپس جائیں",
+    "deactivated": "یہ امدادی کوشش اب فعال نہیں ہے۔",
+    "getDirections": "راستے کی ہدایات حاصل کریں"
   },
   "admin": {
     "title": "منتظم اکاؤنٹس",
     "active": "فعال",
     "banned": "ممنوع",
     "ban": "ممنوع کریں",
-    "unban": "پابندی ہٹائیں"
+    "unban": "پابندی ہٹائیں",
+    "confirmBan": "اس منتظم کو بند کریں؟ وہ لاگ اِن نہیں کر سکیں گے۔",
+    "confirmUnban": "اس منتظم کی پابندی ہٹائیں؟ وہ دوبارہ لاگ اِن کر سکیں گے۔",
+    "role": "کردار",
+    "status": "حیثیت",
+    "organization": "ادارہ",
+    "roleValues": {
+      "ADMIN": "پلیٹ فارم ایڈمن",
+      "ORGANIZER": "منتظم"
+    },
+    "organizationsTitle": "ادارے",
+    "createOrganization": "ادارہ بنائیں",
+    "organizationName": "نام",
+    "organizationDescription": "تفصیل",
+    "editOrganization": "ادارہ ترمیم کریں",
+    "deactivateOrganization": "غیر فعال کریں",
+    "activateOrganization": "فعال کریں",
+    "confirmDeactivateOrganization": "اس ادارے کو غیر فعال کریں؟ اس کے اراکین اب لاگ ان نہیں کر سکیں گے۔",
+    "confirmActivateOrganization": "اس ادارے کو دوبارہ فعال کریں؟ اس کے اراکین دوبارہ لاگ ان کر سکیں گے۔",
+    "orgRole": "تنظیمی کردار",
+    "settingsTitle": "پلیٹ فارم کی ترتیبات",
+    "defaultLanguage": "ڈیفالٹ زبان",
+    "defaultLanguageHint": "جب تک وزیٹرز اپنی زبان منتخب نہ کریں، یہ انہیں دکھائی جاتی ہے اور دعوتی/ری سیٹ ای میلز میں استعمال ہوتی ہے۔",
+    "settingsSaved": "ترتیبات محفوظ ہو گئیں۔"
   },
   "dashboard": {
     "title": "آپریشنز",
@@ -93,7 +123,12 @@
     "kpiOpen": "کھلا",
     "kpiCovered": "مکمل",
     "manage": "انتظام",
-    "publicLink": "عوامی صفحہ"
+    "publicLink": "عوامی صفحہ",
+    "tabActive": "فعال",
+    "tabDeactivated": "غیر فعال",
+    "emptyActive": "کوئی فعال امدادی درخواست نہیں ہے۔",
+    "emptyDeactivated": "کوئی غیر فعال امدادی درخواست نہیں ہے۔",
+    "searchPlaceholder": "عنوان یا مقام سے تلاش کریں…"
   },
   "request": {
     "title": "عنوان",
@@ -105,6 +140,7 @@
     "locationSaved": "مقام اپ ڈیٹ ہو گیا",
     "save": "محفوظ کریں",
     "needs": "اس مقام کی ضروریات",
+    "needsWithOffers": "ضرورتیں اور آنے والی مدد",
     "offers": "عوامی پیشکشیں (آنے والی مدد)",
     "offersHint": "زائرین بغیر اکاؤنٹ بھیجتے ہیں۔ یہاں ترمیم یا حذف کر سکتے ہیں۔",
     "offersEmpty": "ابھی کوئی پیشکش نہیں۔",
@@ -115,9 +151,31 @@
     "closeNeed": "ضرورت بند کریں",
     "requiredMinHint": "پہلے سے پیش کردہ سے کم نہیں ہو سکتا: {{offered}} {{unit}}",
     "share": "عوامی لنک شیئر کریں",
-    "detailsMeta": "درخواست کی تفصیلات اور نوٹس",
+    "copyLink": "لنک کاپی کریں",
+    "linkCopied": "لنک کلپ بورڈ پر کاپی ہو گیا۔",
+    "detailsMeta": "درخواست کی تفصیلات",
+    "editDetails": "تفصیلات میں ترمیم کریں",
+    "backToDashboard": "ڈیش بورڈ پر واپس جائیں",
+    "deactivate": "غیر فعال کریں",
+    "reactivate": "دوبارہ فعال کریں",
+    "confirmDeactivate": "کیا اس امدادی درخواست کو غیر فعال کیا جائے؟ یہ مزید نئی پیشکشیں قبول نہیں کرے گی اور عوامی صفحہ صرف یہ دکھائے گا کہ یہ اب فعال نہیں ہے۔",
+    "confirmReactivate": "کیا اس امدادی درخواست کو دوبارہ فعال کیا جائے؟ یہ دوبارہ پیشکشیں قبول کرے گی اور عوامی صفحہ تمام تفصیلات دکھائے گا۔",
+    "deactivated": "امدادی درخواست غیر فعال کر دی گئی۔",
+    "reactivated": "امدادی درخواست دوبارہ فعال کر دی گئی۔",
+    "deactivatedNotice": "یہ امدادی درخواست غیر فعال ہے۔ یہ مزید نئی پیشکشیں قبول نہیں کرتی اور اس کا عوامی صفحہ صرف ایک اطلاع دکھاتا ہے۔",
     "addFirstNeed": "پہلی ضرورت شامل کریں (اختیاری)",
-    "firstNeedTitle": "پہلی ضرورت کا عنوان"
+    "firstNeedTitle": "پہلی ضرورت کا عنوان",
+    "confirmCloseNeed": "یہ ضرورت بند کریں؟ اب نئی پیشکش قبول نہیں ہوں گی۔",
+    "confirmCancelOffer": "یہ پیشکش منسوخ کریں؟ فراہم کنندہ کی اب توقع نہیں ہوگی۔",
+    "confirmDeleteOffer": "یہ پیشکش مستقل طور پر حذف کریں؟",
+    "confirmDeleteComment": "یہ نوٹ حذف کریں؟",
+    "offerSortNewest": "سب سے نئی",
+    "offerSortOldest": "سب سے پرانی",
+    "offerSortStatus": "حیثیت کے لحاظ سے",
+    "offerSortQuantity": "سب سے زیادہ مقدار",
+    "offerPage": "صفحہ {{page}} از {{total}}",
+    "contacts": "رابطے",
+    "contactsHint": "یہ صرف اس امدادی درخواست کے لیے مخصوص ہے۔ اس کے عوامی صفحے پر آپ کی تنظیم کے رابطوں کے ساتھ دکھایا جاتا ہے۔"
   },
   "comments": {
     "title": "اندرونی نوٹس",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "جزوی طور پر مکمل",
       "COVERED": "مکمل",
       "CLOSED": "بند"
+    },
+    "priorityValues": {
+      "CRITICAL": "نازک",
+      "HIGH": "زیادہ",
+      "NORMAL": "عام",
+      "LOW": "کم"
+    },
+    "categoryValues": {
+      "FOOD": "خوراک",
+      "WATER": "پانی",
+      "CLOTHING": "کپڑے",
+      "SUPPLIES": "سامان",
+      "EQUIPMENT": "آلات",
+      "MACHINERY": "مشینری",
+      "VEHICLES": "گاڑیاں",
+      "SHELTER": "پناہ گاہ",
+      "SERVICES": "خدمات",
+      "OTHER": "دیگر"
     }
   },
   "offer": {
     "title": "وسائل پیش کریں",
     "providerName": "نام / تنظیم",
+    "providerType": "قسم",
+    "searchPlaceholder": "نام، فون یا ای میل",
+    "providerTypeValues": {
+      "PERSON": "نجی فرد",
+      "ORGANIZATION": "تنظیم"
+    },
     "quantity": "متوقع مقدار",
     "firstName": "پہلا نام",
     "lastName": "آخری نام",
@@ -163,12 +245,64 @@
       "RECEIVED": "موصول",
       "CANCELLED": "منسوخ"
     },
-    "cancel": "پیشکش منسوخ کریں"
+    "cancel": "پیشکش منسوخ کریں",
+    "contact": "رابطہ",
+    "distance": "فاصلہ",
+    "distanceKm": "{{km}} کلومیٹر",
+    "statusLabel": "حیثیت",
+    "actions": "اقدامات",
+    "locationHint": "ہم آپ کا مقام اس لیے مانگتے ہیں تاکہ منتظمین کو پتا چلے کہ آپ کتنی دور ہیں۔ پیشکش بھیجنے کے لیے آپ کے آلے کو اسے شیئر کرنا ہوگا — صرف حساب کردہ فاصلہ محفوظ کیا جاتا ہے، آپ کا درست مقام کبھی نہیں۔",
+    "locationRequesting": "آپ کا مقام معلوم کیا جا رہا ہے…",
+    "locationGranted": "مقام شیئر کر دیا گیا۔",
+    "locationDenied": "پیشکش بھیجنے کے لیے مقام تک رسائی ضروری ہے۔",
+    "retryLocation": "مقام شیئر کریں",
+    "changeStatus": "حیثیت تبدیل کریں",
+    "confirmMarkComing": "اس پیشکش کو راستے میں کے طور پر نشان زد کریں؟ فراہم کنندہ سے اسے پہنچانے کی توقع کی جائے گی۔"
   },
   "common": {
+    "refresh": "تازہ کریں",
     "loading": "لوڈ ہو رہا ہے…",
     "error": "کچھ غلط ہو گیا۔",
     "cancel": "منسوخ",
-    "delete": "حذف"
+    "delete": "حذف",
+    "confirm": "تصدیق",
+    "confirmTitle": "تصدیق",
+    "confirmBody": "کیا آپ یقین رکھتے ہیں؟",
+    "prev": "پچھلا",
+    "next": "اگلا",
+    "all": "تمام",
+    "min": "کم از کم",
+    "max": "زیادہ سے زیادہ",
+    "search": "تلاش",
+    "filters": "فلٹرز",
+    "clearFilters": "فلٹرز صاف کریں",
+    "perPage": "فی صفحہ"
+  },
+  "organization": {
+    "title": "ادارہ",
+    "name": "نام",
+    "description": "تفصیل",
+    "save": "محفوظ کریں",
+    "saved": "ادارہ محفوظ ہو گیا",
+    "membersTitle": "اراکین",
+    "invite": "دعوت دیں",
+    "remove": "ہٹائیں",
+    "confirmRemoveMember": "اس رکن کو ہٹا دیں؟ اس کی رسائی فوری طور پر ختم ہو جائے گی۔",
+    "roleValues": {
+      "ADMIN": "ایڈمن",
+      "USER": "رکن"
+    }
+  },
+  "invites": {
+    "create": "دعوت بنائیں",
+    "organization": "ادارہ",
+    "role": "کردار",
+    "tokenLink": "ٹوکن / لنک",
+    "expires": "میعاد ختم",
+    "usedColumn": "استعمال شدہ",
+    "used": "ہاں",
+    "unused": "نہیں",
+    "revoke": "واپس لیں",
+    "confirmRevoke": "اس دعوت کو واپس لیں؟ لنک کام کرنا بند کر دے گا۔"
   }
 }

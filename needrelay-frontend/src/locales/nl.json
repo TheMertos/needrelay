@@ -23,6 +23,7 @@
     "loadError": "Hulpgebieden konden niet worden geladen.",
     "retry": "Opnieuw proberen",
     "openRequest": "Hulppagina openen",
+    "openDetails": "Details openen",
     "org": "Organisatie",
     "location": "Locatie",
     "priority": "Prioriteit"
@@ -49,7 +50,8 @@
     "backToLogin": "Terug naar login",
     "resetTitle": "Kies een nieuw wachtwoord",
     "resetSubmit": "Wachtwoord bijwerken",
-    "resetSuccess": "Wachtwoord bijgewerkt. U kunt nu inloggen."
+    "resetSuccess": "Wachtwoord bijgewerkt. U kunt nu inloggen.",
+    "organizationDisabled": "Je organisatie is gedeactiveerd. Neem contact op met een beheerder."
   },
   "account": {
     "title": "Accountinstellingen",
@@ -70,18 +72,46 @@
     "contactRole": "Rol / functie",
     "contactPhone": "Telefoon",
     "contactEmail": "E-mail",
-    "contactNote": "Notitie (optioneel)"
+    "contactNote": "Notitie (optioneel)",
+    "confirmDeleteContact": "Dit contact verwijderen?",
+    "myName": "Mijn naam"
   },
   "publicPage": {
     "organization": "Organisatie",
-    "contacts": "Contacten"
+    "contacts": "Contacten",
+    "backToList": "Terug naar lijst",
+    "deactivated": "Deze hulpactie is niet meer actief.",
+    "getDirections": "Routebeschrijving"
   },
   "admin": {
     "title": "Organisatoraccounts",
     "active": "Actief",
     "banned": "Geblokkeerd",
     "ban": "Blokkeren",
-    "unban": "Deblokkeren"
+    "unban": "Deblokkeren",
+    "confirmBan": "Deze organisator blokkeren? Ze kunnen niet meer inloggen.",
+    "confirmUnban": "Deze organisator deblokkeren? Ze kunnen weer inloggen.",
+    "role": "Rol",
+    "status": "Status",
+    "organization": "Organisatie",
+    "roleValues": {
+      "ADMIN": "Platformbeheerder",
+      "ORGANIZER": "Organisator"
+    },
+    "organizationsTitle": "Organisaties",
+    "createOrganization": "Organisatie aanmaken",
+    "organizationName": "Naam",
+    "organizationDescription": "Beschrijving",
+    "editOrganization": "Organisatie bewerken",
+    "deactivateOrganization": "Deactiveren",
+    "activateOrganization": "Activeren",
+    "confirmDeactivateOrganization": "Deze organisatie deactiveren? Leden kunnen dan niet meer inloggen.",
+    "confirmActivateOrganization": "Deze organisatie opnieuw activeren? Leden kunnen dan weer inloggen.",
+    "orgRole": "Org.-rol",
+    "settingsTitle": "Platforminstellingen",
+    "defaultLanguage": "Standaardtaal",
+    "defaultLanguageHint": "Wordt getoond aan bezoekers en gebruikt in uitnodigings-/reset-e-mails totdat ze hun eigen taal kiezen.",
+    "settingsSaved": "Instellingen opgeslagen."
   },
   "dashboard": {
     "title": "Operaties",
@@ -93,7 +123,12 @@
     "kpiOpen": "Open",
     "kpiCovered": "Gedekt",
     "manage": "Beheren",
-    "publicLink": "Openbare pagina"
+    "publicLink": "Openbare pagina",
+    "tabActive": "Actief",
+    "tabDeactivated": "Gedeactiveerd",
+    "emptyActive": "Geen actieve hulpaanvragen.",
+    "emptyDeactivated": "Geen gedeactiveerde hulpaanvragen.",
+    "searchPlaceholder": "Zoeken op titel of locatie…"
   },
   "request": {
     "title": "Titel",
@@ -105,6 +140,7 @@
     "locationSaved": "Locatie bijgewerkt",
     "save": "Opslaan",
     "needs": "Behoeften op deze locatie",
+    "needsWithOffers": "Behoeften en binnenkomende hulp",
     "offers": "Openbare aanbiedingen (binnenkomende hulp)",
     "offersHint": "Bezoekers sturen zonder account. Hier kunt u bewerken of verwijderen.",
     "offersEmpty": "Nog geen aanbiedingen.",
@@ -115,9 +151,31 @@
     "closeNeed": "Behoefte sluiten",
     "requiredMinHint": "Mag niet onder al aangeboden: {{offered}} {{unit}}",
     "share": "Openbare link delen",
-    "detailsMeta": "Verzoekdetails & notities",
+    "copyLink": "Link kopiëren",
+    "linkCopied": "Link gekopieerd naar klembord.",
+    "detailsMeta": "Verzoekdetails",
+    "editDetails": "Details bewerken",
+    "backToDashboard": "Terug naar dashboard",
+    "deactivate": "Deactiveren",
+    "reactivate": "Heractiveren",
+    "confirmDeactivate": "Deze hulpaanvraag deactiveren? Er worden geen nieuwe aanbiedingen meer geaccepteerd en de openbare pagina toont alleen dat deze niet meer actief is.",
+    "confirmReactivate": "Deze hulpaanvraag heractiveren? Er worden weer aanbiedingen geaccepteerd en de openbare pagina toont weer alle details.",
+    "deactivated": "Hulpaanvraag gedeactiveerd.",
+    "reactivated": "Hulpaanvraag heractiveerd.",
+    "deactivatedNotice": "Deze hulpaanvraag is gedeactiveerd. Er worden geen nieuwe aanbiedingen meer geaccepteerd en de openbare pagina toont alleen een melding.",
     "addFirstNeed": "Eerste behoefte toevoegen (optioneel)",
-    "firstNeedTitle": "Titel eerste behoefte"
+    "firstNeedTitle": "Titel eerste behoefte",
+    "confirmCloseNeed": "Deze behoefte sluiten? Er worden geen nieuwe aanbiedingen meer geaccepteerd.",
+    "confirmCancelOffer": "Dit aanbod annuleren? De aanbieder wordt niet langer verwacht.",
+    "confirmDeleteOffer": "Dit aanbod permanent verwijderen?",
+    "confirmDeleteComment": "Deze notitie verwijderen?",
+    "offerSortNewest": "Nieuwste eerst",
+    "offerSortOldest": "Oudste eerst",
+    "offerSortStatus": "Op status",
+    "offerSortQuantity": "Hoogste hoeveelheid",
+    "offerPage": "Pagina {{page}} van {{total}}",
+    "contacts": "Contactpersonen",
+    "contactsHint": "Specifiek voor deze hulpaanvraag. Wordt samen met je organisatiecontacten op de publieke pagina getoond."
   },
   "comments": {
     "title": "Interne notities",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Gedeeltelijk gedekt",
       "COVERED": "Gedekt",
       "CLOSED": "Gesloten"
+    },
+    "priorityValues": {
+      "CRITICAL": "Kritiek",
+      "HIGH": "Hoog",
+      "NORMAL": "Normaal",
+      "LOW": "Laag"
+    },
+    "categoryValues": {
+      "FOOD": "Voedsel",
+      "WATER": "Water",
+      "CLOTHING": "Kleding",
+      "SUPPLIES": "Voorraden",
+      "EQUIPMENT": "Uitrusting",
+      "MACHINERY": "Machines",
+      "VEHICLES": "Voertuigen",
+      "SHELTER": "Onderdak",
+      "SERVICES": "Diensten",
+      "OTHER": "Overig"
     }
   },
   "offer": {
     "title": "Middelen aanbieden",
     "providerName": "Naam / organisatie",
+    "providerType": "Type",
+    "searchPlaceholder": "Naam, telefoon of e-mail",
+    "providerTypeValues": {
+      "PERSON": "Particulier",
+      "ORGANIZATION": "Organisatie"
+    },
     "quantity": "Verwachte hoeveelheid",
     "firstName": "Voornaam",
     "lastName": "Achternaam",
@@ -163,12 +245,64 @@
       "RECEIVED": "Ontvangen",
       "CANCELLED": "Geannuleerd"
     },
-    "cancel": "Aanbieding annuleren"
+    "cancel": "Aanbieding annuleren",
+    "contact": "Contact",
+    "distance": "Afstand",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Status",
+    "actions": "Acties",
+    "locationHint": "We vragen je locatie om organisatoren te laten zien hoe ver je weg bent. Je apparaat moet dit delen om een aanbod te versturen — alleen de berekende afstand wordt bewaard, nooit je exacte locatie.",
+    "locationRequesting": "Locatie wordt aangevraagd…",
+    "locationGranted": "Locatie gedeeld.",
+    "locationDenied": "Locatietoegang is vereist om een aanbod te versturen.",
+    "retryLocation": "Locatie delen",
+    "changeStatus": "Status wijzigen",
+    "confirmMarkComing": "Dit aanbod markeren als onderweg? Van de aanbieder wordt dan verwacht dat deze het levert."
   },
   "common": {
+    "refresh": "Vernieuwen",
     "loading": "Laden…",
     "error": "Er ging iets mis.",
     "cancel": "Annuleren",
-    "delete": "Verwijderen"
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "confirmTitle": "Bevestigen",
+    "confirmBody": "Weet je het zeker?",
+    "prev": "Vorige",
+    "next": "Volgende",
+    "all": "Alle",
+    "min": "Min",
+    "max": "Max",
+    "search": "Zoeken",
+    "filters": "Filters",
+    "clearFilters": "Filters wissen",
+    "perPage": "Per pagina"
+  },
+  "organization": {
+    "title": "Organisatie",
+    "name": "Naam",
+    "description": "Beschrijving",
+    "save": "Opslaan",
+    "saved": "Organisatie opgeslagen",
+    "membersTitle": "Leden",
+    "invite": "Uitnodigen",
+    "remove": "Verwijderen",
+    "confirmRemoveMember": "Dit lid verwijderen? Toegang wordt direct ingetrokken.",
+    "roleValues": {
+      "ADMIN": "Beheerder",
+      "USER": "Lid"
+    }
+  },
+  "invites": {
+    "create": "Uitnodiging aanmaken",
+    "organization": "Organisatie",
+    "role": "Rol",
+    "tokenLink": "Token / link",
+    "expires": "Verloopt",
+    "usedColumn": "Gebruikt",
+    "used": "Ja",
+    "unused": "Nee",
+    "revoke": "Intrekken",
+    "confirmRevoke": "Deze uitnodiging intrekken? De link werkt daarna niet meer."
   }
 }

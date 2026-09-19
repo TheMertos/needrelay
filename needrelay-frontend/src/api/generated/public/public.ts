@@ -7,8 +7,11 @@
  */
 import type {
   CreateOfferRequest,
+  DiscoveryNeedPageResponse,
+  DiscoveryPointPageResponse,
+  GetDiscoveryPointNeedsParams,
+  GetPublicDiscoveryParams,
   OfferResponse,
-  PublicDiscoveryResponse,
   PublicReliefRequestResponse
 } from '.././models';
 
@@ -20,10 +23,21 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
   export const getPublic = () => {
 const getPublicDiscovery = (
-    
- options?: SecondParameter<typeof customInstance<PublicDiscoveryResponse>>,) => {
-      return customInstance<PublicDiscoveryResponse>(
-      {url: `/api/public/discovery`, method: 'GET'
+    params?: GetPublicDiscoveryParams,
+ options?: SecondParameter<typeof customInstance<DiscoveryPointPageResponse>>,) => {
+      return customInstance<DiscoveryPointPageResponse>(
+      {url: `/api/public/discovery`, method: 'GET',
+        params
+    },
+      options);
+    }
+  const getDiscoveryPointNeeds = (
+    requestId: string,
+    params?: GetDiscoveryPointNeedsParams,
+ options?: SecondParameter<typeof customInstance<DiscoveryNeedPageResponse>>,) => {
+      return customInstance<DiscoveryNeedPageResponse>(
+      {url: `/api/public/discovery/points/${requestId}/needs`, method: 'GET',
+        params
     },
       options);
     }
@@ -46,7 +60,8 @@ const getPublicDiscovery = (
     },
       options);
     }
-  return {getPublicDiscovery,getPublicReliefRequest,createPublicOffer}};
+  return {getPublicDiscovery,getDiscoveryPointNeeds,getPublicReliefRequest,createPublicOffer}};
 export type GetPublicDiscoveryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getPublic>['getPublicDiscovery']>>>
+export type GetDiscoveryPointNeedsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getPublic>['getDiscoveryPointNeeds']>>>
 export type GetPublicReliefRequestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getPublic>['getPublicReliefRequest']>>>
 export type CreatePublicOfferResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getPublic>['createPublicOffer']>>>

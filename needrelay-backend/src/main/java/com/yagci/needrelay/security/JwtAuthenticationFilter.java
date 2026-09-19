@@ -1,5 +1,6 @@
 package com.yagci.needrelay.security;
 
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.OrganizerRole;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -44,7 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				UUID id = UUID.fromString(claims.getSubject());
 				String email = claims.get("email", String.class);
 				OrganizerRole role = OrganizerRole.valueOf(claims.get("role", String.class));
-				OrganizerPrincipal principal = new OrganizerPrincipal(id, email, "", role, true);
+				String organizationIdClaim = claims.get("organizationId", String.class);
+				String organizationRoleClaim = claims.get("organizationRole", String.class);
+				UUID organizationId = organizationIdClaim != null ? UUID.fromString(organizationIdClaim) : null;
+				OrganizationRole organizationRole =
+						organizationRoleClaim != null ? OrganizationRole.valueOf(organizationRoleClaim) : null;
+				OrganizerPrincipal principal =
+						new OrganizerPrincipal(id, email, "", role, true, organizationId, organizationRole);
 				UsernamePasswordAuthenticationToken authentication =
 						new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

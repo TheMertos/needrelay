@@ -1,16 +1,23 @@
 package com.yagci.needrelay.web;
 
+import com.yagci.needrelay.domain.OfferStatus;
+import com.yagci.needrelay.domain.ProviderType;
 import com.yagci.needrelay.security.OrganizerPrincipal;
 import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.OfferService;
+import com.yagci.needrelay.service.OrganizerContactService;
 import com.yagci.needrelay.service.ReliefRequestService;
 import com.yagci.needrelay.web.dto.CreateReliefRequest;
+import com.yagci.needrelay.web.dto.OfferFilter;
 import com.yagci.needrelay.web.dto.OfferResponse;
+import com.yagci.needrelay.web.dto.OrganizerContactResponse;
+import com.yagci.needrelay.web.dto.PageResponse;
 import com.yagci.needrelay.web.dto.ReceiveOfferRequest;
 import com.yagci.needrelay.web.dto.ReliefRequestResponse;
 import com.yagci.needrelay.web.dto.ReliefRequestSummaryResponse;
 import com.yagci.needrelay.web.dto.UpdateOfferRequest;
 import com.yagci.needrelay.web.dto.UpdateReliefRequest;
+import com.yagci.needrelay.web.dto.UpsertOrganizerContactRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,9 +30,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,14 +48,20 @@ public class ReliefRequestController {
 
 	private final ReliefRequestService reliefRequestService;
 	private final OfferService offerService;
+	private final OrganizerContactService contactService;
 
 	/**
 	 * @param reliefRequestService relief request service
 	 * @param offerService offer listing
+	 * @param contactService relief-request-specific contact persons
 	 */
-	public ReliefRequestController(ReliefRequestService reliefRequestService, OfferService offerService) {
+	public ReliefRequestController(
+			ReliefRequestService reliefRequestService,
+			OfferService offerService,
+			OrganizerContactService contactService) {
 		this.reliefRequestService = reliefRequestService;
 		this.offerService = offerService;
+		this.contactService = contactService;
 	}
 
 	/**
@@ -61,7 +76,7 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "201", description = "Created")
 	public ReliefRequestResponse create(@Valid @RequestBody CreateReliefRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return reliefRequestService.create(principal.getId(), request);
+		return reliefRequestService.create(SecurityUtils.requireOrganizationId(principal), request);
 	}
 
 	/**
@@ -74,7 +89,7 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "200", description = "List")
 	public List<ReliefRequestSummaryResponse> listMine() {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return reliefRequestService.listMine(principal.getId());
+		return reliefRequestService.listMine(SecurityUtils.requireOrganizationId(principal));
 	}
 
 	/**
@@ -88,7 +103,7 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "200", description = "Found")
 	public ReliefRequestResponse getOwned(@PathVariable UUID requestId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return reliefRequestService.getOwned(principal.getId(), requestId);
+		return reliefRequestService.getOwned(SecurityUtils.requireOrganizationId(principal), requestId);
 	}
 
 	/**
@@ -105,21 +120,48 @@ public class ReliefRequestController {
 			@PathVariable UUID requestId,
 			@Valid @RequestBody UpdateReliefRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return reliefRequestService.update(principal.getId(), requestId, request);
+		return reliefRequestService.update(SecurityUtils.requireOrganizationId(principal), requestId, request);
 	}
 
 	/**
-	 * Lists offers for an owned relief request.
+	 * Lists offers for an owned relief request (paginated, max 50 per page) with
+	 * combinable per-column filters. Passing {@code needId} scopes the page/filter/sort
+	 * to a single need, so each need's table can page independently.
 	 *
 	 * @param requestId request id
-	 * @return offers
+	 * @param page zero-based page index
+	 * @param size page size (capped at 50)
+	 * @param sort sort token (property,direction)
+	 * @param needId optional single-need scope
+	 * @param status exact status filter
+	 * @param providerType exact provider type filter
+	 * @param q free-text search across name/contact fields
+	 * @param minQuantity inclusive lower bound on quantity
+	 * @param maxQuantity inclusive upper bound on quantity
+	 * @param minDistanceKm inclusive lower bound on distance
+	 * @param maxDistanceKm inclusive upper bound on distance
+	 * @return paginated offers
 	 */
 	@GetMapping("/{requestId}/offers")
 	@Operation(summary = "List offers for relief request")
-	@ApiResponse(responseCode = "200", description = "Offers")
-	public List<OfferResponse> listOffers(@PathVariable UUID requestId) {
+	@ApiResponse(responseCode = "200", description = "Offers page")
+	public PageResponse<OfferResponse> listOffers(
+			@PathVariable UUID requestId,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size,
+			@RequestParam(defaultValue = "createdAt,desc") String sort,
+			@RequestParam(required = false) UUID needId,
+			@RequestParam(required = false) OfferStatus status,
+			@RequestParam(required = false) ProviderType providerType,
+			@RequestParam(required = false) String q,
+			@RequestParam(required = false) BigDecimal minQuantity,
+			@RequestParam(required = false) BigDecimal maxQuantity,
+			@RequestParam(required = false) BigDecimal minDistanceKm,
+			@RequestParam(required = false) BigDecimal maxDistanceKm) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return offerService.listOffers(principal.getId(), requestId);
+		OfferFilter filter = new OfferFilter(
+				needId, status, providerType, q, minQuantity, maxQuantity, minDistanceKm, maxDistanceKm);
+		return offerService.listOffers(SecurityUtils.requireOrganizationId(principal), requestId, page, size, sort, filter);
 	}
 
 	/**
@@ -138,7 +180,7 @@ public class ReliefRequestController {
 			@PathVariable UUID offerId,
 			@Valid @RequestBody UpdateOfferRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return offerService.updateOffer(principal.getId(), requestId, offerId, request);
+		return offerService.updateOffer(SecurityUtils.requireOrganizationId(principal), requestId, offerId, request);
 	}
 
 	/**
@@ -153,7 +195,7 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "200", description = "Updated")
 	public OfferResponse markOfferComing(@PathVariable UUID requestId, @PathVariable UUID offerId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return offerService.markComing(principal.getId(), requestId, offerId);
+		return offerService.markComing(SecurityUtils.requireOrganizationId(principal), requestId, offerId);
 	}
 
 	/**
@@ -172,7 +214,7 @@ public class ReliefRequestController {
 			@PathVariable UUID offerId,
 			@Valid @RequestBody ReceiveOfferRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return offerService.markReceived(principal.getId(), requestId, offerId, request);
+		return offerService.markReceived(SecurityUtils.requireOrganizationId(principal), requestId, offerId, request);
 	}
 
 	/**
@@ -187,7 +229,7 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "200", description = "Cancelled")
 	public OfferResponse cancelOffer(@PathVariable UUID requestId, @PathVariable UUID offerId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return offerService.cancelOffer(principal.getId(), requestId, offerId);
+		return offerService.cancelOffer(SecurityUtils.requireOrganizationId(principal), requestId, offerId);
 	}
 
 	/**
@@ -202,6 +244,72 @@ public class ReliefRequestController {
 	@ApiResponse(responseCode = "204", description = "Deleted")
 	public void deleteOffer(@PathVariable UUID requestId, @PathVariable UUID offerId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		offerService.deleteOffer(principal.getId(), requestId, offerId);
+		offerService.deleteOffer(SecurityUtils.requireOrganizationId(principal), requestId, offerId);
+	}
+
+	/**
+	 * Lists contact persons specific to an owned relief request.
+	 *
+	 * @param requestId request id
+	 * @return contacts
+	 */
+	@GetMapping("/{requestId}/contacts")
+	@Operation(summary = "List relief request contacts")
+	@ApiResponse(responseCode = "200", description = "Contacts")
+	public List<OrganizerContactResponse> listContacts(@PathVariable UUID requestId) {
+		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
+		return contactService.listForRequest(SecurityUtils.requireOrganizationId(principal), requestId);
+	}
+
+	/**
+	 * Creates a contact person specific to an owned relief request.
+	 *
+	 * @param requestId request id
+	 * @param request payload
+	 * @return created contact
+	 */
+	@PostMapping("/{requestId}/contacts")
+	@ResponseStatus(HttpStatus.CREATED)
+	@Operation(summary = "Create relief request contact")
+	@ApiResponse(responseCode = "201", description = "Created")
+	public OrganizerContactResponse createContact(
+			@PathVariable UUID requestId,
+			@Valid @RequestBody UpsertOrganizerContactRequest request) {
+		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
+		return contactService.createForRequest(SecurityUtils.requireOrganizationId(principal), requestId, request);
+	}
+
+	/**
+	 * Updates a contact person specific to an owned relief request.
+	 *
+	 * @param requestId request id
+	 * @param contactId contact id
+	 * @param request payload
+	 * @return updated contact
+	 */
+	@PutMapping("/{requestId}/contacts/{contactId}")
+	@Operation(summary = "Update relief request contact")
+	@ApiResponse(responseCode = "200", description = "Updated")
+	public OrganizerContactResponse updateContact(
+			@PathVariable UUID requestId,
+			@PathVariable UUID contactId,
+			@Valid @RequestBody UpsertOrganizerContactRequest request) {
+		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
+		return contactService.updateForRequest(SecurityUtils.requireOrganizationId(principal), requestId, contactId, request);
+	}
+
+	/**
+	 * Deletes a contact person specific to an owned relief request.
+	 *
+	 * @param requestId request id
+	 * @param contactId contact id
+	 */
+	@DeleteMapping("/{requestId}/contacts/{contactId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Delete relief request contact")
+	@ApiResponse(responseCode = "204", description = "Deleted")
+	public void deleteContact(@PathVariable UUID requestId, @PathVariable UUID contactId) {
+		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
+		contactService.deleteForRequest(SecurityUtils.requireOrganizationId(principal), requestId, contactId);
 	}
 }

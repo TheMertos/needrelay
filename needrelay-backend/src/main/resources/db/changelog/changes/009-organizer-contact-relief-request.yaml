@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-organizer-contact-relief-request
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: organizer_contacts
+            columns:
+              - column:
+                  name: relief_request_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseTableName: organizer_contacts
+            baseColumnNames: relief_request_id
+            referencedTableName: relief_requests
+            referencedColumnNames: id
+            constraintName: fk_organizer_contacts_relief_request
+            onDelete: CASCADE
+        - createIndex:
+            tableName: organizer_contacts
+            indexName: idx_organizer_contacts_relief_request_id
+            columns:
+              - column:
+                  name: relief_request_id

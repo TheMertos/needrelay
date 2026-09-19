@@ -42,30 +42,31 @@ public class CommentService {
 	/**
 	 * Lists comments for an owned relief request.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param requestId relief request id
 	 * @return comments oldest-first
 	 */
 	@Transactional(readOnly = true)
-	public List<CommentResponse> list(UUID organizerId, UUID requestId) {
-		reliefRequestService.getOwnedEntity(organizerId, requestId);
+	public List<CommentResponse> list(UUID organizationId, UUID requestId) {
+		reliefRequestService.getOwnedEntity(organizationId, requestId);
 		return commentRepository.findByReliefRequestIdOrderByCreatedAtAsc(requestId).stream()
 				.map(this::toResponse)
 				.toList();
 	}
 
 	/**
-	 * Adds a comment as the owning organizer.
+	 * Adds a comment as the given author on an owned relief request.
 	 *
-	 * @param organizerId author/owner id
+	 * @param organizationId owner id (of the relief request)
+	 * @param authorId id of the person posting the comment
 	 * @param requestId relief request id
 	 * @param request body
 	 * @return created comment
 	 */
 	@Transactional
-	public CommentResponse create(UUID organizerId, UUID requestId, CreateCommentRequest request) {
-		ReliefRequest reliefRequest = reliefRequestService.getOwnedEntity(organizerId, requestId);
-		Organizer author = organizerRepository.findById(organizerId)
+	public CommentResponse create(UUID organizationId, UUID authorId, UUID requestId, CreateCommentRequest request) {
+		ReliefRequest reliefRequest = reliefRequestService.getOwnedEntity(organizationId, requestId);
+		Organizer author = organizerRepository.findById(authorId)
 				.orElseThrow(() -> new ApiException("ORGANIZER_NOT_FOUND", "Organizer not found", HttpStatus.NOT_FOUND));
 		ReliefRequestComment comment = new ReliefRequestComment();
 		comment.setReliefRequest(reliefRequest);
@@ -78,13 +79,13 @@ public class CommentService {
 	/**
 	 * Deletes a comment on an owned relief request (owner only).
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param requestId relief request id
 	 * @param commentId comment id
 	 */
 	@Transactional
-	public void delete(UUID organizerId, UUID requestId, UUID commentId) {
-		reliefRequestService.getOwnedEntity(organizerId, requestId);
+	public void delete(UUID organizationId, UUID requestId, UUID commentId) {
+		reliefRequestService.getOwnedEntity(organizationId, requestId);
 		ReliefRequestComment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new ApiException("COMMENT_NOT_FOUND", "Comment not found", HttpStatus.NOT_FOUND));
 		if (!comment.getReliefRequest().getId().equals(requestId)) {

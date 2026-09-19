@@ -1,5 +1,6 @@
 package com.yagci.needrelay.web.dto;
 
+import com.yagci.needrelay.domain.ProviderType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
  * Organizer update of an incoming offer.
  *
  * @param providerName provider name
+ * @param providerType whether the offerer is a private person or an organization
  * @param quantity offered quantity
  * @param firstName offerer first name
  * @param lastName offerer last name
@@ -21,6 +23,7 @@ import java.math.BigDecimal;
  */
 public record UpdateOfferRequest(
 		@NotBlank @Size(max = 200) String providerName,
+		@NotNull ProviderType providerType,
 		@NotNull @DecimalMin(value = "0.0001") BigDecimal quantity,
 		@NotBlank @Size(max = 100) String firstName,
 		@NotBlank @Size(max = 100) String lastName,

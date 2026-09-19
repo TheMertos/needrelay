@@ -5,9 +5,11 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { ProviderType } from './providerType';
 
 export interface CreateOfferRequest {
   providerName: string;
+  providerType: ProviderType;
   quantity: number;
   /** @maxLength 100 */
   firstName: string;
@@ -19,4 +21,14 @@ export interface CreateOfferRequest {
   email: string;
   /** @nullable */
   note?: string | null;
+  /**
+   * Offerer's current latitude from an optional browser geolocation share; used only to compute distanceKm and never persisted.
+   * @nullable
+   */
+  latitude?: number | null;
+  /**
+   * Offerer's current longitude, see latitude.
+   * @nullable
+   */
+  longitude?: number | null;
 }

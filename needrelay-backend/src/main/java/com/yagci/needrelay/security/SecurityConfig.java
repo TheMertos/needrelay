@@ -57,6 +57,7 @@ public class SecurityConfig {
 								"/actuator/health",
 								"/actuator/health/**")
 						.permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/settings").permitAll()
 						.requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/public/**").permitAll()
 						.requestMatchers("/api/**").authenticated()

@@ -2,11 +2,11 @@ package com.yagci.needrelay.service;
 
 import com.yagci.needrelay.domain.NeedPriority;
 import com.yagci.needrelay.domain.NeedStatus;
-import com.yagci.needrelay.domain.Organizer;
+import com.yagci.needrelay.domain.Organization;
 import com.yagci.needrelay.domain.ReliefRequest;
 import com.yagci.needrelay.exception.ApiException;
 import com.yagci.needrelay.repository.NeedRepository;
-import com.yagci.needrelay.repository.OrganizerRepository;
+import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.ReliefRequestRepository;
 import com.yagci.needrelay.web.dto.CreateReliefRequest;
 import com.yagci.needrelay.web.dto.ReliefRequestResponse;
@@ -28,40 +28,40 @@ public class ReliefRequestService {
 	private static final List<NeedStatus> OPEN_STATUSES = List.of(NeedStatus.OPEN, NeedStatus.PARTIALLY_COVERED);
 
 	private final ReliefRequestRepository reliefRequestRepository;
-	private final OrganizerRepository organizerRepository;
+	private final OrganizationRepository organizationRepository;
 	private final NeedRepository needRepository;
 	private final SlugService slugService;
 
 	/**
 	 * @param reliefRequestRepository relief requests
-	 * @param organizerRepository organizers
+	 * @param organizationRepository organizations
 	 * @param needRepository needs for dashboard counts
 	 * @param slugService unique slug generator
 	 */
 	public ReliefRequestService(
 			ReliefRequestRepository reliefRequestRepository,
-			OrganizerRepository organizerRepository,
+			OrganizationRepository organizationRepository,
 			NeedRepository needRepository,
 			SlugService slugService) {
 		this.reliefRequestRepository = reliefRequestRepository;
-		this.organizerRepository = organizerRepository;
+		this.organizationRepository = organizationRepository;
 		this.needRepository = needRepository;
 		this.slugService = slugService;
 	}
 
 	/**
-	 * Creates a relief request owned by the given organizer.
+	 * Creates a relief request owned by the given organization.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @param request create payload
 	 * @return created request
 	 */
 	@Transactional
-	public ReliefRequestResponse create(UUID organizerId, CreateReliefRequest request) {
-		Organizer organizer = organizerRepository.findById(organizerId)
-				.orElseThrow(() -> new ApiException("ORGANIZER_NOT_FOUND", "Organizer not found", HttpStatus.NOT_FOUND));
+	public ReliefRequestResponse create(UUID organizationId, CreateReliefRequest request) {
+		Organization organization = organizationRepository.findById(organizationId)
+				.orElseThrow(() -> new ApiException("ORGANIZATION_NOT_FOUND", "Organization not found", HttpStatus.NOT_FOUND));
 		ReliefRequest entity = new ReliefRequest();
-		entity.setOrganizer(organizer);
+		entity.setOrganization(organization);
 		entity.setTitle(request.title().trim());
 		entity.setDescription(request.description().trim());
 		entity.setLocationLabel(request.locationLabel().trim());
@@ -94,14 +94,14 @@ public class ReliefRequestService {
 	}
 
 	/**
-	 * Lists the organizer's relief requests with need summary counts.
+	 * Lists the organization's relief requests with need summary counts.
 	 *
-	 * @param organizerId owner id
+	 * @param organizationId owner id
 	 * @return summary list
 	 */
 	@Transactional(readOnly = true)
-	public List<ReliefRequestSummaryResponse> listMine(UUID organizerId) {
-		return reliefRequestRepository.findByOrganizerIdOrderByCreatedAtDesc(organizerId).stream()
+	public List<ReliefRequestSummaryResponse> listMine(UUID organizationId) {
+		return reliefRequestRepository.findByOrganizationIdOrderByCreatedAtDesc(organizationId).stream()
 				.map(this::toSummary)
 				.toList();
 	}
@@ -177,13 +177,13 @@ public class ReliefRequestService {
 	}
 
 	/**
-	 * Ensures the organizer owns the relief request.
+	 * Ensures the organization owns the relief request.
 	 *
-	 * @param organizerId candidate owner
+	 * @param organizationId candidate owner
 	 * @param entity relief request
 	 */
-	private void assertOwner(UUID organizerId, ReliefRequest entity) {
-		if (!entity.getOrganizer().getId().equals(organizerId)) {
+	private void assertOwner(UUID organizationId, ReliefRequest entity) {
+		if (!entity.getOrganization().getId().equals(organizationId)) {
 			throw new ApiException("FORBIDDEN", "You do not own this relief request", HttpStatus.FORBIDDEN);
 		}
 	}

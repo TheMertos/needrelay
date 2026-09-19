@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-organizations
+      author: needrelay
+      changes:
+        - createTable:
+            tableName: organizations
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: organizers
+            columns:
+              - column:
+                  name: organization_id
+                  type: uuid
+              - column:
+                  name: organization_role
+                  type: varchar(32)
+        - sql:
+            sql: >-
+              INSERT INTO organizations (id, name, description, created_at)
+              SELECT id, display_name, description, created_at FROM organizers WHERE role = 'ORGANIZER'
+        - sql:
+            sql: >-
+              UPDATE organizers SET organization_id = id, organization_role = 'ADMIN'
+              WHERE role = 'ORGANIZER'
+        - addForeignKeyConstraint:
+            baseTableName: organizers
+            baseColumnNames: organization_id
+            referencedTableName: organizations
+            referencedColumnNames: id
+            constraintName: fk_organizers_organization
+        - createIndex:
+            tableName: organizers
+            indexName: idx_organizers_organization_id
+            columns:
+              - column:
+                  name: organization_id
+        - dropColumn:
+            tableName: organizers
+            columnName: description

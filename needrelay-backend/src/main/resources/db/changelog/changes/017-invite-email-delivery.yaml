@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-invite-email-delivery
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: invites
+            columns:
+              - column:
+                  name: email_sent_at
+                  type: timestamp with time zone
+              - column:
+                  name: email_attempts
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email_error
+                  type: varchar(500)

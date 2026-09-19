@@ -23,6 +23,7 @@
     "loadError": "Could not load help areas.",
     "retry": "Retry",
     "openRequest": "Open help page",
+    "openDetails": "Open details",
     "org": "Organization",
     "location": "Location",
     "priority": "Priority"
@@ -49,7 +50,8 @@
     "backToLogin": "Back to login",
     "resetTitle": "Choose a new password",
     "resetSubmit": "Update password",
-    "resetSuccess": "Password updated. You can log in now."
+    "resetSuccess": "Password updated. You can log in now.",
+    "organizationDisabled": "Your organization has been deactivated. Contact an administrator."
   },
   "account": {
     "title": "Account settings",
@@ -70,18 +72,46 @@
     "contactRole": "Role / function",
     "contactPhone": "Phone",
     "contactEmail": "Email",
-    "contactNote": "Note (optional)"
+    "contactNote": "Note (optional)",
+    "confirmDeleteContact": "Delete this contact?",
+    "myName": "My name"
   },
   "publicPage": {
     "organization": "Organization",
-    "contacts": "Contacts"
+    "contacts": "Contacts",
+    "backToList": "Back to list",
+    "deactivated": "This relief effort is no longer active.",
+    "getDirections": "Get directions"
   },
   "admin": {
     "title": "Organizer accounts",
     "active": "Active",
     "banned": "Banned",
     "ban": "Ban",
-    "unban": "Unban"
+    "unban": "Unban",
+    "confirmBan": "Ban this organizer? They will no longer be able to sign in.",
+    "confirmUnban": "Unban this organizer? They will be able to sign in again.",
+    "role": "Role",
+    "status": "Status",
+    "organization": "Organization",
+    "roleValues": {
+      "ADMIN": "Platform admin",
+      "ORGANIZER": "Organizer"
+    },
+    "organizationsTitle": "Organizations",
+    "createOrganization": "Create organization",
+    "organizationName": "Name",
+    "organizationDescription": "Description",
+    "editOrganization": "Edit organization",
+    "deactivateOrganization": "Deactivate",
+    "activateOrganization": "Activate",
+    "confirmDeactivateOrganization": "Deactivate this organization? Its members will no longer be able to sign in.",
+    "confirmActivateOrganization": "Reactivate this organization? Its members will be able to sign in again.",
+    "orgRole": "Org role",
+    "settingsTitle": "Platform settings",
+    "defaultLanguage": "Default language",
+    "defaultLanguageHint": "Shown to visitors and used in invite/reset emails until they pick their own language.",
+    "settingsSaved": "Settings saved."
   },
   "dashboard": {
     "title": "Operations",
@@ -93,7 +123,12 @@
     "kpiOpen": "Open",
     "kpiCovered": "Covered",
     "manage": "Manage",
-    "publicLink": "Public page"
+    "publicLink": "Public page",
+    "tabActive": "Active",
+    "tabDeactivated": "Deactivated",
+    "emptyActive": "No active relief requests.",
+    "emptyDeactivated": "No deactivated relief requests.",
+    "searchPlaceholder": "Search by title or location…"
   },
   "request": {
     "title": "Title",
@@ -105,6 +140,7 @@
     "locationSaved": "Location updated",
     "save": "Save",
     "needs": "Needs at this location",
+    "needsWithOffers": "Needs and incoming help",
     "offers": "Public offers (incoming help)",
     "offersHint": "Visitors submit these without an account. You can edit or remove them here.",
     "offersEmpty": "No offers yet.",
@@ -115,9 +151,31 @@
     "closeNeed": "Close need",
     "requiredMinHint": "Cannot go below already offered: {{offered}} {{unit}}",
     "share": "Share public link",
-    "detailsMeta": "Request details & notes",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied to clipboard.",
+    "detailsMeta": "Request details",
+    "editDetails": "Edit details",
+    "backToDashboard": "Back to dashboard",
+    "deactivate": "Deactivate",
+    "reactivate": "Reactivate",
+    "confirmDeactivate": "Deactivate this relief request? It will stop accepting new offers and the public page will only show that it's no longer active.",
+    "confirmReactivate": "Reactivate this relief request? It will accept offers again and the public page will show full details.",
+    "deactivated": "Relief request deactivated.",
+    "reactivated": "Relief request reactivated.",
+    "deactivatedNotice": "This relief request is deactivated. It no longer accepts new offers and its public page only shows a notice.",
     "addFirstNeed": "Add first need (optional)",
-    "firstNeedTitle": "First need title"
+    "firstNeedTitle": "First need title",
+    "confirmCloseNeed": "Close this need? It will no longer accept new offers.",
+    "confirmCancelOffer": "Cancel this offer? The provider will no longer be expected.",
+    "confirmDeleteOffer": "Delete this offer permanently?",
+    "confirmDeleteComment": "Delete this note?",
+    "offerSortNewest": "Newest first",
+    "offerSortOldest": "Oldest first",
+    "offerSortStatus": "By status",
+    "offerSortQuantity": "Highest quantity",
+    "offerPage": "Page {{page}} of {{total}}",
+    "contacts": "Contacts",
+    "contactsHint": "Specific to this relief request. Shown together with your organization contacts on its public page."
   },
   "comments": {
     "title": "Internal notes",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Partially covered",
       "COVERED": "Covered",
       "CLOSED": "Closed"
+    },
+    "priorityValues": {
+      "CRITICAL": "Critical",
+      "HIGH": "High",
+      "NORMAL": "Normal",
+      "LOW": "Low"
+    },
+    "categoryValues": {
+      "FOOD": "Food",
+      "WATER": "Water",
+      "CLOTHING": "Clothing",
+      "SUPPLIES": "Supplies",
+      "EQUIPMENT": "Equipment",
+      "MACHINERY": "Machinery",
+      "VEHICLES": "Vehicles",
+      "SHELTER": "Shelter",
+      "SERVICES": "Services",
+      "OTHER": "Other"
     }
   },
   "offer": {
     "title": "Offer resources",
     "providerName": "Name / organization",
+    "providerType": "Type",
+    "searchPlaceholder": "Name, phone or email",
+    "providerTypeValues": {
+      "PERSON": "Private person",
+      "ORGANIZATION": "Organization"
+    },
     "quantity": "Expected quantity",
     "firstName": "First name",
     "lastName": "Last name",
@@ -163,12 +245,70 @@
       "RECEIVED": "Received",
       "CANCELLED": "Cancelled"
     },
-    "cancel": "Cancel offer"
+    "cancel": "Cancel offer",
+    "contact": "Contact",
+    "distance": "Distance",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Status",
+    "actions": "Actions",
+    "locationHint": "We ask for your location to show organizers how far away you are. Your device must share it to submit an offer — only the calculated distance is stored, never your exact location.",
+    "locationRequesting": "Requesting your location…",
+    "locationGranted": "Location shared.",
+    "locationDenied": "Location access is required to submit an offer.",
+    "retryLocation": "Share location",
+    "changeStatus": "Change status",
+    "confirmMarkComing": "Mark this offer as coming? The provider will be expected to deliver it."
   },
   "common": {
+    "refresh": "Refresh",
     "loading": "Loading…",
     "error": "Something went wrong.",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "confirmTitle": "Confirm",
+    "confirmBody": "Are you sure?",
+    "prev": "Previous",
+    "next": "Next",
+    "all": "All",
+    "min": "Min",
+    "max": "Max",
+    "search": "Search",
+    "filters": "Filters",
+    "clearFilters": "Clear filters",
+    "perPage": "Per page"
+  },
+  "organization": {
+    "title": "Organization",
+    "name": "Name",
+    "description": "Description",
+    "save": "Save",
+    "saved": "Organization saved",
+    "membersTitle": "Members",
+    "invite": "Invite",
+    "remove": "Remove",
+    "confirmRemoveMember": "Remove this member? They will lose access immediately.",
+    "roleValues": {
+      "ADMIN": "Admin",
+      "USER": "Member"
+    }
+  },
+  "invites": {
+    "create": "Create invite",
+    "organization": "Organization",
+    "role": "Role",
+    "tokenLink": "Token / link",
+    "email": "Email",
+    "noEmail": "No email",
+    "emailStatus": "Email status",
+    "emailSent": "Sent",
+    "emailPending": "Pending",
+    "emailFailed": "Failed",
+    "expires": "Expires",
+    "usedColumn": "Used",
+    "used": "Yes",
+    "unused": "No",
+    "revoke": "Revoke",
+    "confirmRevoke": "Revoke this invite? The link will stop working."
   }
 }

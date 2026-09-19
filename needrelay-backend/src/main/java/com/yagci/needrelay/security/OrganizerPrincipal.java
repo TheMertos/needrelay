@@ -1,5 +1,6 @@
 package com.yagci.needrelay.security;
 
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.OrganizerRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,8 @@ public class OrganizerPrincipal implements UserDetails {
 	private final String passwordHash;
 	private final OrganizerRole role;
 	private final boolean active;
+	private final UUID organizationId;
+	private final OrganizationRole organizationRole;
 
 	/**
 	 * Creates a principal from organizer fields.
@@ -28,15 +31,26 @@ public class OrganizerPrincipal implements UserDetails {
 	 * @param id organizer id
 	 * @param email email
 	 * @param passwordHash password hash
-	 * @param role role
+	 * @param role platform role
 	 * @param active whether account is active
+	 * @param organizationId organization id, null for platform admins
+	 * @param organizationRole role within the organization, null for platform admins
 	 */
-	public OrganizerPrincipal(UUID id, String email, String passwordHash, OrganizerRole role, boolean active) {
+	public OrganizerPrincipal(
+			UUID id,
+			String email,
+			String passwordHash,
+			OrganizerRole role,
+			boolean active,
+			UUID organizationId,
+			OrganizationRole organizationRole) {
 		this.id = id;
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.role = role;
 		this.active = active;
+		this.organizationId = organizationId;
+		this.organizationRole = organizationRole;
 	}
 
 	@Override

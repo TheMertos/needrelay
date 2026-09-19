@@ -19,7 +19,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Public relief coordination request owned by an organizer.
+ * Public relief coordination request owned by an organization.
  */
 @Getter
 @Setter
@@ -31,8 +31,8 @@ public class ReliefRequest {
 	private UUID id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "organizer_id", nullable = false)
-	private Organizer organizer;
+	@JoinColumn(name = "organization_id", nullable = false)
+	private Organization organization;
 
 	@Column(nullable = false, length = 200)
 	private String title;

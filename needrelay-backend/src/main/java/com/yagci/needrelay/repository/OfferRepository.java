@@ -2,7 +2,10 @@ package com.yagci.needrelay.repository;
 
 import com.yagci.needrelay.domain.Offer;
 import com.yagci.needrelay.domain.OfferStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,7 +16,7 @@ import java.util.UUID;
 /**
  * Persistence access for offers.
  */
-public interface OfferRepository extends JpaRepository<Offer, UUID> {
+public interface OfferRepository extends JpaRepository<Offer, UUID>, JpaSpecificationExecutor<Offer> {
 
 	/**
 	 * Lists offers for a need, newest first.
@@ -30,6 +33,15 @@ public interface OfferRepository extends JpaRepository<Offer, UUID> {
 	 * @return offers
 	 */
 	List<Offer> findByNeedReliefRequestIdOrderByCreatedAtDesc(UUID reliefRequestId);
+
+	/**
+	 * Pages offers for all needs of a relief request.
+	 *
+	 * @param reliefRequestId parent request id
+	 * @param pageable page and sort
+	 * @return offer page
+	 */
+	Page<Offer> findByNeedReliefRequestId(UUID reliefRequestId, Pageable pageable);
 
 	/**
 	 * Sums expected quantities for pending/coming offers on a need.

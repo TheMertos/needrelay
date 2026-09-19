@@ -1,11 +1,10 @@
 # All-in-one NeedRelay app: Vite SPA embedded in Spring Boot JAR.
 # Build from repo root: docker build -t needrelay-app .
-# Compose: docker compose -f docker-compose.app.yml up -d
+# Compose: docker compose up -d --build
 
 FROM node:22-alpine AS frontend
 WORKDIR /fe
 COPY needrelay-frontend/package.json needrelay-frontend/yarn.lock needrelay-frontend/.yarnrc.yml ./
-COPY needrelay-frontend/.yarn ./.yarn
 RUN corepack enable && yarn install --immutable
 COPY needrelay-frontend/ .
 ENV VITE_API_URL=

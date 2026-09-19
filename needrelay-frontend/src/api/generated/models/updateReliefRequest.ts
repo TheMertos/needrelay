@@ -5,6 +5,7 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { UpdateReliefRequestStatus } from './updateReliefRequestStatus';
 
 export interface UpdateReliefRequest {
   title: string;
@@ -12,4 +13,5 @@ export interface UpdateReliefRequest {
   locationLabel: string;
   latitude: number;
   longitude: number;
+  status: UpdateReliefRequestStatus;
 }

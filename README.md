@@ -53,7 +53,7 @@ cd needrelay-db && docker compose up -d
 Or all-in-one app + Postgres (build locally):
 
 ```bash
-docker compose -f docker-compose.app.yml up -d --build
+docker compose up -d --build
 ```
 
 Or run API/UI on the host:

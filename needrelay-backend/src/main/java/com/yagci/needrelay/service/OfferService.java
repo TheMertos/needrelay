@@ -1,22 +1,33 @@
 package com.yagci.needrelay.service;
 
+import com.yagci.needrelay.common.GeoDistance;
 import com.yagci.needrelay.domain.Need;
 import com.yagci.needrelay.domain.NeedStatus;
 import com.yagci.needrelay.domain.Offer;
 import com.yagci.needrelay.domain.OfferStatus;
+import com.yagci.needrelay.domain.ReliefRequest;
+import com.yagci.needrelay.domain.ReliefRequestStatus;
 import com.yagci.needrelay.exception.ApiException;
 import com.yagci.needrelay.repository.NeedRepository;
 import com.yagci.needrelay.repository.OfferRepository;
+import com.yagci.needrelay.repository.OfferSpecifications;
 import com.yagci.needrelay.web.dto.CreateOfferRequest;
+import com.yagci.needrelay.web.dto.OfferFilter;
 import com.yagci.needrelay.web.dto.OfferResponse;
+import com.yagci.needrelay.web.dto.PageResponse;
 import com.yagci.needrelay.web.dto.ReceiveOfferRequest;
 import com.yagci.needrelay.web.dto.UpdateOfferRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -59,6 +70,10 @@ public class OfferService {
 		if (need.getStatus() == NeedStatus.CLOSED) {
 			throw new ApiException("NEED_CLOSED", "Cannot offer against a closed need", HttpStatus.CONFLICT);
 		}
+		if (need.getReliefRequest().getStatus() == ReliefRequestStatus.ARCHIVED) {
+			throw new ApiException(
+					"RELIEF_REQUEST_ARCHIVED", "This relief request is no longer active", HttpStatus.CONFLICT);
+		}
 		if (dto.quantity().compareTo(BigDecimal.ZERO) <= 0) {
 			throw new ApiException("INVALID_QUANTITY", "Quantity must be positive", HttpStatus.BAD_REQUEST);
 		}
@@ -66,6 +81,7 @@ public class OfferService {
 		Offer offer = new Offer();
 		offer.setNeed(need);
 		offer.setProviderName(dto.providerName().trim());
+		offer.setProviderType(dto.providerType());
 		offer.setQuantity(dto.quantity());
 		offer.setStatus(OfferStatus.PENDING);
 		offer.setFirstName(dto.firstName().trim());
@@ -73,23 +89,77 @@ public class OfferService {
 		offer.setPhone(dto.phone().trim());
 		offer.setEmail(dto.email().trim().toLowerCase());
 		offer.setNote(dto.note());
+		if (dto.latitude() != null && dto.longitude() != null) {
+			ReliefRequest reliefRequest = need.getReliefRequest();
+			offer.setDistanceKm(GeoDistance.haversineKm(
+					dto.latitude(), dto.longitude(),
+					reliefRequest.getLatitude(), reliefRequest.getLongitude()));
+		}
 		offerRepository.save(offer);
 		return toResponse(offer);
 	}
 
 	/**
-	 * Lists offers for an owned relief request, newest first.
+	 * Lists offers for an owned relief request with pagination, sort and combinable filters.
 	 *
 	 * @param organizerId owner id
 	 * @param requestId relief request id
-	 * @return offers
+	 * @param page zero-based page index
+	 * @param size page size (capped at 50)
+	 * @param sort sort token (property,direction)
+	 * @param filter combinable filter values
+	 * @return paginated offers
 	 */
 	@Transactional(readOnly = true)
-	public List<OfferResponse> listOffers(UUID organizerId, UUID requestId) {
+	public PageResponse<OfferResponse> listOffers(
+			UUID organizerId,
+			UUID requestId,
+			int page,
+			int size,
+			String sort,
+			OfferFilter filter) {
 		reliefRequestService.getOwnedEntity(organizerId, requestId);
-		return offerRepository.findByNeedReliefRequestIdOrderByCreatedAtDesc(requestId).stream()
-				.map(this::toResponse)
-				.toList();
+		Pageable pageable = toOfferPageable(page, size, sort);
+		Page<Offer> result = offerRepository.findAll(OfferSpecifications.forRequest(requestId, filter), pageable);
+		List<OfferResponse> items = result.getContent().stream().map(this::toResponse).toList();
+		return new PageResponse<>(
+				items,
+				result.getNumber(),
+				result.getSize(),
+				result.getTotalElements(),
+				result.getTotalPages());
+	}
+
+	private static final Set<String> OFFER_SORT_PROPERTIES = Set.of(
+			"createdAt", "status", "quantity", "providerName", "providerType",
+			"distanceKm", "firstName", "lastName", "phone", "email");
+
+	/**
+	 * Builds a bounded pageable with a whitelist of offer sort fields (max 50 per page).
+	 *
+	 * @param page zero-based page
+	 * @param size requested size
+	 * @param sort sort token
+	 * @return pageable
+	 */
+	private Pageable toOfferPageable(int page, int size, String sort) {
+		int safePage = Math.max(page, 0);
+		int safeSize = Math.min(Math.max(size, 1), 50);
+		String raw = sort == null || sort.isBlank() ? "createdAt,desc" : sort.trim();
+		String[] parts = raw.split(",", 2);
+		String property = parts[0].trim();
+		if (!OFFER_SORT_PROPERTIES.contains(property)) {
+			throw new ApiException("INVALID_SORT", "Unsupported sort property", HttpStatus.BAD_REQUEST);
+		}
+		Sort.Direction direction = Sort.Direction.DESC;
+		if (parts.length > 1 && "asc".equalsIgnoreCase(parts[1].trim())) {
+			direction = Sort.Direction.ASC;
+		}
+		Sort springSort = Sort.by(direction, property);
+		if (!"createdAt".equals(property)) {
+			springSort = springSort.and(Sort.by(Sort.Direction.DESC, "createdAt"));
+		}
+		return PageRequest.of(safePage, safeSize, springSort);
 	}
 
 	/**
@@ -118,6 +188,7 @@ public class OfferService {
 					HttpStatus.CONFLICT);
 		}
 		offer.setProviderName(dto.providerName().trim());
+		offer.setProviderType(dto.providerType());
 		offer.setQuantity(dto.quantity());
 		offer.setFirstName(dto.firstName().trim());
 		offer.setLastName(dto.lastName().trim());
@@ -272,6 +343,7 @@ public class OfferService {
 				offer.getId(),
 				offer.getNeed().getId(),
 				offer.getProviderName(),
+				offer.getProviderType(),
 				offer.getQuantity(),
 				offer.getQuantityReceived(),
 				offer.getStatus(),
@@ -280,6 +352,7 @@ public class OfferService {
 				offer.getPhone(),
 				offer.getEmail(),
 				offer.getNote(),
+				offer.getDistanceKm(),
 				offer.getCreatedAt());
 	}
 

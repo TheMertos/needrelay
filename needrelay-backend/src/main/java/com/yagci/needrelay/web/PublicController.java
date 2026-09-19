@@ -1,7 +1,8 @@
 package com.yagci.needrelay.web;
 
-import com.yagci.needrelay.domain.Organizer;
+import com.yagci.needrelay.domain.Organization;
 import com.yagci.needrelay.domain.ReliefRequest;
+import com.yagci.needrelay.domain.ReliefRequestStatus;
 import com.yagci.needrelay.exception.ApiException;
 import com.yagci.needrelay.security.ClientIpResolver;
 import com.yagci.needrelay.security.OfferRateLimiter;
@@ -11,10 +12,12 @@ import com.yagci.needrelay.service.OrganizerContactService;
 import com.yagci.needrelay.service.PublicDiscoveryService;
 import com.yagci.needrelay.service.ReliefRequestService;
 import com.yagci.needrelay.web.dto.CreateOfferRequest;
+import com.yagci.needrelay.web.dto.DiscoveryNeedResponse;
+import com.yagci.needrelay.web.dto.DiscoveryPointResponse;
 import com.yagci.needrelay.web.dto.NeedResponse;
 import com.yagci.needrelay.web.dto.OfferResponse;
 import com.yagci.needrelay.web.dto.OrganizerContactResponse;
-import com.yagci.needrelay.web.dto.PublicDiscoveryResponse;
+import com.yagci.needrelay.web.dto.PageResponse;
 import com.yagci.needrelay.web.dto.PublicReliefRequestResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,9 +30,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,19 +81,46 @@ public class PublicController {
 	}
 
 	/**
-	 * Returns ACTIVE help points and discoverable needs for the public map/list.
+	 * Pages ACTIVE help points for the public map/list (max 50 per page), optionally
+	 * matching a free-text query against a point's location/title or its needs' titles.
 	 *
-	 * @return discovery payload
+	 * @param q optional free-text query
+	 * @param page zero-based page index
+	 * @param size page size (capped at 50)
+	 * @return point page
 	 */
 	@GetMapping("/discovery")
 	@Operation(summary = "Public help discovery feed")
 	@ApiResponse(responseCode = "200", description = "Discovery payload")
-	public PublicDiscoveryResponse discovery() {
-		return publicDiscoveryService.getDiscovery();
+	public PageResponse<DiscoveryPointResponse> discovery(
+			@RequestParam(required = false) String q,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size) {
+		return publicDiscoveryService.getDiscovery(q, page, size);
 	}
 
 	/**
-	 * Returns a public relief request and its needs by slug.
+	 * Pages discoverable needs for one ACTIVE help point (max 20 per page).
+	 *
+	 * @param requestId relief request id
+	 * @param page zero-based page index
+	 * @param size page size (capped at 20)
+	 * @return needs page
+	 */
+	@GetMapping("/discovery/points/{requestId}/needs")
+	@Operation(summary = "List discoverable needs for a public help point")
+	@ApiResponse(responseCode = "200", description = "Needs page")
+	public PageResponse<DiscoveryNeedResponse> discoveryPointNeeds(
+			@PathVariable UUID requestId,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size) {
+		return publicDiscoveryService.getPointNeeds(requestId, page, size);
+	}
+
+	/**
+	 * Returns a public relief request and its needs by slug. Archived requests no longer
+	 * accept offers, so only the title/status/slug are exposed — no needs, location, map
+	 * coordinates, or organization/contact details.
 	 *
 	 * @param slug public slug
 	 * @return public view
@@ -98,9 +130,27 @@ public class PublicController {
 	@ApiResponse(responseCode = "200", description = "Found")
 	public PublicReliefRequestResponse getBySlug(@PathVariable String slug) {
 		ReliefRequest request = reliefRequestService.getBySlug(slug);
-		Organizer organizer = request.getOrganizer();
+		if (request.getStatus() == ReliefRequestStatus.ARCHIVED) {
+			return new PublicReliefRequestResponse(
+					request.getId(),
+					request.getTitle(),
+					"",
+					"",
+					0.0,
+					0.0,
+					request.getPublicSlug(),
+					request.getStatus(),
+					List.of(),
+					"",
+					null,
+					List.of(),
+					request.getCreatedAt());
+		}
+		Organization organization = request.getOrganization();
 		List<NeedResponse> needs = needService.listByRequestId(request.getId());
-		List<OrganizerContactResponse> contacts = contactService.list(organizer.getId());
+		List<OrganizerContactResponse> contacts = new ArrayList<>(
+				contactService.listForRequestPublic(request.getId()));
+		contacts.addAll(contactService.list(organization.getId()));
 		return new PublicReliefRequestResponse(
 				request.getId(),
 				request.getTitle(),
@@ -111,8 +161,8 @@ public class PublicController {
 				request.getPublicSlug(),
 				request.getStatus(),
 				needs,
-				organizer.getDisplayName(),
-				organizer.getDescription(),
+				organization.getName(),
+				organization.getDescription(),
 				contacts,
 				request.getCreatedAt());
 	}

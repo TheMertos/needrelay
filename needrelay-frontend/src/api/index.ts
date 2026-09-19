@@ -4,8 +4,10 @@ import { getComments } from './generated/comments/comments';
 import { getContacts } from './generated/contacts/contacts';
 import { getInvites } from './generated/invites/invites';
 import { getNeeds } from './generated/needs/needs';
+import { getOrganization } from './generated/organization/organization';
 import { getPublic } from './generated/public/public';
 import { getReliefRequests } from './generated/relief-requests/relief-requests';
+import { getSettings } from './generated/settings/settings';
 
 /** Typed auth API from OpenAPI. */
 export const authApi = getAuth();
@@ -19,7 +21,11 @@ export const contactsApi = getContacts();
 export const invitesApi = getInvites();
 /** Typed needs API from OpenAPI. */
 export const needsApi = getNeeds();
+/** Typed organization API from OpenAPI. */
+export const organizationApi = getOrganization();
 /** Typed public API from OpenAPI. */
 export const publicApi = getPublic();
 /** Typed relief-request API from OpenAPI. */
 export const reliefRequestsApi = getReliefRequests();
+/** Typed public settings API from OpenAPI. */
+export const settingsApi = getSettings();

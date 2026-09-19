@@ -1,10 +1,12 @@
 import {
+  Badge,
   Button,
   Container,
   Divider,
   Group,
   Modal,
   PasswordInput,
+  Select,
   Stack,
   Text,
   Textarea,
@@ -15,23 +17,39 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { authApi, contactsApi } from '../api';
-import type { OrganizerContactResponse, OrganizerResponse } from '../api/generated/models';
+import { Link } from 'react-router-dom';
+import { authApi, contactsApi, organizationApi } from '../api';
+import {
+  OrganizationRole,
+  type OrganizationMemberResponse,
+  type OrganizationResponse,
+  type OrganizerContactResponse,
+  type OrganizerResponse,
+} from '../api/generated/models';
 import { SurfaceCard } from '../components/SurfaceCard';
+import { ConfirmModal } from '../components/ConfirmModal';
 
 /**
- * Account settings: org profile, contacts, and password change.
+ * Account settings: personal profile, organization profile, members, contacts, and password.
  *
  * @returns account page
  */
 export function AccountPage() {
   const { t } = useTranslation();
   const [me, setMe] = useState<OrganizerResponse | null>(null);
+  const [organization, setOrganization] = useState<OrganizationResponse | null>(null);
+  const [members, setMembers] = useState<OrganizationMemberResponse[]>([]);
   const [contacts, setContacts] = useState<OrganizerContactResponse[]>([]);
   const [contactOpen, setContactOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<OrganizerContactResponse | null>(null);
+  const [deleteContactId, setDeleteContactId] = useState<string | null>(null);
+  const [removeMemberId, setRemoveMemberId] = useState<string | null>(null);
+  const [confirming, setConfirming] = useState(false);
   const profileForm = useForm({
-    initialValues: { displayName: '', description: '' },
+    initialValues: { displayName: '' },
+  });
+  const orgForm = useForm({
+    initialValues: { name: '', description: '' },
   });
   const passwordForm = useForm({
     initialValues: { currentPassword: '', newPassword: '' },
@@ -40,20 +58,26 @@ export function AccountPage() {
     initialValues: { name: '', role: '', phone: '', email: '', note: '' },
   });
 
+  const isOrgAdmin = me?.organizationRole === OrganizationRole.ADMIN;
+
   /**
-   * Reloads profile and contacts.
+   * Reloads profile, organization, members, and contacts.
    */
   async function reload() {
-    const [profile, contactList] = await Promise.all([
-      authApi.me(),
-      contactsApi.listContacts(),
-    ]);
+    const profile = await authApi.me();
     setMe(profile);
-    setContacts(contactList);
-    profileForm.setValues({
-      displayName: profile.displayName,
-      description: profile.description ?? '',
-    });
+    profileForm.setValues({ displayName: profile.displayName });
+    if (profile.organizationId) {
+      const [org, memberList, contactList] = await Promise.all([
+        organizationApi.getMyOrganization(),
+        organizationApi.listOrganizationMembers(),
+        contactsApi.listContacts(),
+      ]);
+      setOrganization(org);
+      orgForm.setValues({ name: org.name, description: org.description ?? '' });
+      setMembers(memberList);
+      setContacts(contactList);
+    }
   }
 
   useEffect(() => {
@@ -63,20 +87,70 @@ export function AccountPage() {
   }, []);
 
   /**
-   * Saves organization display name and description.
+   * Saves the person's own display name.
    *
    * @param values profile form
    */
   async function saveProfile(values: typeof profileForm.values) {
     try {
-      const updated = await authApi.updateProfile({
-        displayName: values.displayName,
-        description: values.description.trim() || null,
-      });
+      const updated = await authApi.updateProfile({ displayName: values.displayName });
       setMe(updated);
       notifications.show({ color: 'green', message: t('account.profileSaved') });
     } catch {
       notifications.show({ color: 'red', message: t('common.error') });
+    }
+  }
+
+  /**
+   * Saves the organization's name/description. Organization admin only.
+   *
+   * @param values organization form
+   */
+  async function saveOrganization(values: typeof orgForm.values) {
+    try {
+      const updated = await organizationApi.updateMyOrganization({
+        name: values.name,
+        description: values.description.trim() || null,
+      });
+      setOrganization(updated);
+      notifications.show({ color: 'green', message: t('organization.saved') });
+    } catch {
+      notifications.show({ color: 'red', message: t('common.error') });
+    }
+  }
+
+  /**
+   * Changes a member's role.
+   *
+   * @param memberId member id
+   * @param role new role
+   * @returns void
+   */
+  async function changeMemberRole(memberId: string, role: OrganizationRole) {
+    try {
+      await organizationApi.updateMemberRole(memberId, { organizationRole: role });
+      await reload();
+    } catch {
+      notifications.show({ color: 'red', message: t('common.error') });
+    }
+  }
+
+  /**
+   * Removes a member after confirmation.
+   *
+   * @param memberId member id
+   * @returns void
+   */
+  async function removeMember(memberId: string) {
+    setConfirming(true);
+    try {
+      await organizationApi.removeMember(memberId);
+      setRemoveMemberId(null);
+      await reload();
+    } catch {
+      notifications.show({ color: 'red', message: t('common.error') });
+    } finally {
+      setConfirming(false);
     }
   }
 
@@ -151,16 +225,21 @@ export function AccountPage() {
   }
 
   /**
-   * Deletes a contact.
+   * Deletes a contact after confirmation.
    *
    * @param contactId contact id
+   * @returns void
    */
   async function removeContact(contactId: string) {
+    setConfirming(true);
     try {
       await contactsApi.deleteContact(contactId);
+      setDeleteContactId(null);
       await reload();
     } catch {
       notifications.show({ color: 'red', message: t('common.error') });
+    } finally {
+      setConfirming(false);
     }
   }
 
@@ -174,14 +253,8 @@ export function AccountPage() {
             <form onSubmit={profileForm.onSubmit(saveProfile)}>
               <Stack>
                 <TextInput
-                  label={t('auth.displayName')}
+                  label={t('account.myName')}
                   {...profileForm.getInputProps('displayName')}
-                />
-                <Textarea
-                  label={t('account.description')}
-                  description={t('account.descriptionHint')}
-                  minRows={4}
-                  {...profileForm.getInputProps('description')}
                 />
                 <Button type="submit" w="fit-content" color="ink">
                   {t('account.saveProfile')}
@@ -190,6 +263,97 @@ export function AccountPage() {
             </form>
           </Stack>
         </SurfaceCard>
+
+        {organization ? (
+          <SurfaceCard accent="ink">
+            <Stack gap="md">
+              <Title order={3}>{t('organization.title')}</Title>
+              {isOrgAdmin ? (
+                <form onSubmit={orgForm.onSubmit(saveOrganization)}>
+                  <Stack>
+                    <TextInput label={t('organization.name')} required {...orgForm.getInputProps('name')} />
+                    <Textarea
+                      label={t('organization.description')}
+                      minRows={4}
+                      {...orgForm.getInputProps('description')}
+                    />
+                    <Button type="submit" w="fit-content" color="ink">
+                      {t('organization.save')}
+                    </Button>
+                  </Stack>
+                </form>
+              ) : (
+                <Stack gap={4}>
+                  <Text fw={700}>{organization.name}</Text>
+                  {organization.description ? <Text size="sm">{organization.description}</Text> : null}
+                </Stack>
+              )}
+            </Stack>
+          </SurfaceCard>
+        ) : null}
+
+        {organization ? (
+          <SurfaceCard accent="none">
+            <Stack gap="md">
+              <Group justify="space-between">
+                <Title order={3}>{t('organization.membersTitle')}</Title>
+                {isOrgAdmin ? (
+                  <Button component={Link} to="/invites">
+                    {t('organization.invite')}
+                  </Button>
+                ) : null}
+              </Group>
+              <Stack gap="sm">
+                {members.map((member) => (
+                  <SurfaceCard key={member.id} p="md" accent="none">
+                    <Group justify="space-between" align="center" wrap="wrap">
+                      <div>
+                        <Group gap="xs" align="center">
+                          <Text fw={700}>{member.displayName}</Text>
+                          {!member.active ? (
+                            <Badge color="gray" size="sm">
+                              {t('admin.banned')}
+                            </Badge>
+                          ) : null}
+                        </Group>
+                        <Text size="sm">{member.email}</Text>
+                      </div>
+                      {isOrgAdmin && member.id !== me?.id ? (
+                        <Group gap="xs">
+                          <Select
+                            size="xs"
+                            w={140}
+                            value={member.organizationRole}
+                            data={[
+                              { value: OrganizationRole.ADMIN, label: t('organization.roleValues.ADMIN') },
+                              { value: OrganizationRole.USER, label: t('organization.roleValues.USER') },
+                            ]}
+                            allowDeselect={false}
+                            onChange={(value) => {
+                              if (value) {
+                                void changeMemberRole(member.id, value as OrganizationRole);
+                              }
+                            }}
+                          />
+                          <Button
+                            size="xs"
+                            color="red"
+                            variant="outline"
+                            onClick={() => setRemoveMemberId(member.id)}
+                          >
+                            {t('organization.remove')}
+                          </Button>
+                        </Group>
+                      ) : (
+                        <Badge variant="light">{t(`organization.roleValues.${member.organizationRole}`)}</Badge>
+                      )}
+                    </Group>
+                  </SurfaceCard>
+                ))}
+              </Stack>
+            </Stack>
+          </SurfaceCard>
+        ) : null}
 
         <SurfaceCard accent="ink">
           <Stack gap="md">
@@ -211,7 +375,9 @@ export function AccountPage() {
                         <Text fw={700}>{contact.name}</Text>
                         <Text size="sm">{contact.role}</Text>
                         <Text size="sm">
-                          {contact.phone} · {contact.email}
+                          <bdi dir="ltr">
+                            {contact.phone} · {contact.email}
+                          </bdi>
                         </Text>
                         {contact.note ? (
                           <Text size="xs" c="dimmed" mt={4}>
@@ -227,7 +393,7 @@ export function AccountPage() {
                           size="xs"
                           color="red"
                           variant="outline"
-                          onClick={() => void removeContact(contact.id)}
+                          onClick={() => setDeleteContactId(contact.id)}
                         >
                           {t('common.delete')}
                         </Button>
@@ -277,6 +443,32 @@ export function AccountPage() {
           </Stack>
         </form>
       </Modal>
+
+      <ConfirmModal
+        opened={Boolean(deleteContactId)}
+        onClose={() => setDeleteContactId(null)}
+        title={t('common.confirmTitle')}
+        body={t('account.confirmDeleteContact')}
+        confirming={confirming}
+        onConfirm={() => {
+          if (deleteContactId) {
+            void removeContact(deleteContactId);
+          }
+        }}
+      />
+
+      <ConfirmModal
+        opened={Boolean(removeMemberId)}
+        onClose={() => setRemoveMemberId(null)}
+        title={t('common.confirmTitle')}
+        body={t('organization.confirmRemoveMember')}
+        confirming={confirming}
+        onConfirm={() => {
+          if (removeMemberId) {
+            void removeMember(removeMemberId);
+          }
+        }}
+      />
     </Container>
   );
 }

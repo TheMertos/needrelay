@@ -5,6 +5,7 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { CreateInviteRequestOrganizationRole } from './createInviteRequestOrganizationRole';
 
 export interface CreateInviteRequest {
   /** @nullable */
@@ -14,4 +15,8 @@ export interface CreateInviteRequest {
    * @maximum 90
    */
   daysValid?: number;
+  /** @nullable */
+  organizationId?: string | null;
+  /** @nullable */
+  organizationRole?: CreateInviteRequestOrganizationRole;
 }

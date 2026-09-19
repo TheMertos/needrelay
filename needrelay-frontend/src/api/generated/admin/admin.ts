@@ -6,7 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 import type {
-  OrganizerResponse
+  CreateOrganizationRequest,
+  OrganizationResponse,
+  OrganizerResponse,
+  SystemSettingsResponse,
+  UpdateMemberRoleRequest,
+  UpdateOrganizationRequest,
+  UpdateSystemSettingsRequest
 } from '.././models';
 
 import { customInstance } from '../../client';
@@ -49,7 +55,101 @@ const unbanOrganizer = (
     },
       options);
     }
-  return {listOrganizers,banOrganizer,unbanOrganizer}};
+  /**
+ * @summary Update organization member role
+ */
+const adminUpdateOrganizerRole = (
+    organizerId: string,
+    updateMemberRoleRequest: UpdateMemberRoleRequest,
+ options?: SecondParameter<typeof customInstance<OrganizerResponse>>,) => {
+      return customInstance<OrganizerResponse>(
+      {url: `/api/admin/organizers/${organizerId}/role`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateMemberRoleRequest
+    },
+      options);
+    }
+  /**
+ * @summary List organizations
+ */
+const listOrganizations = (
+    
+ options?: SecondParameter<typeof customInstance<OrganizationResponse[]>>,) => {
+      return customInstance<OrganizationResponse[]>(
+      {url: `/api/admin/organizations`, method: 'GET'
+    },
+      options);
+    }
+  /**
+ * @summary Create organization
+ */
+const createOrganization = (
+    createOrganizationRequest: CreateOrganizationRequest,
+ options?: SecondParameter<typeof customInstance<OrganizationResponse>>,) => {
+      return customInstance<OrganizationResponse>(
+      {url: `/api/admin/organizations`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createOrganizationRequest
+    },
+      options);
+    }
+  /**
+ * @summary Update organization
+ */
+const updateOrganization = (
+    organizationId: string,
+    updateOrganizationRequest: UpdateOrganizationRequest,
+ options?: SecondParameter<typeof customInstance<OrganizationResponse>>,) => {
+      return customInstance<OrganizationResponse>(
+      {url: `/api/admin/organizations/${organizationId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateOrganizationRequest
+    },
+      options);
+    }
+  /**
+ * @summary Deactivate organization
+ */
+const deactivateOrganization = (
+    organizationId: string,
+ options?: SecondParameter<typeof customInstance<OrganizationResponse>>,) => {
+      return customInstance<OrganizationResponse>(
+      {url: `/api/admin/organizations/${organizationId}/deactivate`, method: 'POST'
+    },
+      options);
+    }
+  /**
+ * @summary Activate organization
+ */
+const activateOrganization = (
+    organizationId: string,
+ options?: SecondParameter<typeof customInstance<OrganizationResponse>>,) => {
+      return customInstance<OrganizationResponse>(
+      {url: `/api/admin/organizations/${organizationId}/activate`, method: 'POST'
+    },
+      options);
+    }
+  /**
+ * @summary Update platform settings
+ */
+const updateSystemSettings = (
+    updateSystemSettingsRequest: UpdateSystemSettingsRequest,
+ options?: SecondParameter<typeof customInstance<SystemSettingsResponse>>,) => {
+      return customInstance<SystemSettingsResponse>(
+      {url: `/api/admin/settings`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSystemSettingsRequest
+    },
+      options);
+    }
+  return {listOrganizers,banOrganizer,unbanOrganizer,adminUpdateOrganizerRole,listOrganizations,createOrganization,updateOrganization,deactivateOrganization,activateOrganization,updateSystemSettings}};
 export type ListOrganizersResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['listOrganizers']>>>
 export type BanOrganizerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['banOrganizer']>>>
 export type UnbanOrganizerResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['unbanOrganizer']>>>
+export type AdminUpdateOrganizerRoleResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['adminUpdateOrganizerRole']>>>
+export type ListOrganizationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['listOrganizations']>>>
+export type CreateOrganizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['createOrganization']>>>
+export type UpdateOrganizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['updateOrganization']>>>
+export type DeactivateOrganizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['deactivateOrganization']>>>
+export type ActivateOrganizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['activateOrganization']>>>
+export type UpdateSystemSettingsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAdmin>['updateSystemSettings']>>>

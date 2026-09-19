@@ -23,6 +23,7 @@
     "loadError": "无法加载援助区域。",
     "retry": "重试",
     "openRequest": "打开援助页面",
+    "openDetails": "打开详情",
     "org": "组织",
     "location": "位置",
     "priority": "优先级"
@@ -49,7 +50,8 @@
     "backToLogin": "返回登录",
     "resetTitle": "选择新密码",
     "resetSubmit": "更新密码",
-    "resetSuccess": "密码已更新。现在可以登录。"
+    "resetSuccess": "密码已更新。现在可以登录。",
+    "organizationDisabled": "您的组织已被停用。请联系管理员。"
   },
   "account": {
     "title": "账户设置",
@@ -70,18 +72,46 @@
     "contactRole": "角色 / 职能",
     "contactPhone": "电话",
     "contactEmail": "电子邮箱",
-    "contactNote": "备注（可选）"
+    "contactNote": "备注（可选）",
+    "confirmDeleteContact": "删除此联系人？",
+    "myName": "我的姓名"
   },
   "publicPage": {
     "organization": "组织",
-    "contacts": "联系人"
+    "contacts": "联系人",
+    "backToList": "返回列表",
+    "deactivated": "此救援行动已不再活跃。",
+    "getDirections": "获取路线"
   },
   "admin": {
     "title": "组织者账户",
     "active": "活跃",
     "banned": "已封禁",
     "ban": "封禁",
-    "unban": "解封"
+    "unban": "解封",
+    "confirmBan": "封禁此组织者？他们将无法登录。",
+    "confirmUnban": "解除封禁此组织者？他们将可以再次登录。",
+    "role": "角色",
+    "status": "状态",
+    "organization": "组织",
+    "roleValues": {
+      "ADMIN": "平台管理员",
+      "ORGANIZER": "组织者"
+    },
+    "organizationsTitle": "组织列表",
+    "createOrganization": "创建组织",
+    "organizationName": "名称",
+    "organizationDescription": "描述",
+    "editOrganization": "编辑组织",
+    "deactivateOrganization": "停用",
+    "activateOrganization": "启用",
+    "confirmDeactivateOrganization": "停用此组织?其成员将无法再登录。",
+    "confirmActivateOrganization": "重新启用此组织?其成员将可以重新登录。",
+    "orgRole": "组织角色",
+    "settingsTitle": "平台设置",
+    "defaultLanguage": "默认语言",
+    "defaultLanguageHint": "在访客选择自己的语言之前，将显示给访客并用于邀请/重置邮件。",
+    "settingsSaved": "设置已保存。"
   },
   "dashboard": {
     "title": "运营",
@@ -93,7 +123,12 @@
     "kpiOpen": "开放",
     "kpiCovered": "已满足",
     "manage": "管理",
-    "publicLink": "公开页面"
+    "publicLink": "公开页面",
+    "tabActive": "活跃",
+    "tabDeactivated": "已停用",
+    "emptyActive": "暂无活跃的救援请求。",
+    "emptyDeactivated": "暂无已停用的救援请求。",
+    "searchPlaceholder": "按标题或地点搜索…"
   },
   "request": {
     "title": "标题",
@@ -105,6 +140,7 @@
     "locationSaved": "位置已更新",
     "save": "保存",
     "needs": "此位置的需求",
+    "needsWithOffers": "需求与收到的帮助",
     "offers": "公开捐赠（收到的帮助）",
     "offersHint": "访客无需账户即可提交。您可在此编辑或删除。",
     "offersEmpty": "暂无捐赠。",
@@ -115,9 +151,31 @@
     "closeNeed": "关闭需求",
     "requiredMinHint": "不能低于已提供数量：{{offered}} {{unit}}",
     "share": "分享公开链接",
-    "detailsMeta": "请求详情与备注",
+    "copyLink": "复制链接",
+    "linkCopied": "链接已复制到剪贴板。",
+    "detailsMeta": "请求详情",
+    "editDetails": "编辑详情",
+    "backToDashboard": "返回控制台",
+    "deactivate": "停用",
+    "reactivate": "重新启用",
+    "confirmDeactivate": "要停用这个求助请求吗？它将不再接受新的捐助，公开页面只会显示它已不再活跃。",
+    "confirmReactivate": "要重新启用这个求助请求吗？它将再次接受捐助，公开页面将显示全部详情。",
+    "deactivated": "求助请求已停用。",
+    "reactivated": "求助请求已重新启用。",
+    "deactivatedNotice": "此求助请求已停用。它不再接受新的捐助，其公开页面仅显示一条通知。",
     "addFirstNeed": "添加首个需求（可选）",
-    "firstNeedTitle": "首个需求标题"
+    "firstNeedTitle": "首个需求标题",
+    "confirmCloseNeed": "关闭此需求？将不再接受新的提供。",
+    "confirmCancelOffer": "取消此提供？将不再等待该提供者。",
+    "confirmDeleteOffer": "永久删除此提供？",
+    "confirmDeleteComment": "删除此备注？",
+    "offerSortNewest": "最新优先",
+    "offerSortOldest": "最旧优先",
+    "offerSortStatus": "按状态",
+    "offerSortQuantity": "数量从高到低",
+    "offerPage": "第 {{page}} 页，共 {{total}} 页",
+    "contacts": "联系人",
+    "contactsHint": "仅适用于此求助请求。会与您组织的联系人一起显示在其公开页面上。"
   },
   "comments": {
     "title": "内部备注",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "部分满足",
       "COVERED": "已满足",
       "CLOSED": "已关闭"
+    },
+    "priorityValues": {
+      "CRITICAL": "紧急",
+      "HIGH": "高",
+      "NORMAL": "普通",
+      "LOW": "低"
+    },
+    "categoryValues": {
+      "FOOD": "食品",
+      "WATER": "水",
+      "CLOTHING": "衣物",
+      "SUPPLIES": "物资",
+      "EQUIPMENT": "设备",
+      "MACHINERY": "机械",
+      "VEHICLES": "车辆",
+      "SHELTER": "庇护所",
+      "SERVICES": "服务",
+      "OTHER": "其他"
     }
   },
   "offer": {
     "title": "提供资源",
     "providerName": "姓名 / 组织",
+    "providerType": "类型",
+    "searchPlaceholder": "姓名、电话或邮箱",
+    "providerTypeValues": {
+      "PERSON": "个人",
+      "ORGANIZATION": "组织"
+    },
     "quantity": "预计数量",
     "firstName": "名",
     "lastName": "姓",
@@ -163,12 +245,64 @@
       "RECEIVED": "已收到",
       "CANCELLED": "已取消"
     },
-    "cancel": "取消捐赠"
+    "cancel": "取消捐赠",
+    "contact": "联系方式",
+    "distance": "距离",
+    "distanceKm": "{{km}} 公里",
+    "statusLabel": "状态",
+    "actions": "操作",
+    "locationHint": "我们请求您的位置，以便向组织者显示您的距离。您的设备必须共享位置才能提交捐助 — 只保存计算出的距离，绝不保存您的确切位置。",
+    "locationRequesting": "正在请求您的位置…",
+    "locationGranted": "位置已共享。",
+    "locationDenied": "提交捐助需要位置访问权限。",
+    "retryLocation": "共享位置",
+    "changeStatus": "更改状态",
+    "confirmMarkComing": "将此捐赠标记为在途？届时将期望提供者完成交付。"
   },
   "common": {
+    "refresh": "刷新",
     "loading": "加载中…",
     "error": "出了点问题。",
     "cancel": "取消",
-    "delete": "删除"
+    "delete": "删除",
+    "confirm": "确认",
+    "confirmTitle": "确认",
+    "confirmBody": "确定吗？",
+    "prev": "上一页",
+    "next": "下一页",
+    "all": "全部",
+    "min": "最小",
+    "max": "最大",
+    "search": "搜索",
+    "filters": "筛选",
+    "clearFilters": "清除筛选",
+    "perPage": "每页"
+  },
+  "organization": {
+    "title": "组织",
+    "name": "名称",
+    "description": "描述",
+    "save": "保存",
+    "saved": "组织已保存",
+    "membersTitle": "成员",
+    "invite": "邀请",
+    "remove": "移除",
+    "confirmRemoveMember": "移除此成员?其访问权限将立即被撤销。",
+    "roleValues": {
+      "ADMIN": "管理员",
+      "USER": "成员"
+    }
+  },
+  "invites": {
+    "create": "创建邀请",
+    "organization": "组织",
+    "role": "角色",
+    "tokenLink": "令牌 / 链接",
+    "expires": "过期时间",
+    "usedColumn": "已使用",
+    "used": "是",
+    "unused": "否",
+    "revoke": "撤销",
+    "confirmRevoke": "撤销此邀请?该链接将失效。"
   }
 }

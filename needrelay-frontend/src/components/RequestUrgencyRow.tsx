@@ -1,7 +1,10 @@
 import { Badge, Button, Group, Stack, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import type { ReliefRequestSummaryResponse } from '../api/generated/models';
+import {
+  ReliefRequestSummaryResponseStatus,
+  type ReliefRequestSummaryResponse,
+} from '../api/generated/models';
 import { SurfaceCard } from './SurfaceCard';
 
 /**
@@ -12,14 +15,27 @@ import { SurfaceCard } from './SurfaceCard';
  */
 export function RequestUrgencyRow({ item }: { item: ReliefRequestSummaryResponse }) {
   const { t } = useTranslation();
-  const accent =
-    item.criticalNeeds > 0 ? 'signal' : item.openNeeds > 0 ? 'warn' : 'ink';
+  const isArchived = item.status === ReliefRequestSummaryResponseStatus.ARCHIVED;
+  const accent = isArchived
+    ? 'ink'
+    : item.criticalNeeds > 0
+      ? 'signal'
+      : item.openNeeds > 0
+        ? 'warn'
+        : 'ink';
 
   return (
     <SurfaceCard data-testid={`request-row-${item.id}`} accent={accent}>
       <Stack gap="sm">
         <div>
-          <Title order={4}>{item.title}</Title>
+          <Group gap="xs" align="center">
+            <Title order={4}>{item.title}</Title>
+            {isArchived ? (
+              <Badge color="gray" variant="filled">
+                {t('dashboard.tabDeactivated')}
+              </Badge>
+            ) : null}
+          </Group>
           <Text size="sm" c="dimmed">
             {item.locationLabel}
           </Text>

@@ -5,12 +5,14 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { ProviderType } from './providerType';
 import type { OfferStatus } from './offerStatus';
 
 export interface OfferResponse {
   id: string;
   needId: string;
   providerName: string;
+  providerType: ProviderType;
   quantity: number;
   /** @nullable */
   quantityReceived?: number | null;
@@ -21,5 +23,10 @@ export interface OfferResponse {
   email: string;
   /** @nullable */
   note?: string | null;
+  /**
+   * Distance in km from the offerer's shared location to the relief request, null when no location was shared.
+   * @nullable
+   */
+  distanceKm?: number | null;
   createdAt: string;
 }

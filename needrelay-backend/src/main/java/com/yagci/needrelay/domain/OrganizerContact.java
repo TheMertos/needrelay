@@ -16,7 +16,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Public contact person for an organizer organization.
+ * Public contact person for an organization.
  */
 @Getter
 @Setter
@@ -27,9 +27,17 @@ public class OrganizerContact {
 	@Id
 	private UUID id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "organizer_id", nullable = false)
-	private Organizer organizer;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "organization_id")
+	private Organization organization;
+
+	/**
+	 * Null for an organization-wide contact shown on every public page. When set, this
+	 * contact is specific to one relief request and shown only on its public page.
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "relief_request_id")
+	private ReliefRequest reliefRequest;
 
 	@Column(nullable = false, length = 200)
 	private String name;

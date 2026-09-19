@@ -23,6 +23,7 @@
     "loadError": "Không thể tải khu vực hỗ trợ.",
     "retry": "Thử lại",
     "openRequest": "Mở trang hỗ trợ",
+    "openDetails": "Mở chi tiết",
     "org": "Tổ chức",
     "location": "Vị trí",
     "priority": "Ưu tiên"
@@ -49,7 +50,8 @@
     "backToLogin": "Quay lại đăng nhập",
     "resetTitle": "Chọn mật khẩu mới",
     "resetSubmit": "Cập nhật mật khẩu",
-    "resetSuccess": "Đã cập nhật mật khẩu. Bạn có thể đăng nhập ngay."
+    "resetSuccess": "Đã cập nhật mật khẩu. Bạn có thể đăng nhập ngay.",
+    "organizationDisabled": "Tổ chức của bạn đã bị vô hiệu hóa. Hãy liên hệ quản trị viên."
   },
   "account": {
     "title": "Cài đặt tài khoản",
@@ -70,18 +72,46 @@
     "contactRole": "Vai trò / chức năng",
     "contactPhone": "Điện thoại",
     "contactEmail": "Email",
-    "contactNote": "Ghi chú (tùy chọn)"
+    "contactNote": "Ghi chú (tùy chọn)",
+    "confirmDeleteContact": "Xóa liên hệ này?",
+    "myName": "Tên của tôi"
   },
   "publicPage": {
     "organization": "Tổ chức",
-    "contacts": "Liên hệ"
+    "contacts": "Liên hệ",
+    "backToList": "Quay lại danh sách",
+    "deactivated": "Nỗ lực cứu trợ này không còn hoạt động.",
+    "getDirections": "Chỉ đường"
   },
   "admin": {
     "title": "Tài khoản người tổ chức",
     "active": "Hoạt động",
     "banned": "Bị cấm",
     "ban": "Cấm",
-    "unban": "Bỏ cấm"
+    "unban": "Bỏ cấm",
+    "confirmBan": "Cấm tổ chức viên này? Họ sẽ không thể đăng nhập.",
+    "confirmUnban": "Bỏ cấm tổ chức viên này? Họ có thể đăng nhập lại.",
+    "role": "Vai trò",
+    "status": "Trạng thái",
+    "organization": "Tổ chức",
+    "roleValues": {
+      "ADMIN": "Quản trị viên nền tảng",
+      "ORGANIZER": "Người tổ chức"
+    },
+    "organizationsTitle": "Các tổ chức",
+    "createOrganization": "Tạo tổ chức",
+    "organizationName": "Tên",
+    "organizationDescription": "Mô tả",
+    "editOrganization": "Chỉnh sửa tổ chức",
+    "deactivateOrganization": "Vô hiệu hóa",
+    "activateOrganization": "Kích hoạt",
+    "confirmDeactivateOrganization": "Vô hiệu hóa tổ chức này? Thành viên sẽ không thể đăng nhập nữa.",
+    "confirmActivateOrganization": "Kích hoạt lại tổ chức này? Thành viên sẽ có thể đăng nhập lại.",
+    "orgRole": "Vai trò trong tổ chức",
+    "settingsTitle": "Cài đặt nền tảng",
+    "defaultLanguage": "Ngôn ngữ mặc định",
+    "defaultLanguageHint": "Được hiển thị cho khách truy cập và dùng trong email mời/đặt lại cho đến khi họ chọn ngôn ngữ riêng.",
+    "settingsSaved": "Đã lưu cài đặt."
   },
   "dashboard": {
     "title": "Vận hành",
@@ -93,7 +123,12 @@
     "kpiOpen": "Mở",
     "kpiCovered": "Đã đáp ứng",
     "manage": "Quản lý",
-    "publicLink": "Trang công khai"
+    "publicLink": "Trang công khai",
+    "tabActive": "Đang hoạt động",
+    "tabDeactivated": "Đã vô hiệu hóa",
+    "emptyActive": "Không có yêu cầu cứu trợ đang hoạt động.",
+    "emptyDeactivated": "Không có yêu cầu cứu trợ đã bị vô hiệu hóa.",
+    "searchPlaceholder": "Tìm theo tiêu đề hoặc địa điểm…"
   },
   "request": {
     "title": "Tiêu đề",
@@ -105,6 +140,7 @@
     "locationSaved": "Đã cập nhật vị trí",
     "save": "Lưu",
     "needs": "Nhu cầu tại vị trí này",
+    "needsWithOffers": "Nhu cầu và trợ giúp đến",
     "offers": "Đề nghị công khai (hỗ trợ đến)",
     "offersHint": "Khách gửi không cần tài khoản. Bạn có thể sửa hoặc xóa tại đây.",
     "offersEmpty": "Chưa có đề nghị.",
@@ -115,9 +151,31 @@
     "closeNeed": "Đóng nhu cầu",
     "requiredMinHint": "Không được thấp hơn đã đề nghị: {{offered}} {{unit}}",
     "share": "Chia sẻ liên kết công khai",
-    "detailsMeta": "Chi tiết yêu cầu & ghi chú",
+    "copyLink": "Sao chép liên kết",
+    "linkCopied": "Đã sao chép liên kết vào bộ nhớ tạm.",
+    "detailsMeta": "Chi tiết yêu cầu",
+    "editDetails": "Chỉnh sửa chi tiết",
+    "backToDashboard": "Quay lại bảng điều khiển",
+    "deactivate": "Vô hiệu hóa",
+    "reactivate": "Kích hoạt lại",
+    "confirmDeactivate": "Vô hiệu hóa yêu cầu cứu trợ này? Yêu cầu sẽ ngừng nhận đề nghị mới và trang công khai sẽ chỉ hiển thị rằng nó không còn hoạt động.",
+    "confirmReactivate": "Kích hoạt lại yêu cầu cứu trợ này? Yêu cầu sẽ nhận đề nghị trở lại và trang công khai sẽ hiển thị đầy đủ chi tiết.",
+    "deactivated": "Yêu cầu cứu trợ đã bị vô hiệu hóa.",
+    "reactivated": "Yêu cầu cứu trợ đã được kích hoạt lại.",
+    "deactivatedNotice": "Yêu cầu cứu trợ này đã bị vô hiệu hóa. Nó không còn nhận đề nghị mới và trang công khai chỉ hiển thị một thông báo.",
     "addFirstNeed": "Thêm nhu cầu đầu tiên (tùy chọn)",
-    "firstNeedTitle": "Tiêu đề nhu cầu đầu tiên"
+    "firstNeedTitle": "Tiêu đề nhu cầu đầu tiên",
+    "confirmCloseNeed": "Đóng nhu cầu này? Sẽ không còn nhận đề nghị mới.",
+    "confirmCancelOffer": "Hủy đề nghị này? Nhà cung cấp sẽ không còn được chờ.",
+    "confirmDeleteOffer": "Xóa vĩnh viễn đề nghị này?",
+    "confirmDeleteComment": "Xóa ghi chú này?",
+    "offerSortNewest": "Mới nhất",
+    "offerSortOldest": "Cũ nhất",
+    "offerSortStatus": "Theo trạng thái",
+    "offerSortQuantity": "Số lượng cao nhất",
+    "offerPage": "Trang {{page}} / {{total}}",
+    "contacts": "Liên hệ",
+    "contactsHint": "Dành riêng cho yêu cầu cứu trợ này. Được hiển thị cùng với các liên hệ của tổ chức bạn trên trang công khai của nó."
   },
   "comments": {
     "title": "Ghi chú nội bộ",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Đáp ứng một phần",
       "COVERED": "Đã đáp ứng",
       "CLOSED": "Đã đóng"
+    },
+    "priorityValues": {
+      "CRITICAL": "Khẩn cấp",
+      "HIGH": "Cao",
+      "NORMAL": "Bình thường",
+      "LOW": "Thấp"
+    },
+    "categoryValues": {
+      "FOOD": "Thực phẩm",
+      "WATER": "Nước",
+      "CLOTHING": "Quần áo",
+      "SUPPLIES": "Vật tư",
+      "EQUIPMENT": "Thiết bị",
+      "MACHINERY": "Máy móc",
+      "VEHICLES": "Phương tiện",
+      "SHELTER": "Nơi trú ẩn",
+      "SERVICES": "Dịch vụ",
+      "OTHER": "Khác"
     }
   },
   "offer": {
     "title": "Đề nghị nguồn lực",
     "providerName": "Tên / tổ chức",
+    "providerType": "Loại",
+    "searchPlaceholder": "Tên, điện thoại hoặc email",
+    "providerTypeValues": {
+      "PERSON": "Cá nhân",
+      "ORGANIZATION": "Tổ chức"
+    },
     "quantity": "Số lượng dự kiến",
     "firstName": "Tên",
     "lastName": "Họ",
@@ -163,12 +245,64 @@
       "RECEIVED": "Đã nhận",
       "CANCELLED": "Đã hủy"
     },
-    "cancel": "Hủy đề nghị"
+    "cancel": "Hủy đề nghị",
+    "contact": "Liên hệ",
+    "distance": "Khoảng cách",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Trạng thái",
+    "actions": "Hành động",
+    "locationHint": "Chúng tôi hỏi vị trí của bạn để cho ban tổ chức biết bạn cách bao xa. Thiết bị của bạn phải chia sẻ vị trí để gửi đề nghị — chỉ khoảng cách được tính mới được lưu, không bao giờ lưu vị trí chính xác của bạn.",
+    "locationRequesting": "Đang yêu cầu vị trí của bạn…",
+    "locationGranted": "Đã chia sẻ vị trí.",
+    "locationDenied": "Cần quyền truy cập vị trí để gửi đề nghị.",
+    "retryLocation": "Chia sẻ vị trí",
+    "changeStatus": "Thay đổi trạng thái",
+    "confirmMarkComing": "Đánh dấu đề nghị này là đang đến? Nhà cung cấp sẽ được kỳ vọng giao hàng."
   },
   "common": {
+    "refresh": "Làm mới",
     "loading": "Đang tải…",
     "error": "Đã xảy ra lỗi.",
     "cancel": "Hủy",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "confirmTitle": "Xác nhận",
+    "confirmBody": "Bạn có chắc không?",
+    "prev": "Trước",
+    "next": "Sau",
+    "all": "Tất cả",
+    "min": "Tối thiểu",
+    "max": "Tối đa",
+    "search": "Tìm kiếm",
+    "filters": "Bộ lọc",
+    "clearFilters": "Xóa bộ lọc",
+    "perPage": "Mỗi trang"
+  },
+  "organization": {
+    "title": "Tổ chức",
+    "name": "Tên",
+    "description": "Mô tả",
+    "save": "Lưu",
+    "saved": "Đã lưu tổ chức",
+    "membersTitle": "Thành viên",
+    "invite": "Mời",
+    "remove": "Xóa",
+    "confirmRemoveMember": "Xóa thành viên này? Họ sẽ mất quyền truy cập ngay lập tức.",
+    "roleValues": {
+      "ADMIN": "Quản trị viên",
+      "USER": "Thành viên"
+    }
+  },
+  "invites": {
+    "create": "Tạo lời mời",
+    "organization": "Tổ chức",
+    "role": "Vai trò",
+    "tokenLink": "Token / liên kết",
+    "expires": "Hết hạn",
+    "usedColumn": "Đã dùng",
+    "used": "Có",
+    "unused": "Không",
+    "revoke": "Thu hồi",
+    "confirmRevoke": "Thu hồi lời mời này? Liên kết sẽ ngừng hoạt động."
   }
 }

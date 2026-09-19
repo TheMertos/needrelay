@@ -47,6 +47,10 @@ public class Offer {
 	@Column(nullable = false, length = 32)
 	private OfferStatus status = OfferStatus.PENDING;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "provider_type", nullable = false, length = 32)
+	private ProviderType providerType;
+
 	@Column(name = "first_name", nullable = false, length = 100)
 	private String firstName;
 
@@ -61,6 +65,9 @@ public class Offer {
 
 	@Column(columnDefinition = "text")
 	private String note;
+
+	@Column(name = "distance_km", precision = 10, scale = 1)
+	private BigDecimal distanceKm;
 
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;

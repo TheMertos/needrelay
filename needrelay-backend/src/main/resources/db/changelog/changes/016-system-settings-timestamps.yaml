@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016-system-settings-timestamps
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: system_settings
+            columns:
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false

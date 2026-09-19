@@ -15,9 +15,10 @@ import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { authApi } from '../api';
+import { authApi, settingsApi } from '../api';
 import { clearTokens, getAccessToken, getRefreshToken } from '../api/client';
 import { OrganizerResponseRole } from '../api/generated/models';
+import { applySystemDefaultLanguage, markLanguageExplicit } from '../i18n';
 import { resolveUiLanguage, RTL_LANGUAGES, UI_LANGUAGES } from '../locales/languages';
 
 /**
@@ -49,6 +50,15 @@ export function AppLayout() {
     document.documentElement.lang = uiLanguage;
     document.documentElement.dir = RTL_LANGUAGES.has(uiLanguage) ? 'rtl' : 'ltr';
   }, [uiLanguage]);
+
+  useEffect(() => {
+    void settingsApi
+      .getPublicSettings()
+      .then((settings) => applySystemDefaultLanguage(settings.defaultLanguage))
+      .catch(() => {
+        // keep the current language when settings can't be fetched
+      });
+  }, []);
 
   /**
    * Clears tokens and returns to home after confirm (revokes refresh when possible).
@@ -87,6 +97,7 @@ export function AppLayout() {
       value={uiLanguage}
       onChange={(value) => {
         if (value) {
+          markLanguageExplicit();
           void i18n.changeLanguage(value);
         }
       }}
@@ -100,9 +111,6 @@ export function AppLayout() {
     <>
       <Button component={Link} to="/dashboard" variant="subtle" color="ink">
         {t('nav.ops')}
-      </Button>
-      <Button component={Link} to="/requests/new" color="ink">
-        {t('nav.createRequest')}
       </Button>
       <Button component={Link} to="/invites" variant="subtle" color="ink">
         {t('nav.invites')}
@@ -137,9 +145,6 @@ export function AppLayout() {
           <Button component={Link} to="/dashboard" variant="subtle" color="ink" fullWidth onClick={closeNav}>
             {t('nav.ops')}
           </Button>
-          <Button component={Link} to="/requests/new" color="ink" fullWidth onClick={closeNav}>
-            {t('nav.createRequest')}
-          </Button>
           <Button component={Link} to="/invites" variant="subtle" color="ink" fullWidth onClick={closeNav}>
             {t('nav.invites')}
           </Button>
@@ -171,15 +176,15 @@ export function AppLayout() {
   );
 
   return (
-    <AppShell header={{ height: 64 }} padding="md">
+    <AppShell header={{ height: 56 }} padding="sm">
       <AppShell.Header
         style={{
           background: 'var(--nr-card)',
           borderBottom: '1px solid var(--nr-border)',
         }}
       >
-        <Group h="100%" px="md" justify="space-between" wrap="nowrap">
-          <Group gap="sm" wrap="nowrap">
+        <Group h="100%" px="sm" justify="space-between" wrap="nowrap">
+          <Group gap="xs" wrap="nowrap">
             <Burger
               data-testid="nav-burger"
               opened={navOpened}
@@ -189,14 +194,14 @@ export function AppLayout() {
               aria-label="Open navigation"
             />
             <Anchor component={Link} to="/" underline="never" c="var(--nr-ink)" onClick={closeNav}>
-              <Title order={3} c="var(--nr-ink)">
+              <Title order={4} c="var(--nr-ink)">
                 {t('app.name')}
               </Title>
             </Anchor>
           </Group>
-          <Group gap="sm" wrap="nowrap">
+          <Group gap="xs" wrap="nowrap">
             {languageSelect}
-            <Group gap="sm" visibleFrom="sm" wrap="nowrap">
+            <Group gap="xs" visibleFrom="sm" wrap="nowrap">
               {desktopNav}
             </Group>
           </Group>

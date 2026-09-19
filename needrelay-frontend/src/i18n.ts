@@ -23,6 +23,7 @@ import vi from './locales/vi.json';
 import zh from './locales/zh.json';
 
 const LANG_STORAGE_KEY = 'nr-ui-lang';
+const LANG_EXPLICIT_KEY = 'nr-ui-lang-explicit';
 
 /**
  * Reads the persisted UI language from localStorage (browser only).
@@ -48,6 +49,51 @@ function persistLanguage(language: string): void {
     localStorage.setItem(LANG_STORAGE_KEY, resolveUiLanguage(language));
   } catch {
     // ignore quota / private mode
+  }
+}
+
+/**
+ * Marks that the visitor picked a language themselves, so the platform's default
+ * language no longer overrides their choice on future visits.
+ *
+ * @returns void
+ */
+export function markLanguageExplicit(): void {
+  try {
+    localStorage.setItem(LANG_EXPLICIT_KEY, '1');
+  } catch {
+    // ignore quota / private mode
+  }
+}
+
+/**
+ * Whether the visitor has explicitly picked a language before.
+ *
+ * @returns true when a manual choice was recorded
+ */
+function isLanguageExplicit(): boolean {
+  try {
+    return localStorage.getItem(LANG_EXPLICIT_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Applies the platform's default language, unless the visitor already picked one
+ * themselves. Safe to call on every app boot — it only ever affects visitors who have
+ * never touched the language switcher.
+ *
+ * @param defaultLanguage - platform default language code
+ * @returns void
+ */
+export function applySystemDefaultLanguage(defaultLanguage: string): void {
+  if (isLanguageExplicit()) {
+    return;
+  }
+  const resolved = resolveUiLanguage(defaultLanguage);
+  if (resolved !== resolveUiLanguage(i18n.language)) {
+    void i18n.changeLanguage(resolved);
   }
 }
 

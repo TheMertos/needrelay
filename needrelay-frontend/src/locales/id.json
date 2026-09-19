@@ -23,6 +23,7 @@
     "loadError": "Tidak dapat memuat area bantuan.",
     "retry": "Coba lagi",
     "openRequest": "Buka halaman bantuan",
+    "openDetails": "Buka detail",
     "org": "Organisasi",
     "location": "Lokasi",
     "priority": "Prioritas"
@@ -49,7 +50,8 @@
     "backToLogin": "Kembali ke login",
     "resetTitle": "Pilih kata sandi baru",
     "resetSubmit": "Perbarui kata sandi",
-    "resetSuccess": "Kata sandi diperbarui. Anda dapat masuk sekarang."
+    "resetSuccess": "Kata sandi diperbarui. Anda dapat masuk sekarang.",
+    "organizationDisabled": "Organisasi Anda telah dinonaktifkan. Hubungi administrator."
   },
   "account": {
     "title": "Pengaturan akun",
@@ -70,18 +72,46 @@
     "contactRole": "Peran / fungsi",
     "contactPhone": "Telepon",
     "contactEmail": "Email",
-    "contactNote": "Catatan (opsional)"
+    "contactNote": "Catatan (opsional)",
+    "confirmDeleteContact": "Hapus kontak ini?",
+    "myName": "Nama saya"
   },
   "publicPage": {
     "organization": "Organisasi",
-    "contacts": "Kontak"
+    "contacts": "Kontak",
+    "backToList": "Kembali ke daftar",
+    "deactivated": "Upaya bantuan ini sudah tidak aktif.",
+    "getDirections": "Dapatkan petunjuk arah"
   },
   "admin": {
     "title": "Akun penyelenggara",
     "active": "Aktif",
     "banned": "Diblokir",
     "ban": "Blokir",
-    "unban": "Buka blokir"
+    "unban": "Buka blokir",
+    "confirmBan": "Blokir penyelenggara ini? Mereka tidak dapat masuk lagi.",
+    "confirmUnban": "Buka blokir penyelenggara ini? Mereka dapat masuk lagi.",
+    "role": "Peran",
+    "status": "Status",
+    "organization": "Organisasi",
+    "roleValues": {
+      "ADMIN": "Admin platform",
+      "ORGANIZER": "Penyelenggara"
+    },
+    "organizationsTitle": "Organisasi",
+    "createOrganization": "Buat organisasi",
+    "organizationName": "Nama",
+    "organizationDescription": "Deskripsi",
+    "editOrganization": "Edit organisasi",
+    "deactivateOrganization": "Nonaktifkan",
+    "activateOrganization": "Aktifkan",
+    "confirmDeactivateOrganization": "Nonaktifkan organisasi ini? Anggotanya tidak akan bisa masuk lagi.",
+    "confirmActivateOrganization": "Aktifkan kembali organisasi ini? Anggotanya akan bisa masuk lagi.",
+    "orgRole": "Peran org.",
+    "settingsTitle": "Pengaturan platform",
+    "defaultLanguage": "Bahasa default",
+    "defaultLanguageHint": "Ditampilkan kepada pengunjung dan digunakan dalam email undangan/reset hingga mereka memilih bahasa sendiri.",
+    "settingsSaved": "Pengaturan disimpan."
   },
   "dashboard": {
     "title": "Operasi",
@@ -93,7 +123,12 @@
     "kpiOpen": "Terbuka",
     "kpiCovered": "Terpenuhi",
     "manage": "Kelola",
-    "publicLink": "Halaman publik"
+    "publicLink": "Halaman publik",
+    "tabActive": "Aktif",
+    "tabDeactivated": "Nonaktif",
+    "emptyActive": "Tidak ada permintaan bantuan aktif.",
+    "emptyDeactivated": "Tidak ada permintaan bantuan yang dinonaktifkan.",
+    "searchPlaceholder": "Cari berdasarkan judul atau lokasi…"
   },
   "request": {
     "title": "Judul",
@@ -105,6 +140,7 @@
     "locationSaved": "Lokasi diperbarui",
     "save": "Simpan",
     "needs": "Kebutuhan di lokasi ini",
+    "needsWithOffers": "Kebutuhan dan bantuan masuk",
     "offers": "Penawaran publik (bantuan masuk)",
     "offersHint": "Pengunjung mengirim tanpa akun. Anda dapat mengedit atau menghapus di sini.",
     "offersEmpty": "Belum ada penawaran.",
@@ -115,9 +151,31 @@
     "closeNeed": "Tutup kebutuhan",
     "requiredMinHint": "Tidak boleh di bawah yang sudah ditawarkan: {{offered}} {{unit}}",
     "share": "Bagikan tautan publik",
-    "detailsMeta": "Detail permintaan & catatan",
+    "copyLink": "Salin tautan",
+    "linkCopied": "Tautan disalin ke clipboard.",
+    "detailsMeta": "Detail permintaan",
+    "editDetails": "Edit detail",
+    "backToDashboard": "Kembali ke dasbor",
+    "deactivate": "Nonaktifkan",
+    "reactivate": "Aktifkan kembali",
+    "confirmDeactivate": "Nonaktifkan permintaan bantuan ini? Permintaan tidak akan menerima penawaran baru lagi dan halaman publik hanya akan menunjukkan bahwa ini sudah tidak aktif.",
+    "confirmReactivate": "Aktifkan kembali permintaan bantuan ini? Permintaan akan menerima penawaran lagi dan halaman publik akan menampilkan semua detail.",
+    "deactivated": "Permintaan bantuan dinonaktifkan.",
+    "reactivated": "Permintaan bantuan diaktifkan kembali.",
+    "deactivatedNotice": "Permintaan bantuan ini dinonaktifkan. Permintaan tidak lagi menerima penawaran baru dan halaman publiknya hanya menampilkan pemberitahuan.",
     "addFirstNeed": "Tambah kebutuhan pertama (opsional)",
-    "firstNeedTitle": "Judul kebutuhan pertama"
+    "firstNeedTitle": "Judul kebutuhan pertama",
+    "confirmCloseNeed": "Tutup kebutuhan ini? Tidak akan menerima penawaran baru.",
+    "confirmCancelOffer": "Batalkan penawaran ini? Penyedia tidak lagi diharapkan.",
+    "confirmDeleteOffer": "Hapus penawaran ini secara permanen?",
+    "confirmDeleteComment": "Hapus catatan ini?",
+    "offerSortNewest": "Terbaru dulu",
+    "offerSortOldest": "Terlama dulu",
+    "offerSortStatus": "Berdasarkan status",
+    "offerSortQuantity": "Jumlah tertinggi",
+    "offerPage": "Halaman {{page}} dari {{total}}",
+    "contacts": "Kontak",
+    "contactsHint": "Khusus untuk permintaan bantuan ini. Ditampilkan bersama kontak organisasi Anda di halaman publiknya."
   },
   "comments": {
     "title": "Catatan internal",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Sebagian terpenuhi",
       "COVERED": "Terpenuhi",
       "CLOSED": "Ditutup"
+    },
+    "priorityValues": {
+      "CRITICAL": "Kritis",
+      "HIGH": "Tinggi",
+      "NORMAL": "Normal",
+      "LOW": "Rendah"
+    },
+    "categoryValues": {
+      "FOOD": "Makanan",
+      "WATER": "Air",
+      "CLOTHING": "Pakaian",
+      "SUPPLIES": "Perbekalan",
+      "EQUIPMENT": "Peralatan",
+      "MACHINERY": "Mesin",
+      "VEHICLES": "Kendaraan",
+      "SHELTER": "Tempat berlindung",
+      "SERVICES": "Layanan",
+      "OTHER": "Lainnya"
     }
   },
   "offer": {
     "title": "Tawarkan sumber daya",
     "providerName": "Nama / organisasi",
+    "providerType": "Jenis",
+    "searchPlaceholder": "Nama, telepon, atau email",
+    "providerTypeValues": {
+      "PERSON": "Perorangan",
+      "ORGANIZATION": "Organisasi"
+    },
     "quantity": "Jumlah yang diharapkan",
     "firstName": "Nama depan",
     "lastName": "Nama belakang",
@@ -163,12 +245,64 @@
       "RECEIVED": "Diterima",
       "CANCELLED": "Dibatalkan"
     },
-    "cancel": "Batalkan penawaran"
+    "cancel": "Batalkan penawaran",
+    "contact": "Kontak",
+    "distance": "Jarak",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Status",
+    "actions": "Tindakan",
+    "locationHint": "Kami meminta lokasi Anda untuk menunjukkan kepada penyelenggara seberapa jauh Anda. Perangkat Anda harus membagikannya untuk mengirim penawaran — hanya jarak yang dihitung yang disimpan, bukan lokasi persis Anda.",
+    "locationRequesting": "Meminta lokasi Anda…",
+    "locationGranted": "Lokasi dibagikan.",
+    "locationDenied": "Akses lokasi diperlukan untuk mengirim penawaran.",
+    "retryLocation": "Bagikan lokasi",
+    "changeStatus": "Ubah status",
+    "confirmMarkComing": "Tandai penawaran ini sebagai dalam perjalanan? Penyedia akan diharapkan untuk mengirimkannya."
   },
   "common": {
+    "refresh": "Muat ulang",
     "loading": "Memuat…",
     "error": "Terjadi kesalahan.",
     "cancel": "Batal",
-    "delete": "Hapus"
+    "delete": "Hapus",
+    "confirm": "Konfirmasi",
+    "confirmTitle": "Konfirmasi",
+    "confirmBody": "Apakah Anda yakin?",
+    "prev": "Sebelumnya",
+    "next": "Berikutnya",
+    "all": "Semua",
+    "min": "Min",
+    "max": "Maks",
+    "search": "Cari",
+    "filters": "Filter",
+    "clearFilters": "Hapus filter",
+    "perPage": "Per halaman"
+  },
+  "organization": {
+    "title": "Organisasi",
+    "name": "Nama",
+    "description": "Deskripsi",
+    "save": "Simpan",
+    "saved": "Organisasi disimpan",
+    "membersTitle": "Anggota",
+    "invite": "Undang",
+    "remove": "Hapus",
+    "confirmRemoveMember": "Hapus anggota ini? Mereka akan langsung kehilangan akses.",
+    "roleValues": {
+      "ADMIN": "Admin",
+      "USER": "Anggota"
+    }
+  },
+  "invites": {
+    "create": "Buat undangan",
+    "organization": "Organisasi",
+    "role": "Peran",
+    "tokenLink": "Token / tautan",
+    "expires": "Kedaluwarsa",
+    "usedColumn": "Digunakan",
+    "used": "Ya",
+    "unused": "Tidak",
+    "revoke": "Cabut",
+    "confirmRevoke": "Cabut undangan ini? Tautan akan berhenti berfungsi."
   }
 }

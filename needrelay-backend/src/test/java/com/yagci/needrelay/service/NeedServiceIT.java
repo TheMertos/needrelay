@@ -4,12 +4,15 @@ import com.yagci.needrelay.domain.Need;
 import com.yagci.needrelay.domain.NeedCategory;
 import com.yagci.needrelay.domain.NeedPriority;
 import com.yagci.needrelay.domain.NeedStatus;
+import com.yagci.needrelay.domain.Organization;
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.Organizer;
 import com.yagci.needrelay.domain.OrganizerRole;
 import com.yagci.needrelay.domain.ReliefRequest;
 import com.yagci.needrelay.domain.ReliefRequestStatus;
 import com.yagci.needrelay.exception.ApiException;
 import com.yagci.needrelay.repository.NeedRepository;
+import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.repository.ReliefRequestRepository;
 import com.yagci.needrelay.web.dto.UpdateNeedRequest;
@@ -36,12 +39,16 @@ class NeedServiceIT {
 	private OrganizerRepository organizerRepository;
 
 	@Autowired
+	private OrganizationRepository organizationRepository;
+
+	@Autowired
 	private ReliefRequestRepository reliefRequestRepository;
 
 	@Autowired
 	private NeedRepository needRepository;
 
 	private Organizer organizer;
+	private Organization organization;
 	private ReliefRequest request;
 	private Need need;
 
@@ -50,16 +57,23 @@ class NeedServiceIT {
 		needRepository.deleteAll();
 		reliefRequestRepository.deleteAll();
 		organizerRepository.deleteAll();
+		organizationRepository.deleteAll();
+
+		organization = new Organization();
+		organization.setName("Org");
+		organizationRepository.save(organization);
 
 		organizer = new Organizer();
 		organizer.setEmail("owner@example.com");
 		organizer.setPasswordHash("hash");
 		organizer.setDisplayName("Owner");
 		organizer.setRole(OrganizerRole.ORGANIZER);
+		organizer.setOrganization(organization);
+		organizer.setOrganizationRole(OrganizationRole.ADMIN);
 		organizerRepository.save(organizer);
 
 		request = new ReliefRequest();
-		request.setOrganizer(organizer);
+		request.setOrganization(organization);
 		request.setTitle("Req");
 		request.setDescription("d");
 		request.setLocationLabel("Loc");
@@ -84,7 +98,7 @@ class NeedServiceIT {
 	@Test
 	void allowsReducingRequiredDownToOffered() {
 		var updated = needService.update(
-				organizer.getId(),
+				organization.getId(),
 				request.getId(),
 				need.getId(),
 				new UpdateNeedRequest(
@@ -102,7 +116,7 @@ class NeedServiceIT {
 	@Test
 	void rejectsRequiredBelowOffered() {
 		assertThatThrownBy(() -> needService.update(
-				organizer.getId(),
+				organization.getId(),
 				request.getId(),
 				need.getId(),
 				new UpdateNeedRequest(
@@ -122,7 +136,7 @@ class NeedServiceIT {
 		need.setStatus(NeedStatus.COVERED);
 		needRepository.save(need);
 
-		var closed = needService.close(organizer.getId(), request.getId(), need.getId());
+		var closed = needService.close(organization.getId(), request.getId(), need.getId());
 		assertThat(closed.status()).isEqualTo(NeedStatus.CLOSED);
 	}
 }

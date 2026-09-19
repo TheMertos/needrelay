@@ -23,6 +23,7 @@
     "loadError": "Hilfegebiete konnten nicht geladen werden.",
     "retry": "Erneut versuchen",
     "openRequest": "Hilfe-Seite öffnen",
+    "openDetails": "Details öffnen",
     "org": "Organisation",
     "location": "Ort",
     "priority": "Priorität"
@@ -49,7 +50,8 @@
     "backToLogin": "Zurück zum Login",
     "resetTitle": "Neues Passwort wählen",
     "resetSubmit": "Passwort aktualisieren",
-    "resetSuccess": "Passwort aktualisiert. Du kannst dich jetzt anmelden."
+    "resetSuccess": "Passwort aktualisiert. Du kannst dich jetzt anmelden.",
+    "organizationDisabled": "Ihre Organisation wurde deaktiviert. Wenden Sie sich an einen Administrator."
   },
   "account": {
     "title": "Kontoeinstellungen",
@@ -70,18 +72,46 @@
     "contactRole": "Rolle / Funktion",
     "contactPhone": "Telefon",
     "contactEmail": "E-Mail",
-    "contactNote": "Notiz (optional)"
+    "contactNote": "Notiz (optional)",
+    "confirmDeleteContact": "Diesen Kontakt löschen?",
+    "myName": "Mein Name"
   },
   "publicPage": {
     "organization": "Organisation",
-    "contacts": "Ansprechpartner"
+    "contacts": "Ansprechpartner",
+    "backToList": "Zurück zur Liste",
+    "deactivated": "Dieses Hilfsprojekt ist nicht mehr aktiv.",
+    "getDirections": "Route anzeigen"
   },
   "admin": {
     "title": "Organizer-Konten",
     "active": "Aktiv",
     "banned": "Gesperrt",
     "ban": "Sperren",
-    "unban": "Entsperren"
+    "unban": "Entsperren",
+    "confirmBan": "Diesen Organizer sperren? Er kann sich dann nicht mehr anmelden.",
+    "confirmUnban": "Diesen Organizer entsperren? Er kann sich dann wieder anmelden.",
+    "role": "Rolle",
+    "status": "Status",
+    "organization": "Organisation",
+    "roleValues": {
+      "ADMIN": "Plattform-Admin",
+      "ORGANIZER": "Organizer"
+    },
+    "organizationsTitle": "Organisationen",
+    "createOrganization": "Organisation erstellen",
+    "organizationName": "Name",
+    "organizationDescription": "Beschreibung",
+    "editOrganization": "Organisation bearbeiten",
+    "deactivateOrganization": "Deaktivieren",
+    "activateOrganization": "Aktivieren",
+    "confirmDeactivateOrganization": "Diese Organisation deaktivieren? Ihre Mitglieder können sich dann nicht mehr anmelden.",
+    "confirmActivateOrganization": "Diese Organisation wieder aktivieren? Ihre Mitglieder können sich dann wieder anmelden.",
+    "orgRole": "Org.-Rolle",
+    "settingsTitle": "Plattformeinstellungen",
+    "defaultLanguage": "Standardsprache",
+    "defaultLanguageHint": "Wird Besuchern gezeigt und in Einladungs-/Reset-E-Mails verwendet, bis sie ihre eigene Sprache wählen.",
+    "settingsSaved": "Einstellungen gespeichert."
   },
   "dashboard": {
     "title": "Operations",
@@ -93,7 +123,12 @@
     "kpiOpen": "Offen",
     "kpiCovered": "Gedeckt",
     "manage": "Verwalten",
-    "publicLink": "Öffentliche Seite"
+    "publicLink": "Öffentliche Seite",
+    "tabActive": "Aktiv",
+    "tabDeactivated": "Deaktiviert",
+    "emptyActive": "Keine aktiven Hilfeanfragen.",
+    "emptyDeactivated": "Keine deaktivierten Hilfeanfragen.",
+    "searchPlaceholder": "Nach Titel oder Ort suchen…"
   },
   "request": {
     "title": "Titel",
@@ -105,6 +140,7 @@
     "locationSaved": "Standort aktualisiert",
     "save": "Speichern",
     "needs": "Bedarfe an diesem Standort",
+    "needsWithOffers": "Bedarfe und eingehende Hilfe",
     "offers": "Öffentliche Angebote (eingehende Hilfe)",
     "offersHint": "Besucher melden das ohne Account. Hier kannst du Angebote bearbeiten oder löschen.",
     "offersEmpty": "Noch keine Angebote.",
@@ -115,9 +151,31 @@
     "closeNeed": "Bedarf schließen",
     "requiredMinHint": "Nicht unter bereits angeboten: {{offered}} {{unit}}",
     "share": "Öffentlichen Link teilen",
-    "detailsMeta": "Details & Notizen",
+    "copyLink": "Link kopieren",
+    "linkCopied": "Link in die Zwischenablage kopiert.",
+    "detailsMeta": "Details",
+    "editDetails": "Details bearbeiten",
+    "backToDashboard": "Zurück zum Dashboard",
+    "deactivate": "Deaktivieren",
+    "reactivate": "Reaktivieren",
+    "confirmDeactivate": "Diese Hilfsanfrage deaktivieren? Es werden keine neuen Angebote mehr angenommen, und die öffentliche Seite zeigt nur noch, dass sie nicht mehr aktiv ist.",
+    "confirmReactivate": "Diese Hilfsanfrage reaktivieren? Sie nimmt wieder Angebote an, und die öffentliche Seite zeigt wieder alle Details.",
+    "deactivated": "Hilfsanfrage deaktiviert.",
+    "reactivated": "Hilfsanfrage reaktiviert.",
+    "deactivatedNotice": "Diese Hilfsanfrage ist deaktiviert. Es werden keine neuen Angebote mehr angenommen, und die öffentliche Seite zeigt nur einen Hinweis.",
     "addFirstNeed": "Ersten Bedarf hinzufügen (optional)",
-    "firstNeedTitle": "Titel des ersten Bedarfs"
+    "firstNeedTitle": "Titel des ersten Bedarfs",
+    "confirmCloseNeed": "Diesen Bedarf schließen? Es werden keine neuen Angebote mehr angenommen.",
+    "confirmCancelOffer": "Dieses Angebot stornieren? Der Anbieter wird nicht mehr erwartet.",
+    "confirmDeleteOffer": "Dieses Angebot endgültig löschen?",
+    "confirmDeleteComment": "Diese Notiz löschen?",
+    "offerSortNewest": "Neueste zuerst",
+    "offerSortOldest": "Älteste zuerst",
+    "offerSortStatus": "Nach Status",
+    "offerSortQuantity": "Höchste Menge",
+    "offerPage": "Seite {{page}} von {{total}}",
+    "contacts": "Ansprechpartner",
+    "contactsHint": "Speziell für diese Hilfsanfrage. Wird zusammen mit deinen Organisationskontakten auf der öffentlichen Seite angezeigt."
   },
   "comments": {
     "title": "Interne Notizen",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Teilweise gedeckt",
       "COVERED": "Gedeckt",
       "CLOSED": "Geschlossen"
+    },
+    "priorityValues": {
+      "CRITICAL": "Kritisch",
+      "HIGH": "Hoch",
+      "NORMAL": "Normal",
+      "LOW": "Niedrig"
+    },
+    "categoryValues": {
+      "FOOD": "Nahrung",
+      "WATER": "Wasser",
+      "CLOTHING": "Kleidung",
+      "SUPPLIES": "Vorräte",
+      "EQUIPMENT": "Ausrüstung",
+      "MACHINERY": "Maschinen",
+      "VEHICLES": "Fahrzeuge",
+      "SHELTER": "Unterkunft",
+      "SERVICES": "Dienstleistungen",
+      "OTHER": "Sonstiges"
     }
   },
   "offer": {
     "title": "Ressource anbieten",
     "providerName": "Name / Organisation",
+    "providerType": "Typ",
+    "searchPlaceholder": "Name, Telefon oder E-Mail",
+    "providerTypeValues": {
+      "PERSON": "Privatperson",
+      "ORGANIZATION": "Organisation"
+    },
     "quantity": "Erwartete Menge",
     "firstName": "Vorname",
     "lastName": "Nachname",
@@ -163,12 +245,70 @@
       "RECEIVED": "Erhalten",
       "CANCELLED": "Storniert"
     },
-    "cancel": "Angebot stornieren"
+    "cancel": "Angebot stornieren",
+    "contact": "Kontakt",
+    "distance": "Entfernung",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Status",
+    "actions": "Aktionen",
+    "locationHint": "Wir fragen deinen Standort ab, um Organisatoren zu zeigen, wie weit du entfernt bist. Dein Gerät muss ihn teilen, um ein Angebot abzusenden — gespeichert wird nur die berechnete Entfernung, nie dein genauer Standort.",
+    "locationRequesting": "Standort wird angefragt…",
+    "locationGranted": "Standort geteilt.",
+    "locationDenied": "Standortzugriff ist erforderlich, um ein Angebot abzusenden.",
+    "retryLocation": "Standort teilen",
+    "changeStatus": "Status ändern",
+    "confirmMarkComing": "Dieses Angebot als unterwegs markieren? Der Anbieter wird dann erwartet."
   },
   "common": {
+    "refresh": "Aktualisieren",
     "loading": "Laden…",
     "error": "Etwas ist schiefgelaufen.",
     "cancel": "Abbrechen",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "confirm": "Bestätigen",
+    "confirmTitle": "Bestätigen",
+    "confirmBody": "Bist du sicher?",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "all": "Alle",
+    "min": "Min",
+    "max": "Max",
+    "search": "Suche",
+    "filters": "Filter",
+    "clearFilters": "Filter zurücksetzen",
+    "perPage": "Pro Seite"
+  },
+  "organization": {
+    "title": "Organisation",
+    "name": "Name",
+    "description": "Beschreibung",
+    "save": "Speichern",
+    "saved": "Organisation gespeichert",
+    "membersTitle": "Mitglieder",
+    "invite": "Einladen",
+    "remove": "Entfernen",
+    "confirmRemoveMember": "Dieses Mitglied entfernen? Es verliert sofort den Zugriff.",
+    "roleValues": {
+      "ADMIN": "Admin",
+      "USER": "Mitglied"
+    }
+  },
+  "invites": {
+    "create": "Einladung erstellen",
+    "organization": "Organisation",
+    "role": "Rolle",
+    "tokenLink": "Token / Link",
+    "email": "E-Mail",
+    "noEmail": "Keine E-Mail",
+    "emailStatus": "E-Mail-Status",
+    "emailSent": "Gesendet",
+    "emailPending": "Ausstehend",
+    "emailFailed": "Fehlgeschlagen",
+    "expires": "Läuft ab",
+    "usedColumn": "Verwendet",
+    "used": "Ja",
+    "unused": "Nein",
+    "revoke": "Zurückziehen",
+    "confirmRevoke": "Diese Einladung zurückziehen? Der Link funktioniert danach nicht mehr."
   }
 }

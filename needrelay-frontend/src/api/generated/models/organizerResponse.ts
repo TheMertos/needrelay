@@ -6,14 +6,19 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { OrganizerResponseRole } from './organizerResponseRole';
+import type { OrganizerResponseOrganizationRole } from './organizerResponseOrganizationRole';
 
 export interface OrganizerResponse {
   id: string;
   email: string;
   displayName: string;
-  /** @nullable */
-  description?: string | null;
   role: OrganizerResponseRole;
   active: boolean;
+  /** @nullable */
+  organizationId?: string | null;
+  /** @nullable */
+  organizationName?: string | null;
+  /** @nullable */
+  organizationRole?: OrganizerResponseOrganizationRole;
   createdAt: string;
 }

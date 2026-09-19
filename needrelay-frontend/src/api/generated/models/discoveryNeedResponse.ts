@@ -5,12 +5,19 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { NeedCategory } from './needCategory';
 import type { NeedPriority } from './needPriority';
 import type { NeedStatus } from './needStatus';
 
 export interface DiscoveryNeedResponse {
   id: string;
   title: string;
+  category: NeedCategory;
+  quantityRequired: number;
+  quantityOffered: number;
+  quantityPending: number;
+  remaining: number;
+  unit: string;
   priority: NeedPriority;
   status: NeedStatus;
   requestId: string;

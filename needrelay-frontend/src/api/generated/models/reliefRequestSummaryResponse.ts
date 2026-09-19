@@ -5,12 +5,14 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { ReliefRequestSummaryResponseStatus } from './reliefRequestSummaryResponseStatus';
 
 export interface ReliefRequestSummaryResponse {
   id: string;
   title: string;
   locationLabel: string;
   publicSlug: string;
+  status: ReliefRequestSummaryResponseStatus;
   openNeeds: number;
   criticalNeeds: number;
   coveredNeeds: number;

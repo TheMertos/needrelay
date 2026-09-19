@@ -3,7 +3,7 @@
 Build and run from the **repository root**:
 
 ```bash
-docker compose -f docker-compose.app.yml up -d --build
+docker compose up -d --build
 ```
 
 - App: http://localhost:8080 (SPA + `/api`)

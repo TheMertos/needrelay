@@ -112,9 +112,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const config = error.config as RetryConfig | undefined;
+    const status = error.response?.status;
     if (
       !config ||
-      error.response?.status !== 401 ||
+      (status !== 401 && status !== 403) ||
       config._retry ||
       isAuthSkipUrl(config.url)
     ) {

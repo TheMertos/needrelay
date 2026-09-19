@@ -56,7 +56,7 @@ public class NeedController {
 			@PathVariable UUID requestId,
 			@Valid @RequestBody CreateNeedRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return needService.create(principal.getId(), requestId, request);
+		return needService.create(SecurityUtils.requireOrganizationId(principal), requestId, request);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class NeedController {
 	@ApiResponse(responseCode = "200", description = "Needs")
 	public List<NeedResponse> list(@PathVariable UUID requestId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return needService.listByRequest(principal.getId(), requestId);
+		return needService.listByRequest(SecurityUtils.requireOrganizationId(principal), requestId);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class NeedController {
 			@PathVariable UUID needId,
 			@Valid @RequestBody UpdateNeedRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return needService.update(principal.getId(), requestId, needId, request);
+		return needService.update(SecurityUtils.requireOrganizationId(principal), requestId, needId, request);
 	}
 
 	/**
@@ -104,6 +104,6 @@ public class NeedController {
 	@ApiResponse(responseCode = "200", description = "Closed")
 	public NeedResponse close(@PathVariable UUID requestId, @PathVariable UUID needId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return needService.close(principal.getId(), requestId, needId);
+		return needService.close(SecurityUtils.requireOrganizationId(principal), requestId, needId);
 	}
 }

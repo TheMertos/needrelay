@@ -52,7 +52,7 @@ public class OrganizerContactController {
 	@ApiResponse(responseCode = "200", description = "Contacts")
 	public List<OrganizerContactResponse> list() {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return contactService.list(principal.getId());
+		return contactService.list(SecurityUtils.requireOrganizationId(principal));
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class OrganizerContactController {
 	@ApiResponse(responseCode = "201", description = "Created")
 	public OrganizerContactResponse create(@Valid @RequestBody UpsertOrganizerContactRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return contactService.create(principal.getId(), request);
+		return contactService.create(SecurityUtils.requireOrganizationId(principal), request);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class OrganizerContactController {
 			@PathVariable UUID contactId,
 			@Valid @RequestBody UpsertOrganizerContactRequest request) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		return contactService.update(principal.getId(), contactId, request);
+		return contactService.update(SecurityUtils.requireOrganizationId(principal), contactId, request);
 	}
 
 	/**
@@ -98,6 +98,6 @@ public class OrganizerContactController {
 	@ApiResponse(responseCode = "204", description = "Deleted")
 	public void delete(@PathVariable UUID contactId) {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
-		contactService.delete(principal.getId(), contactId);
+		contactService.delete(SecurityUtils.requireOrganizationId(principal), contactId);
 	}
 }

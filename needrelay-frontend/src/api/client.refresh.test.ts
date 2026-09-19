@@ -25,6 +25,23 @@ function unauthorized(config: InternalAxiosRequestConfig): AxiosError {
   } as AxiosResponse);
 }
 
+/**
+ * Builds a 403 AxiosError for the interceptor under test (Spring Security's default
+ * response for an expired/invalid JWT when no custom AuthenticationEntryPoint is set).
+ *
+ * @param config - failed request config
+ * @returns AxiosError with status 403
+ */
+function forbidden(config: InternalAxiosRequestConfig): AxiosError {
+  return new AxiosError('Forbidden', 'ERR_BAD_REQUEST', config, null, {
+    status: 403,
+    statusText: 'Forbidden',
+    data: {},
+    headers: {},
+    config,
+  } as AxiosResponse);
+}
+
 describe('auth refresh interceptor', () => {
   beforeEach(() => {
     clearTokens();
@@ -105,6 +122,25 @@ describe('auth refresh interceptor', () => {
 
     await expect(
       customInstance({ url: '/api/relief-requests', method: 'GET' }),
+    ).rejects.toBeTruthy();
+
+    expect(localStorage.getItem('needrelay.accessToken')).toBeNull();
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it('clears tokens and notifies on protected path when access is forbidden (403)', async () => {
+    setTokens('old-access', 'bad-refresh');
+    window.history.pushState({}, '', '/requests/33333333-3333-3333-3333-333333333301');
+    const handler = vi.fn();
+    setSessionExpiredHandler(handler);
+    vi.spyOn(Axios, 'post').mockRejectedValue(new Error('REFRESH_INVALID'));
+
+    axiosInstance.defaults.adapter = async (config) => {
+      throw forbidden(config);
+    };
+
+    await expect(
+      customInstance({ url: '/api/relief-requests/abc', method: 'GET' }),
     ).rejects.toBeTruthy();
 
     expect(localStorage.getItem('needrelay.accessToken')).toBeNull();

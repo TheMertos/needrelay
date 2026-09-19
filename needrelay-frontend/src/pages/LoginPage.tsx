@@ -40,6 +40,9 @@ export function LoginPage() {
     if (code === 'ACCOUNT_DISABLED') {
       return t('auth.accountDisabled');
     }
+    if (code === 'ORGANIZATION_DISABLED') {
+      return t('auth.organizationDisabled');
+    }
     if (code === 'RATE_LIMITED') {
       return t('auth.rateLimited');
     }

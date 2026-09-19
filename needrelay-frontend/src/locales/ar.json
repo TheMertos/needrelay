@@ -23,6 +23,7 @@
     "loadError": "تعذر تحميل مناطق المساعدة.",
     "retry": "إعادة المحاولة",
     "openRequest": "فتح صفحة المساعدة",
+    "openDetails": "فتح التفاصيل",
     "org": "المنظمة",
     "location": "الموقع",
     "priority": "الأولوية"
@@ -49,7 +50,8 @@
     "backToLogin": "العودة لتسجيل الدخول",
     "resetTitle": "اختر كلمة مرور جديدة",
     "resetSubmit": "تحديث كلمة المرور",
-    "resetSuccess": "تم تحديث كلمة المرور. يمكنك تسجيل الدخول الآن."
+    "resetSuccess": "تم تحديث كلمة المرور. يمكنك تسجيل الدخول الآن.",
+    "organizationDisabled": "تم تعطيل مؤسستك. يرجى التواصل مع أحد المسؤولين."
   },
   "account": {
     "title": "إعدادات الحساب",
@@ -70,18 +72,46 @@
     "contactRole": "الدور / الوظيفة",
     "contactPhone": "الهاتف",
     "contactEmail": "البريد الإلكتروني",
-    "contactNote": "ملاحظة (اختياري)"
+    "contactNote": "ملاحظة (اختياري)",
+    "confirmDeleteContact": "حذف جهة الاتصال هذه؟",
+    "myName": "اسمي"
   },
   "publicPage": {
     "organization": "المنظمة",
-    "contacts": "جهات الاتصال"
+    "contacts": "جهات الاتصال",
+    "backToList": "العودة إلى القائمة",
+    "deactivated": "لم يعد هذا الجهد الإغاثي نشطًا.",
+    "getDirections": "الحصول على الاتجاهات"
   },
   "admin": {
     "title": "حسابات المنظمين",
     "active": "نشط",
     "banned": "محظور",
     "ban": "حظر",
-    "unban": "رفع الحظر"
+    "unban": "رفع الحظر",
+    "confirmBan": "حظر هذا المنظم؟ لن يتمكن من تسجيل الدخول.",
+    "confirmUnban": "إلغاء حظر هذا المنظم؟ سيتمكن من تسجيل الدخول مجددًا.",
+    "role": "الدور",
+    "status": "الحالة",
+    "organization": "المؤسسة",
+    "roleValues": {
+      "ADMIN": "مسؤول المنصة",
+      "ORGANIZER": "منظم"
+    },
+    "organizationsTitle": "المؤسسات",
+    "createOrganization": "إنشاء مؤسسة",
+    "organizationName": "الاسم",
+    "organizationDescription": "الوصف",
+    "editOrganization": "تعديل المؤسسة",
+    "deactivateOrganization": "تعطيل",
+    "activateOrganization": "تفعيل",
+    "confirmDeactivateOrganization": "تعطيل هذه المؤسسة؟ لن يتمكن أعضاؤها بعد الآن من تسجيل الدخول.",
+    "confirmActivateOrganization": "إعادة تفعيل هذه المؤسسة؟ سيتمكن أعضاؤها من تسجيل الدخول مرة أخرى.",
+    "orgRole": "دور المنظمة",
+    "settingsTitle": "إعدادات المنصة",
+    "defaultLanguage": "اللغة الافتراضية",
+    "defaultLanguageHint": "تُعرض للزوار وتُستخدم في رسائل الدعوة وإعادة التعيين حتى يختاروا لغتهم الخاصة.",
+    "settingsSaved": "تم حفظ الإعدادات."
   },
   "dashboard": {
     "title": "العمليات",
@@ -93,7 +123,12 @@
     "kpiOpen": "مفتوح",
     "kpiCovered": "مغطى",
     "manage": "إدارة",
-    "publicLink": "الصفحة العامة"
+    "publicLink": "الصفحة العامة",
+    "tabActive": "نشط",
+    "tabDeactivated": "معطل",
+    "emptyActive": "لا توجد طلبات مساعدة نشطة.",
+    "emptyDeactivated": "لا توجد طلبات مساعدة معطلة.",
+    "searchPlaceholder": "البحث حسب العنوان أو الموقع…"
   },
   "request": {
     "title": "العنوان",
@@ -105,6 +140,7 @@
     "locationSaved": "تم تحديث الموقع",
     "save": "حفظ",
     "needs": "الاحتياجات في هذا الموقع",
+    "needsWithOffers": "الاحتياجات والمساعدات الواردة",
     "offers": "عروض عامة (مساعدة واردة)",
     "offersHint": "يزورها الزوار دون حساب. يمكنك تعديلها أو حذفها هنا.",
     "offersEmpty": "لا توجد عروض بعد.",
@@ -115,9 +151,31 @@
     "closeNeed": "إغلاق احتياج",
     "requiredMinHint": "لا يمكن أن يقل عن المعروض: {{offered}} {{unit}}",
     "share": "مشاركة الرابط العام",
-    "detailsMeta": "تفاصيل الطلب والملاحظات",
+    "copyLink": "نسخ الرابط",
+    "linkCopied": "تم نسخ الرابط إلى الحافظة.",
+    "detailsMeta": "تفاصيل الطلب",
+    "editDetails": "تعديل التفاصيل",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "deactivate": "تعطيل",
+    "reactivate": "إعادة التفعيل",
+    "confirmDeactivate": "هل تريد تعطيل طلب الإغاثة هذا؟ لن يقبل عروضًا جديدة بعد الآن، وستعرض الصفحة العامة فقط أنه لم يعد نشطًا.",
+    "confirmReactivate": "هل تريد إعادة تفعيل طلب الإغاثة هذا؟ سيقبل العروض مرة أخرى، وستعرض الصفحة العامة كل التفاصيل مجددًا.",
+    "deactivated": "تم تعطيل طلب الإغاثة.",
+    "reactivated": "تمت إعادة تفعيل طلب الإغاثة.",
+    "deactivatedNotice": "طلب الإغاثة هذا معطّل. لم يعد يقبل عروضًا جديدة، وتعرض صفحته العامة إشعارًا فقط.",
     "addFirstNeed": "إضافة أول احتياج (اختياري)",
-    "firstNeedTitle": "عنوان أول احتياج"
+    "firstNeedTitle": "عنوان أول احتياج",
+    "confirmCloseNeed": "إغلاق هذه الحاجة؟ لن تقبل عروضًا جديدة.",
+    "confirmCancelOffer": "إلغاء هذا العرض؟ لن يُتوقع المورد بعد الآن.",
+    "confirmDeleteOffer": "حذف هذا العرض نهائيًا؟",
+    "confirmDeleteComment": "حذف هذه الملاحظة؟",
+    "offerSortNewest": "الأحدث أولاً",
+    "offerSortOldest": "الأقدم أولاً",
+    "offerSortStatus": "حسب الحالة",
+    "offerSortQuantity": "أعلى كمية",
+    "offerPage": "صفحة {{page}} من {{total}}",
+    "contacts": "جهات الاتصال",
+    "contactsHint": "خاصة بطلب المساعدة هذا. تُعرض إلى جانب جهات اتصال مؤسستك على صفحته العامة."
   },
   "comments": {
     "title": "ملاحظات داخلية",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "مغطى جزئياً",
       "COVERED": "مغطى",
       "CLOSED": "مغلق"
+    },
+    "priorityValues": {
+      "CRITICAL": "حرج",
+      "HIGH": "مرتفع",
+      "NORMAL": "عادي",
+      "LOW": "منخفض"
+    },
+    "categoryValues": {
+      "FOOD": "طعام",
+      "WATER": "مياه",
+      "CLOTHING": "ملابس",
+      "SUPPLIES": "إمدادات",
+      "EQUIPMENT": "معدات",
+      "MACHINERY": "آليات",
+      "VEHICLES": "مركبات",
+      "SHELTER": "مأوى",
+      "SERVICES": "خدمات",
+      "OTHER": "أخرى"
     }
   },
   "offer": {
     "title": "تقديم موارد",
     "providerName": "الاسم / المنظمة",
+    "providerType": "النوع",
+    "searchPlaceholder": "الاسم أو الهاتف أو البريد الإلكتروني",
+    "providerTypeValues": {
+      "PERSON": "شخص خاص",
+      "ORGANIZATION": "منظمة"
+    },
     "quantity": "الكمية المتوقعة",
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
@@ -163,12 +245,64 @@
       "RECEIVED": "مستلم",
       "CANCELLED": "ملغى"
     },
-    "cancel": "إلغاء العرض"
+    "cancel": "إلغاء العرض",
+    "contact": "التواصل",
+    "distance": "المسافة",
+    "distanceKm": "{{km}} كم",
+    "statusLabel": "الحالة",
+    "actions": "الإجراءات",
+    "locationHint": "نطلب موقعك لنُظهر للمنظمين مدى بُعدك. يجب أن يشارك جهازك الموقع لإرسال العرض — يُحفظ فقط المسافة المحسوبة، وليس موقعك الدقيق أبدًا.",
+    "locationRequesting": "جارٍ طلب موقعك…",
+    "locationGranted": "تمت مشاركة الموقع.",
+    "locationDenied": "الوصول إلى الموقع مطلوب لإرسال عرض.",
+    "retryLocation": "مشاركة الموقع",
+    "changeStatus": "تغيير الحالة",
+    "confirmMarkComing": "وضع علامة على هذا العرض كأنه في الطريق؟ سيُتوقع من المزوّد تسليمه."
   },
   "common": {
+    "refresh": "تحديث",
     "loading": "جاري التحميل…",
     "error": "حدث خطأ ما.",
     "cancel": "إلغاء",
-    "delete": "حذف"
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "confirmTitle": "تأكيد",
+    "confirmBody": "هل أنت متأكد؟",
+    "prev": "السابق",
+    "next": "التالي",
+    "all": "الكل",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "search": "بحث",
+    "filters": "الفلاتر",
+    "clearFilters": "مسح الفلاتر",
+    "perPage": "لكل صفحة"
+  },
+  "organization": {
+    "title": "المؤسسة",
+    "name": "الاسم",
+    "description": "الوصف",
+    "save": "حفظ",
+    "saved": "تم حفظ المؤسسة",
+    "membersTitle": "الأعضاء",
+    "invite": "دعوة",
+    "remove": "إزالة",
+    "confirmRemoveMember": "إزالة هذا العضو؟ سيفقد الوصول فورًا.",
+    "roleValues": {
+      "ADMIN": "مسؤول",
+      "USER": "عضو"
+    }
+  },
+  "invites": {
+    "create": "إنشاء دعوة",
+    "organization": "المؤسسة",
+    "role": "الدور",
+    "tokenLink": "الرمز / الرابط",
+    "expires": "تنتهي في",
+    "usedColumn": "مستخدم",
+    "used": "نعم",
+    "unused": "لا",
+    "revoke": "سحب",
+    "confirmRevoke": "سحب هذه الدعوة؟ سيتوقف الرابط عن العمل."
   }
 }

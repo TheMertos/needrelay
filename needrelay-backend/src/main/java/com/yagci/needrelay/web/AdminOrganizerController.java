@@ -4,14 +4,18 @@ import com.yagci.needrelay.security.OrganizerPrincipal;
 import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.AdminOrganizerService;
 import com.yagci.needrelay.web.dto.OrganizerResponse;
+import com.yagci.needrelay.web.dto.UpdateMemberRoleRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -74,5 +78,21 @@ public class AdminOrganizerController {
 	@ApiResponse(responseCode = "200", description = "Unbanned")
 	public OrganizerResponse unban(@PathVariable UUID organizerId) {
 		return adminOrganizerService.unban(organizerId);
+	}
+
+	/**
+	 * Changes an organization member's role within their organization.
+	 *
+	 * @param organizerId target organizer
+	 * @param request new organization role
+	 * @return updated organizer
+	 */
+	@PatchMapping("/{organizerId}/role")
+	@Operation(summary = "Update organization member role")
+	@ApiResponse(responseCode = "200", description = "Updated")
+	public OrganizerResponse updateOrganizationRole(
+			@PathVariable UUID organizerId,
+			@Valid @RequestBody UpdateMemberRoleRequest request) {
+		return adminOrganizerService.updateOrganizationRole(organizerId, request.organizationRole());
 	}
 }

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { NeedCategory, NeedPriority, NeedStatus } from '../api/generated/models';
+import {
+  NeedCategory,
+  NeedPriority,
+  NeedStatus,
+  ReliefRequestSummaryResponseStatus,
+} from '../api/generated/models';
 import {
   priorityRank,
   sortNeedsByUrgency,
@@ -65,6 +70,7 @@ describe('sortSummariesByUrgency', () => {
         title: 'a',
         locationLabel: '',
         publicSlug: 'a',
+        status: ReliefRequestSummaryResponseStatus.ACTIVE,
         openNeeds: 9,
         criticalNeeds: 0,
         coveredNeeds: 0,
@@ -74,6 +80,7 @@ describe('sortSummariesByUrgency', () => {
         title: 'b',
         locationLabel: '',
         publicSlug: 'b',
+        status: ReliefRequestSummaryResponseStatus.ACTIVE,
         openNeeds: 1,
         criticalNeeds: 2,
         coveredNeeds: 0,
@@ -92,6 +99,7 @@ describe('sumSummaryCounts', () => {
           title: '',
           locationLabel: '',
           publicSlug: '',
+          status: ReliefRequestSummaryResponseStatus.ACTIVE,
           openNeeds: 2,
           criticalNeeds: 1,
           coveredNeeds: 3,
@@ -101,11 +109,29 @@ describe('sumSummaryCounts', () => {
           title: '',
           locationLabel: '',
           publicSlug: '',
+          status: ReliefRequestSummaryResponseStatus.ACTIVE,
           openNeeds: 4,
           criticalNeeds: 2,
           coveredNeeds: 1,
         },
       ]),
     ).toEqual({ critical: 3, open: 6, covered: 4 });
+  });
+
+  it('treats missing counts as zero', () => {
+    expect(
+      sumSummaryCounts([
+        {
+          id: '1',
+          title: '',
+          locationLabel: '',
+          publicSlug: '',
+          status: ReliefRequestSummaryResponseStatus.ACTIVE,
+          openNeeds: undefined as unknown as number,
+          criticalNeeds: undefined as unknown as number,
+          coveredNeeds: undefined as unknown as number,
+        },
+      ]),
+    ).toEqual({ critical: 0, open: 0, covered: 0 });
   });
 });

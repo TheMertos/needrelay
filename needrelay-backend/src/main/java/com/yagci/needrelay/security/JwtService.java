@@ -1,6 +1,7 @@
 package com.yagci.needrelay.security;
 
 import com.yagci.needrelay.config.NeedRelayProperties;
+import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.OrganizerRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -38,16 +39,30 @@ public class JwtService {
 	 *
 	 * @param organizerId organizer id
 	 * @param email email
-	 * @param role role
+	 * @param role platform role
+	 * @param organizationId organization id, null for platform admins
+	 * @param organizationRole role within the organization, null for platform admins
 	 * @return JWT compact string
 	 */
-	public String createAccessToken(UUID organizerId, String email, OrganizerRole role) {
+	public String createAccessToken(
+			UUID organizerId,
+			String email,
+			OrganizerRole role,
+			UUID organizationId,
+			OrganizationRole organizationRole) {
 		Instant now = Instant.now();
 		Instant expiry = now.plusSeconds(accessTokenMinutes * 60);
-		return Jwts.builder()
+		var builder = Jwts.builder()
 				.subject(organizerId.toString())
 				.claim("email", email)
-				.claim("role", role.name())
+				.claim("role", role.name());
+		if (organizationId != null) {
+			builder.claim("organizationId", organizationId.toString());
+		}
+		if (organizationRole != null) {
+			builder.claim("organizationRole", organizationRole.name());
+		}
+		return builder
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(expiry))
 				.signWith(key)

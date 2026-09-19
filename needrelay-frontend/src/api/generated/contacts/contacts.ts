@@ -18,6 +18,58 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
   export const getContacts = () => {
 /**
+ * @summary List relief request contacts
+ */
+const listRequestContacts = (
+    requestId: string,
+ options?: SecondParameter<typeof customInstance<OrganizerContactResponse[]>>,) => {
+      return customInstance<OrganizerContactResponse[]>(
+      {url: `/api/relief-requests/${requestId}/contacts`, method: 'GET'
+    },
+      options);
+    }
+  /**
+ * @summary Create relief request contact
+ */
+const createRequestContact = (
+    requestId: string,
+    upsertOrganizerContactRequest: UpsertOrganizerContactRequest,
+ options?: SecondParameter<typeof customInstance<OrganizerContactResponse>>,) => {
+      return customInstance<OrganizerContactResponse>(
+      {url: `/api/relief-requests/${requestId}/contacts`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: upsertOrganizerContactRequest
+    },
+      options);
+    }
+  /**
+ * @summary Update relief request contact
+ */
+const updateRequestContact = (
+    requestId: string,
+    contactId: string,
+    upsertOrganizerContactRequest: UpsertOrganizerContactRequest,
+ options?: SecondParameter<typeof customInstance<OrganizerContactResponse>>,) => {
+      return customInstance<OrganizerContactResponse>(
+      {url: `/api/relief-requests/${requestId}/contacts/${contactId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: upsertOrganizerContactRequest
+    },
+      options);
+    }
+  /**
+ * @summary Delete relief request contact
+ */
+const deleteRequestContact = (
+    requestId: string,
+    contactId: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/relief-requests/${requestId}/contacts/${contactId}`, method: 'DELETE'
+    },
+      options);
+    }
+  /**
  * @summary List organization contacts
  */
 const listContacts = (
@@ -66,7 +118,11 @@ const deleteContact = (
     },
       options);
     }
-  return {listContacts,createContact,updateContact,deleteContact}};
+  return {listRequestContacts,createRequestContact,updateRequestContact,deleteRequestContact,listContacts,createContact,updateContact,deleteContact}};
+export type ListRequestContactsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['listRequestContacts']>>>
+export type CreateRequestContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['createRequestContact']>>>
+export type UpdateRequestContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['updateRequestContact']>>>
+export type DeleteRequestContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['deleteRequestContact']>>>
 export type ListContactsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['listContacts']>>>
 export type CreateContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['createContact']>>>
 export type UpdateContactResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getContacts>['updateContact']>>>

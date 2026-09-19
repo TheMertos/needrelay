@@ -23,6 +23,7 @@
     "loadError": "सहायता क्षेत्र लोड नहीं हो सके।",
     "retry": "फिर कोशिश करें",
     "openRequest": "सहायता पृष्ठ खोलें",
+    "openDetails": "विवरण खोलें",
     "org": "संगठन",
     "location": "स्थान",
     "priority": "प्राथमिकता"
@@ -49,7 +50,8 @@
     "backToLogin": "लॉगिन पर वापस",
     "resetTitle": "नया पासवर्ड चुनें",
     "resetSubmit": "पासवर्ड अपडेट करें",
-    "resetSuccess": "पासवर्ड अपडेट हो गया। अब लॉग इन कर सकते हैं।"
+    "resetSuccess": "पासवर्ड अपडेट हो गया। अब लॉग इन कर सकते हैं।",
+    "organizationDisabled": "आपका संगठन निष्क्रिय कर दिया गया है। किसी व्यवस्थापक से संपर्क करें।"
   },
   "account": {
     "title": "खाता सेटिंग्स",
@@ -70,18 +72,46 @@
     "contactRole": "भूमिका / कार्य",
     "contactPhone": "फ़ोन",
     "contactEmail": "ईमेल",
-    "contactNote": "नोट (वैकल्पिक)"
+    "contactNote": "नोट (वैकल्पिक)",
+    "confirmDeleteContact": "यह संपर्क हटाएँ?",
+    "myName": "मेरा नाम"
   },
   "publicPage": {
     "organization": "संगठन",
-    "contacts": "संपर्क"
+    "contacts": "संपर्क",
+    "backToList": "सूची पर वापस जाएं",
+    "deactivated": "यह सहायता प्रयास अब सक्रिय नहीं है।",
+    "getDirections": "दिशा-निर्देश प्राप्त करें"
   },
   "admin": {
     "title": "आयोजक खाते",
     "active": "सक्रिय",
     "banned": "प्रतिबंधित",
     "ban": "प्रतिबंधित करें",
-    "unban": "प्रतिबंध हटाएँ"
+    "unban": "प्रतिबंध हटाएँ",
+    "confirmBan": "इस आयोजक को प्रतिबंधित करें? वे लॉग इन नहीं कर पाएँगे.",
+    "confirmUnban": "इस आयोजक का प्रतिबंध हटाएँ? वे फिर लॉग इन कर सकेंगे.",
+    "role": "भूमिका",
+    "status": "स्थिति",
+    "organization": "संगठन",
+    "roleValues": {
+      "ADMIN": "प्लेटफ़ॉर्म व्यवस्थापक",
+      "ORGANIZER": "आयोजक"
+    },
+    "organizationsTitle": "संगठन",
+    "createOrganization": "संगठन बनाएं",
+    "organizationName": "नाम",
+    "organizationDescription": "विवरण",
+    "editOrganization": "संगठन संपादित करें",
+    "deactivateOrganization": "निष्क्रिय करें",
+    "activateOrganization": "सक्रिय करें",
+    "confirmDeactivateOrganization": "इस संगठन को निष्क्रिय करें? इसके सदस्य अब लॉगिन नहीं कर पाएंगे।",
+    "confirmActivateOrganization": "इस संगठन को फिर से सक्रिय करें? इसके सदस्य फिर से लॉगिन कर सकेंगे।",
+    "orgRole": "संगठन भूमिका",
+    "settingsTitle": "प्लेटफ़ॉर्म सेटिंग्स",
+    "defaultLanguage": "डिफ़ॉल्ट भाषा",
+    "defaultLanguageHint": "जब तक विज़िटर अपनी भाषा नहीं चुनते, तब तक यह उन्हें दिखाई जाती है और निमंत्रण/रीसेट ईमेल में उपयोग होती है।",
+    "settingsSaved": "सेटिंग्स सहेजी गईं।"
   },
   "dashboard": {
     "title": "संचालन",
@@ -93,7 +123,12 @@
     "kpiOpen": "खुला",
     "kpiCovered": "पूर्ण",
     "manage": "प्रबंधित करें",
-    "publicLink": "सार्वजनिक पृष्ठ"
+    "publicLink": "सार्वजनिक पृष्ठ",
+    "tabActive": "सक्रिय",
+    "tabDeactivated": "निष्क्रिय",
+    "emptyActive": "कोई सक्रिय सहायता अनुरोध नहीं है।",
+    "emptyDeactivated": "कोई निष्क्रिय सहायता अनुरोध नहीं है।",
+    "searchPlaceholder": "शीर्षक या स्थान से खोजें…"
   },
   "request": {
     "title": "शीर्षक",
@@ -105,6 +140,7 @@
     "locationSaved": "स्थान अपडेट हुआ",
     "save": "सहेजें",
     "needs": "इस स्थान की आवश्यकताएँ",
+    "needsWithOffers": "ज़रूरतें और आने वाली मदद",
     "offers": "सार्वजनिक प्रस्ताव (आने वाली मदद)",
     "offersHint": "आगंतुक बिना खाते भेजते हैं। यहाँ संपादित या हटा सकते हैं।",
     "offersEmpty": "अभी कोई प्रस्ताव नहीं।",
@@ -115,9 +151,31 @@
     "closeNeed": "आवश्यकता बंद करें",
     "requiredMinHint": "पहले से प्रस्तावित से कम नहीं हो सकता: {{offered}} {{unit}}",
     "share": "सार्वजनिक लिंक साझा करें",
-    "detailsMeta": "अनुरोध विवरण और नोट्स",
+    "copyLink": "लिंक कॉपी करें",
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया।",
+    "detailsMeta": "अनुरोध विवरण",
+    "editDetails": "विवरण संपादित करें",
+    "backToDashboard": "डैशबोर्ड पर वापस जाएं",
+    "deactivate": "निष्क्रिय करें",
+    "reactivate": "पुनः सक्रिय करें",
+    "confirmDeactivate": "इस सहायता अनुरोध को निष्क्रिय करें? यह नए प्रस्ताव स्वीकार करना बंद कर देगा और सार्वजनिक पृष्ठ केवल यह दिखाएगा कि यह अब सक्रिय नहीं है।",
+    "confirmReactivate": "इस सहायता अनुरोध को फिर से सक्रिय करें? यह फिर से प्रस्ताव स्वीकार करेगा और सार्वजनिक पृष्ठ सभी विवरण दिखाएगा।",
+    "deactivated": "सहायता अनुरोध निष्क्रिय कर दिया गया।",
+    "reactivated": "सहायता अनुरोध पुनः सक्रिय कर दिया गया।",
+    "deactivatedNotice": "यह सहायता अनुरोध निष्क्रिय है। यह अब नए प्रस्ताव स्वीकार नहीं करता और इसका सार्वजनिक पृष्ठ केवल एक सूचना दिखाता है।",
     "addFirstNeed": "पहली आवश्यकता जोड़ें (वैकल्पिक)",
-    "firstNeedTitle": "पहली आवश्यकता का शीर्षक"
+    "firstNeedTitle": "पहली आवश्यकता का शीर्षक",
+    "confirmCloseNeed": "इस आवश्यकता को बंद करें? अब नई पेशकश स्वीकार नहीं होगी.",
+    "confirmCancelOffer": "इस पेशकश को रद्द करें? प्रदाता की अब प्रतीक्षा नहीं होगी.",
+    "confirmDeleteOffer": "इस पेशकश को स्थायी रूप से हटाएँ?",
+    "confirmDeleteComment": "यह नोट हटाएँ?",
+    "offerSortNewest": "सबसे नया पहले",
+    "offerSortOldest": "सबसे पुराना पहले",
+    "offerSortStatus": "स्थिति के अनुसार",
+    "offerSortQuantity": "सबसे अधिक मात्रा",
+    "offerPage": "पृष्ठ {{page}} / {{total}}",
+    "contacts": "संपर्क",
+    "contactsHint": "यह इस सहायता अनुरोध के लिए विशिष्ट है। इसके सार्वजनिक पृष्ठ पर आपके संगठन के संपर्कों के साथ दिखाया जाता है।"
   },
   "comments": {
     "title": "आंतरिक नोट्स",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "आंशिक रूप से पूर्ण",
       "COVERED": "पूर्ण",
       "CLOSED": "बंद"
+    },
+    "priorityValues": {
+      "CRITICAL": "गंभीर",
+      "HIGH": "उच्च",
+      "NORMAL": "सामान्य",
+      "LOW": "निम्न"
+    },
+    "categoryValues": {
+      "FOOD": "भोजन",
+      "WATER": "पानी",
+      "CLOTHING": "कपड़े",
+      "SUPPLIES": "आपूर्ति",
+      "EQUIPMENT": "उपकरण",
+      "MACHINERY": "मशीनरी",
+      "VEHICLES": "वाहन",
+      "SHELTER": "आश्रय",
+      "SERVICES": "सेवाएं",
+      "OTHER": "अन्य"
     }
   },
   "offer": {
     "title": "संसाधन प्रस्तावित करें",
     "providerName": "नाम / संगठन",
+    "providerType": "प्रकार",
+    "searchPlaceholder": "नाम, फ़ोन या ईमेल",
+    "providerTypeValues": {
+      "PERSON": "निजी व्यक्ति",
+      "ORGANIZATION": "संगठन"
+    },
     "quantity": "अपेक्षित मात्रा",
     "firstName": "पहला नाम",
     "lastName": "उपनाम",
@@ -163,12 +245,64 @@
       "RECEIVED": "प्राप्त",
       "CANCELLED": "रद्द"
     },
-    "cancel": "प्रस्ताव रद्द करें"
+    "cancel": "प्रस्ताव रद्द करें",
+    "contact": "संपर्क",
+    "distance": "दूरी",
+    "distanceKm": "{{km}} किमी",
+    "statusLabel": "स्थिति",
+    "actions": "कार्रवाइयाँ",
+    "locationHint": "हम आपका स्थान इसलिए माँगते हैं ताकि आयोजकों को पता चले कि आप कितनी दूर हैं। प्रस्ताव भेजने के लिए आपके डिवाइस को इसे साझा करना होगा — केवल गणना की गई दूरी सहेजी जाती है, आपका सटीक स्थान कभी नहीं।",
+    "locationRequesting": "आपका स्थान माँगा जा रहा है…",
+    "locationGranted": "स्थान साझा किया गया।",
+    "locationDenied": "प्रस्ताव भेजने के लिए स्थान की अनुमति आवश्यक है।",
+    "retryLocation": "स्थान साझा करें",
+    "changeStatus": "स्थिति बदलें",
+    "confirmMarkComing": "इस पेशकश को आ रहा है के रूप में चिह्नित करें? प्रदाता से इसे देने की अपेक्षा की जाएगी।"
   },
   "common": {
+    "refresh": "रीफ़्रेश",
     "loading": "लोड हो रहा है…",
     "error": "कुछ गलत हो गया।",
     "cancel": "रद्द करें",
-    "delete": "हटाएँ"
+    "delete": "हटाएँ",
+    "confirm": "पुष्टि करें",
+    "confirmTitle": "पुष्टि करें",
+    "confirmBody": "क्या आप सुनिश्चित हैं?",
+    "prev": "पिछला",
+    "next": "अगला",
+    "all": "सभी",
+    "min": "न्यूनतम",
+    "max": "अधिकतम",
+    "search": "खोजें",
+    "filters": "फ़िल्टर",
+    "clearFilters": "फ़िल्टर साफ़ करें",
+    "perPage": "प्रति पृष्ठ"
+  },
+  "organization": {
+    "title": "संगठन",
+    "name": "नाम",
+    "description": "विवरण",
+    "save": "सहेजें",
+    "saved": "संगठन सहेजा गया",
+    "membersTitle": "सदस्य",
+    "invite": "आमंत्रित करें",
+    "remove": "हटाएं",
+    "confirmRemoveMember": "इस सदस्य को हटाएं? उनकी पहुंच तुरंत समाप्त हो जाएगी।",
+    "roleValues": {
+      "ADMIN": "व्यवस्थापक",
+      "USER": "सदस्य"
+    }
+  },
+  "invites": {
+    "create": "आमंत्रण बनाएं",
+    "organization": "संगठन",
+    "role": "भूमिका",
+    "tokenLink": "टोकन / लिंक",
+    "expires": "समाप्ति",
+    "usedColumn": "उपयोग किया गया",
+    "used": "हां",
+    "unused": "नहीं",
+    "revoke": "रद्द करें",
+    "confirmRevoke": "इस आमंत्रण को रद्द करें? लिंक काम करना बंद कर देगा।"
   }
 }

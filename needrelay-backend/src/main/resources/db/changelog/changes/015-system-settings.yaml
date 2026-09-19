@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-system-settings
+      author: needrelay
+      changes:
+        - createTable:
+            tableName: system_settings
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: default_language
+                  type: varchar(8)
+                  constraints:
+                    nullable: false
+        - insert:
+            tableName: system_settings
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: default_language
+                  value: en

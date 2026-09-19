@@ -23,6 +23,7 @@
     "loadError": "도움 지역을 불러올 수 없습니다.",
     "retry": "다시 시도",
     "openRequest": "도움 페이지 열기",
+    "openDetails": "세부정보 열기",
     "org": "조직",
     "location": "위치",
     "priority": "우선순위"
@@ -49,7 +50,8 @@
     "backToLogin": "로그인으로 돌아가기",
     "resetTitle": "새 비밀번호 선택",
     "resetSubmit": "비밀번호 업데이트",
-    "resetSuccess": "비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다."
+    "resetSuccess": "비밀번호가 업데이트되었습니다. 이제 로그인할 수 있습니다.",
+    "organizationDisabled": "귀하의 조직이 비활성화되었습니다. 관리자에게 문의하세요."
   },
   "account": {
     "title": "계정 설정",
@@ -70,18 +72,46 @@
     "contactRole": "역할 / 직무",
     "contactPhone": "전화",
     "contactEmail": "이메일",
-    "contactNote": "메모 (선택)"
+    "contactNote": "메모 (선택)",
+    "confirmDeleteContact": "이 연락처를 삭제할까요?",
+    "myName": "내 이름"
   },
   "publicPage": {
     "organization": "조직",
-    "contacts": "연락처"
+    "contacts": "연락처",
+    "backToList": "목록으로 돌아가기",
+    "deactivated": "이 지원 활동은 더 이상 활성 상태가 아닙니다.",
+    "getDirections": "길찾기"
   },
   "admin": {
     "title": "주최자 계정",
     "active": "활성",
     "banned": "차단됨",
     "ban": "차단",
-    "unban": "차단 해제"
+    "unban": "차단 해제",
+    "confirmBan": "이 주최자를 차단할까요? 더 이상 로그인할 수 없습니다.",
+    "confirmUnban": "이 주최자의 차단을 해제할까요? 다시 로그인할 수 있습니다.",
+    "role": "역할",
+    "status": "상태",
+    "organization": "조직",
+    "roleValues": {
+      "ADMIN": "플랫폼 관리자",
+      "ORGANIZER": "주최자"
+    },
+    "organizationsTitle": "조직 목록",
+    "createOrganization": "조직 생성",
+    "organizationName": "이름",
+    "organizationDescription": "설명",
+    "editOrganization": "조직 수정",
+    "deactivateOrganization": "비활성화",
+    "activateOrganization": "활성화",
+    "confirmDeactivateOrganization": "이 조직을 비활성화하시겠습니까? 구성원은 더 이상 로그인할 수 없습니다.",
+    "confirmActivateOrganization": "이 조직을 다시 활성화하시겠습니까? 구성원이 다시 로그인할 수 있게 됩니다.",
+    "orgRole": "조직 내 역할",
+    "settingsTitle": "플랫폼 설정",
+    "defaultLanguage": "기본 언어",
+    "defaultLanguageHint": "방문자가 직접 언어를 선택하기 전까지 표시되며 초대/재설정 이메일에 사용됩니다.",
+    "settingsSaved": "설정이 저장되었습니다."
   },
   "dashboard": {
     "title": "운영",
@@ -93,7 +123,12 @@
     "kpiOpen": "열림",
     "kpiCovered": "충족",
     "manage": "관리",
-    "publicLink": "공개 페이지"
+    "publicLink": "공개 페이지",
+    "tabActive": "활성",
+    "tabDeactivated": "비활성화됨",
+    "emptyActive": "활성화된 지원 요청이 없습니다.",
+    "emptyDeactivated": "비활성화된 지원 요청이 없습니다.",
+    "searchPlaceholder": "제목 또는 위치로 검색…"
   },
   "request": {
     "title": "제목",
@@ -105,6 +140,7 @@
     "locationSaved": "위치가 업데이트되었습니다",
     "save": "저장",
     "needs": "이 위치의 필요",
+    "needsWithOffers": "필요와 들어오는 도움",
     "offers": "공개 제안 (들어오는 도움)",
     "offersHint": "방문자가 계정 없이 제출합니다. 여기서 편집하거나 삭제할 수 있습니다.",
     "offersEmpty": "아직 제안이 없습니다.",
@@ -115,9 +151,31 @@
     "closeNeed": "필요 닫기",
     "requiredMinHint": "이미 제안된 양보다 적을 수 없습니다: {{offered}} {{unit}}",
     "share": "공개 링크 공유",
-    "detailsMeta": "요청 세부정보 및 메모",
+    "copyLink": "링크 복사",
+    "linkCopied": "링크가 클립보드에 복사되었습니다.",
+    "detailsMeta": "요청 세부정보",
+    "editDetails": "세부정보 수정",
+    "backToDashboard": "대시보드로 돌아가기",
+    "deactivate": "비활성화",
+    "reactivate": "다시 활성화",
+    "confirmDeactivate": "이 지원 요청을 비활성화하시겠습니까? 더 이상 새로운 제안을 받지 않으며 공개 페이지에는 비활성 상태라는 알림만 표시됩니다.",
+    "confirmReactivate": "이 지원 요청을 다시 활성화하시겠습니까? 다시 제안을 받게 되며 공개 페이지에 모든 세부정보가 표시됩니다.",
+    "deactivated": "지원 요청이 비활성화되었습니다.",
+    "reactivated": "지원 요청이 다시 활성화되었습니다.",
+    "deactivatedNotice": "이 지원 요청은 비활성화되어 있습니다. 더 이상 새로운 제안을 받지 않으며 공개 페이지에는 알림만 표시됩니다.",
     "addFirstNeed": "첫 번째 필요 추가 (선택)",
-    "firstNeedTitle": "첫 번째 필요 제목"
+    "firstNeedTitle": "첫 번째 필요 제목",
+    "confirmCloseNeed": "이 필요를 닫을까요? 더 이상 새 제안을 받지 않습니다.",
+    "confirmCancelOffer": "이 제안을 취소할까요? 제공자를 더 이상 기다리지 않습니다.",
+    "confirmDeleteOffer": "이 제안을 영구 삭제할까요?",
+    "confirmDeleteComment": "이 메모를 삭제할까요?",
+    "offerSortNewest": "최신순",
+    "offerSortOldest": "오래된순",
+    "offerSortStatus": "상태순",
+    "offerSortQuantity": "수량 많은순",
+    "offerPage": "{{page}} / {{total}} 페이지",
+    "contacts": "연락처",
+    "contactsHint": "이 지원 요청에 특화된 연락처입니다. 공개 페이지에서 조직 연락처와 함께 표시됩니다."
   },
   "comments": {
     "title": "내부 메모",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "부분 충족",
       "COVERED": "충족",
       "CLOSED": "종료"
+    },
+    "priorityValues": {
+      "CRITICAL": "긴급",
+      "HIGH": "높음",
+      "NORMAL": "보통",
+      "LOW": "낮음"
+    },
+    "categoryValues": {
+      "FOOD": "식량",
+      "WATER": "물",
+      "CLOTHING": "의류",
+      "SUPPLIES": "물품",
+      "EQUIPMENT": "장비",
+      "MACHINERY": "기계",
+      "VEHICLES": "차량",
+      "SHELTER": "보호소",
+      "SERVICES": "서비스",
+      "OTHER": "기타"
     }
   },
   "offer": {
     "title": "자원 제안",
     "providerName": "이름 / 조직",
+    "providerType": "유형",
+    "searchPlaceholder": "이름, 전화, 이메일",
+    "providerTypeValues": {
+      "PERSON": "개인",
+      "ORGANIZATION": "단체"
+    },
     "quantity": "예상 수량",
     "firstName": "이름",
     "lastName": "성",
@@ -163,12 +245,64 @@
       "RECEIVED": "수령",
       "CANCELLED": "취소됨"
     },
-    "cancel": "제안 취소"
+    "cancel": "제안 취소",
+    "contact": "연락처",
+    "distance": "거리",
+    "distanceKm": "{{km}}km",
+    "statusLabel": "상태",
+    "actions": "작업",
+    "locationHint": "주최자에게 거리를 보여주기 위해 위치를 요청합니다. 제안을 보내려면 기기에서 위치를 공유해야 합니다 — 계산된 거리만 저장되고 정확한 위치는 저장되지 않습니다.",
+    "locationRequesting": "위치를 요청하는 중…",
+    "locationGranted": "위치가 공유되었습니다.",
+    "locationDenied": "제안을 보내려면 위치 액세스가 필요합니다.",
+    "retryLocation": "위치 공유",
+    "changeStatus": "상태 변경",
+    "confirmMarkComing": "이 제안을 배송 중으로 표시하시겠습니까? 제공자는 이를 전달할 것으로 예상됩니다."
   },
   "common": {
+    "refresh": "새로고침",
     "loading": "로딩 중…",
     "error": "문제가 발생했습니다.",
     "cancel": "취소",
-    "delete": "삭제"
+    "delete": "삭제",
+    "confirm": "확인",
+    "confirmTitle": "확인",
+    "confirmBody": "확실합니까?",
+    "prev": "이전",
+    "next": "다음",
+    "all": "전체",
+    "min": "최소",
+    "max": "최대",
+    "search": "검색",
+    "filters": "필터",
+    "clearFilters": "필터 지우기",
+    "perPage": "페이지당"
+  },
+  "organization": {
+    "title": "조직",
+    "name": "이름",
+    "description": "설명",
+    "save": "저장",
+    "saved": "조직이 저장되었습니다",
+    "membersTitle": "구성원",
+    "invite": "초대",
+    "remove": "제거",
+    "confirmRemoveMember": "이 구성원을 제거하시겠습니까? 즉시 접근 권한을 잃게 됩니다.",
+    "roleValues": {
+      "ADMIN": "관리자",
+      "USER": "구성원"
+    }
+  },
+  "invites": {
+    "create": "초대 생성",
+    "organization": "조직",
+    "role": "역할",
+    "tokenLink": "토큰 / 링크",
+    "expires": "만료",
+    "usedColumn": "사용됨",
+    "used": "예",
+    "unused": "아니오",
+    "revoke": "철회",
+    "confirmRevoke": "이 초대를 철회하시겠습니까? 링크가 더 이상 작동하지 않습니다."
   }
 }

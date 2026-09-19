@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-relief-request-organization
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: relief_requests
+            columns:
+              - column:
+                  name: organization_id
+                  type: uuid
+        - sql:
+            sql: UPDATE relief_requests SET organization_id = organizer_id
+        - addNotNullConstraint:
+            tableName: relief_requests
+            columnName: organization_id
+            columnDataType: uuid
+        - dropForeignKeyConstraint:
+            baseTableName: relief_requests
+            constraintName: fk_relief_requests_organizer
+        - dropIndex:
+            tableName: relief_requests
+            indexName: idx_relief_requests_organizer_id
+        - dropColumn:
+            tableName: relief_requests
+            columnName: organizer_id
+        - addForeignKeyConstraint:
+            baseTableName: relief_requests
+            baseColumnNames: organization_id
+            referencedTableName: organizations
+            referencedColumnNames: id
+            constraintName: fk_relief_requests_organization
+        - createIndex:
+            tableName: relief_requests
+            indexName: idx_relief_requests_organization_id
+            columns:
+              - column:
+                  name: organization_id

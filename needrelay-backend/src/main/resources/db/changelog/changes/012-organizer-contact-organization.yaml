@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-organizer-contact-organization
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: organizer_contacts
+            columns:
+              - column:
+                  name: organization_id
+                  type: uuid
+        - sql:
+            sql: >-
+              UPDATE organizer_contacts SET organization_id = organizer_id
+              WHERE organizer_id IN (SELECT id FROM organizers WHERE role = 'ORGANIZER')
+        - dropForeignKeyConstraint:
+            baseTableName: organizer_contacts
+            constraintName: fk_organizer_contacts_organizer
+        - dropIndex:
+            tableName: organizer_contacts
+            indexName: idx_organizer_contacts_organizer_id
+        - dropColumn:
+            tableName: organizer_contacts
+            columnName: organizer_id
+        - addForeignKeyConstraint:
+            baseTableName: organizer_contacts
+            baseColumnNames: organization_id
+            referencedTableName: organizations
+            referencedColumnNames: id
+            constraintName: fk_organizer_contacts_organization
+        - createIndex:
+            tableName: organizer_contacts
+            indexName: idx_organizer_contacts_organization_id
+            columns:
+              - column:
+                  name: organization_id

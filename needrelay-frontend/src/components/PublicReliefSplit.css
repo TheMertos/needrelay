@@ -1,0 +1,7 @@
+@media (min-width: 48em) {
+  .nr-public-relief-map {
+    position: sticky;
+    top: 76px;
+    align-self: start;
+  }
+}

@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-offer-distance
+      author: needrelay
+      changes:
+        - addColumn:
+            tableName: offers
+            columns:
+              - column:
+                  name: distance_km
+                  type: numeric(10, 1)

@@ -23,6 +23,7 @@
     "loadError": "Yardım alanları yüklenemedi.",
     "retry": "Yeniden dene",
     "openRequest": "Yardım sayfasını aç",
+    "openDetails": "Detayları aç",
     "org": "Kuruluş",
     "location": "Konum",
     "priority": "Öncelik"
@@ -49,7 +50,8 @@
     "backToLogin": "Girişe dön",
     "resetTitle": "Yeni şifre seçin",
     "resetSubmit": "Şifreyi güncelle",
-    "resetSuccess": "Şifre güncellendi. Şimdi giriş yapabilirsiniz."
+    "resetSuccess": "Şifre güncellendi. Şimdi giriş yapabilirsiniz.",
+    "organizationDisabled": "Kuruluşunuz devre dışı bırakıldı. Bir yöneticiyle iletişime geçin."
   },
   "account": {
     "title": "Hesap ayarları",
@@ -70,18 +72,46 @@
     "contactRole": "Rol / görev",
     "contactPhone": "Telefon",
     "contactEmail": "E-posta",
-    "contactNote": "Not (isteğe bağlı)"
+    "contactNote": "Not (isteğe bağlı)",
+    "confirmDeleteContact": "Bu kişi silinsin mi?",
+    "myName": "Adım"
   },
   "publicPage": {
     "organization": "Kuruluş",
-    "contacts": "İletişim"
+    "contacts": "İletişim",
+    "backToList": "Listeye dön",
+    "deactivated": "Bu yardım çalışması artık aktif değil.",
+    "getDirections": "Yol tarifi al"
   },
   "admin": {
     "title": "Organizatör hesapları",
     "active": "Aktif",
     "banned": "Yasaklı",
     "ban": "Yasakla",
-    "unban": "Yasağı kaldır"
+    "unban": "Yasağı kaldır",
+    "confirmBan": "Bu organizatör yasaklansın mı? Artık giriş yapamayacak.",
+    "confirmUnban": "Bu organizatörün yasağı kaldırılsın mı? Tekrar giriş yapabilecek.",
+    "role": "Rol",
+    "status": "Durum",
+    "organization": "Kuruluş",
+    "roleValues": {
+      "ADMIN": "Platform yöneticisi",
+      "ORGANIZER": "Organizatör"
+    },
+    "organizationsTitle": "Kuruluşlar",
+    "createOrganization": "Kuruluş oluştur",
+    "organizationName": "Ad",
+    "organizationDescription": "Açıklama",
+    "editOrganization": "Kuruluşu düzenle",
+    "deactivateOrganization": "Devre dışı bırak",
+    "activateOrganization": "Etkinleştir",
+    "confirmDeactivateOrganization": "Bu kuruluş devre dışı bırakılsın mı? Üyeleri artık giriş yapamayacak.",
+    "confirmActivateOrganization": "Bu kuruluş yeniden etkinleştirilsin mi? Üyeleri tekrar giriş yapabilecek.",
+    "orgRole": "Org. rolü",
+    "settingsTitle": "Platform ayarları",
+    "defaultLanguage": "Varsayılan dil",
+    "defaultLanguageHint": "Ziyaretçilere gösterilir ve kendi dillerini seçene kadar davet/sıfırlama e-postalarında kullanılır.",
+    "settingsSaved": "Ayarlar kaydedildi."
   },
   "dashboard": {
     "title": "Operasyonlar",
@@ -93,7 +123,12 @@
     "kpiOpen": "Açık",
     "kpiCovered": "Karşılanan",
     "manage": "Yönet",
-    "publicLink": "Herkese açık sayfa"
+    "publicLink": "Herkese açık sayfa",
+    "tabActive": "Aktif",
+    "tabDeactivated": "Devre dışı",
+    "emptyActive": "Aktif yardım talebi yok.",
+    "emptyDeactivated": "Devre dışı bırakılmış yardım talebi yok.",
+    "searchPlaceholder": "Başlığa veya konuma göre ara…"
   },
   "request": {
     "title": "Başlık",
@@ -105,6 +140,7 @@
     "locationSaved": "Konum güncellendi",
     "save": "Kaydet",
     "needs": "Bu konumdaki ihtiyaçlar",
+    "needsWithOffers": "İhtiyaçlar ve gelen yardım",
     "offers": "Herkese açık teklifler (gelen yardım)",
     "offersHint": "Ziyaretçiler hesap olmadan gönderir. Buradan düzenleyebilir veya silebilirsiniz.",
     "offersEmpty": "Henüz teklif yok.",
@@ -115,9 +151,31 @@
     "closeNeed": "İhtiyacı kapat",
     "requiredMinHint": "Sunulan miktarın altına inilemez: {{offered}} {{unit}}",
     "share": "Herkese açık bağlantıyı paylaş",
-    "detailsMeta": "Talep ayrıntıları ve notlar",
+    "copyLink": "Bağlantıyı kopyala",
+    "linkCopied": "Bağlantı panoya kopyalandı.",
+    "detailsMeta": "Talep ayrıntıları",
+    "editDetails": "Ayrıntıları düzenle",
+    "backToDashboard": "Panele dön",
+    "deactivate": "Devre dışı bırak",
+    "reactivate": "Yeniden etkinleştir",
+    "confirmDeactivate": "Bu yardım talebi devre dışı bırakılsın mı? Artık yeni teklif kabul etmeyecek ve genel sayfa yalnızca artık aktif olmadığını gösterecek.",
+    "confirmReactivate": "Bu yardım talebi yeniden etkinleştirilsin mi? Tekrar teklif kabul edecek ve genel sayfa tüm ayrıntıları gösterecek.",
+    "deactivated": "Yardım talebi devre dışı bırakıldı.",
+    "reactivated": "Yardım talebi yeniden etkinleştirildi.",
+    "deactivatedNotice": "Bu yardım talebi devre dışı bırakıldı. Artık yeni teklif kabul etmiyor ve genel sayfası yalnızca bir bildirim gösteriyor.",
     "addFirstNeed": "İlk ihtiyacı ekle (isteğe bağlı)",
-    "firstNeedTitle": "İlk ihtiyaç başlığı"
+    "firstNeedTitle": "İlk ihtiyaç başlığı",
+    "confirmCloseNeed": "Bu ihtiyaç kapatılsın mı? Artık yeni teklif kabul etmez.",
+    "confirmCancelOffer": "Bu teklif iptal edilsin mi? Sağlayıcı artık beklenmeyecek.",
+    "confirmDeleteOffer": "Bu teklif kalıcı olarak silinsin mi?",
+    "confirmDeleteComment": "Bu not silinsin mi?",
+    "offerSortNewest": "En yeni",
+    "offerSortOldest": "En eski",
+    "offerSortStatus": "Duruma göre",
+    "offerSortQuantity": "En yüksek miktar",
+    "offerPage": "Sayfa {{page}} / {{total}}",
+    "contacts": "İletişim kişileri",
+    "contactsHint": "Yalnızca bu yardım talebine özeldir. Herkese açık sayfasında kuruluş kişilerinizle birlikte gösterilir."
   },
   "comments": {
     "title": "Dahili notlar",
@@ -139,11 +197,35 @@
       "PARTIALLY_COVERED": "Kısmen karşılandı",
       "COVERED": "Karşılandı",
       "CLOSED": "Kapalı"
+    },
+    "priorityValues": {
+      "CRITICAL": "Kritik",
+      "HIGH": "Yüksek",
+      "NORMAL": "Normal",
+      "LOW": "Düşük"
+    },
+    "categoryValues": {
+      "FOOD": "Gıda",
+      "WATER": "Su",
+      "CLOTHING": "Giysi",
+      "SUPPLIES": "Malzeme",
+      "EQUIPMENT": "Ekipman",
+      "MACHINERY": "Makine",
+      "VEHICLES": "Araçlar",
+      "SHELTER": "Barınak",
+      "SERVICES": "Hizmetler",
+      "OTHER": "Diğer"
     }
   },
   "offer": {
     "title": "Kaynak teklif et",
     "providerName": "Ad / kuruluş",
+    "providerType": "Tür",
+    "searchPlaceholder": "Ad, telefon veya e-posta",
+    "providerTypeValues": {
+      "PERSON": "Bireysel",
+      "ORGANIZATION": "Kurum"
+    },
     "quantity": "Beklenen miktar",
     "firstName": "Ad",
     "lastName": "Soyad",
@@ -163,12 +245,64 @@
       "RECEIVED": "Alındı",
       "CANCELLED": "İptal edildi"
     },
-    "cancel": "Teklifi iptal et"
+    "cancel": "Teklifi iptal et",
+    "contact": "İletişim",
+    "distance": "Mesafe",
+    "distanceKm": "{{km}} km",
+    "statusLabel": "Durum",
+    "actions": "İşlemler",
+    "locationHint": "Organizatörlere ne kadar uzakta olduğunuzu göstermek için konumunuzu istiyoruz. Teklif gönderebilmek için cihazınızın bunu paylaşması gerekir — yalnızca hesaplanan mesafe kaydedilir, kesin konumunuz asla kaydedilmez.",
+    "locationRequesting": "Konumunuz isteniyor…",
+    "locationGranted": "Konum paylaşıldı.",
+    "locationDenied": "Teklif göndermek için konum erişimi gereklidir.",
+    "retryLocation": "Konumu paylaş",
+    "changeStatus": "Durumu değiştir",
+    "confirmMarkComing": "Bu teklif yolda olarak işaretlensin mi? Sağlayıcının teslim etmesi beklenecek."
   },
   "common": {
+    "refresh": "Yenile",
     "loading": "Yükleniyor…",
     "error": "Bir şeyler ters gitti.",
     "cancel": "İptal",
-    "delete": "Sil"
+    "delete": "Sil",
+    "confirm": "Onayla",
+    "confirmTitle": "Onayla",
+    "confirmBody": "Emin misiniz?",
+    "prev": "Önceki",
+    "next": "Sonraki",
+    "all": "Tümü",
+    "min": "Min",
+    "max": "Maks",
+    "search": "Ara",
+    "filters": "Filtreler",
+    "clearFilters": "Filtreleri temizle",
+    "perPage": "Sayfa başına"
+  },
+  "organization": {
+    "title": "Kuruluş",
+    "name": "Ad",
+    "description": "Açıklama",
+    "save": "Kaydet",
+    "saved": "Kuruluş kaydedildi",
+    "membersTitle": "Üyeler",
+    "invite": "Davet et",
+    "remove": "Kaldır",
+    "confirmRemoveMember": "Bu üye kaldırılsın mı? Erişimini hemen kaybedecek.",
+    "roleValues": {
+      "ADMIN": "Yönetici",
+      "USER": "Üye"
+    }
+  },
+  "invites": {
+    "create": "Davet oluştur",
+    "organization": "Kuruluş",
+    "role": "Rol",
+    "tokenLink": "Token / bağlantı",
+    "expires": "Son kullanma",
+    "usedColumn": "Kullanıldı",
+    "used": "Evet",
+    "unused": "Hayır",
+    "revoke": "Geri çek",
+    "confirmRevoke": "Bu davet geri çekilsin mi? Bağlantı artık çalışmayacak."
   }
 }

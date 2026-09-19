@@ -64,9 +64,9 @@ export function sumSummaryCounts(items: ReliefRequestSummaryResponse[]): {
 } {
   return items.reduce(
     (acc, item) => ({
-      critical: acc.critical + item.criticalNeeds,
-      open: acc.open + item.openNeeds,
-      covered: acc.covered + item.coveredNeeds,
+      critical: acc.critical + Number(item.criticalNeeds ?? 0),
+      open: acc.open + Number(item.openNeeds ?? 0),
+      covered: acc.covered + Number(item.coveredNeeds ?? 0),
     }),
     { critical: 0, open: 0, covered: 0 },
   );

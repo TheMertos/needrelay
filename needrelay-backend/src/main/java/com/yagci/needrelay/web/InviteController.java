@@ -10,7 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Invite management for authenticated organizers.
@@ -62,5 +65,19 @@ public class InviteController {
 	public List<InviteResponse> listMine() {
 		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
 		return inviteService.listMine(principal.getId());
+	}
+
+	/**
+	 * Revokes an unused invite created by the current organizer.
+	 *
+	 * @param inviteId invite id
+	 */
+	@DeleteMapping("/{inviteId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Revoke invite")
+	@ApiResponse(responseCode = "204", description = "Revoked")
+	public void revoke(@PathVariable UUID inviteId) {
+		OrganizerPrincipal principal = SecurityUtils.getCurrentPrincipal();
+		inviteService.revoke(principal.getId(), inviteId);
 	}
 }

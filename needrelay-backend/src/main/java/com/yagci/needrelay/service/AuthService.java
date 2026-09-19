@@ -3,6 +3,7 @@ package com.yagci.needrelay.service;
 import com.yagci.needrelay.common.UuidV7;
 import com.yagci.needrelay.config.NeedRelayProperties;
 import com.yagci.needrelay.domain.Invite;
+import com.yagci.needrelay.domain.Organization;
 import com.yagci.needrelay.domain.Organizer;
 import com.yagci.needrelay.domain.OrganizerRole;
 import com.yagci.needrelay.domain.PasswordResetToken;
@@ -23,6 +24,8 @@ import com.yagci.needrelay.web.dto.RegisterRequest;
 import com.yagci.needrelay.web.dto.ResetPasswordRequest;
 import com.yagci.needrelay.web.dto.TokenResponse;
 import com.yagci.needrelay.web.dto.UpdateProfileRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +44,8 @@ import java.util.UUID;
  */
 @Service
 public class AuthService {
+
+	private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
 	private final OrganizerRepository organizerRepository;
 	private final InviteRepository inviteRepository;
@@ -100,12 +105,18 @@ public class AuthService {
 		if (organizerRepository.findByEmailIgnoreCase(email).isPresent()) {
 			throw new ApiException("EMAIL_TAKEN", "Email already registered", HttpStatus.CONFLICT);
 		}
+		Organization organization = invite.getOrganization();
+		if (organization == null) {
+			throw new ApiException("INVITE_INVALID", "Invite has no target organization", HttpStatus.BAD_REQUEST);
+		}
 
 		Organizer organizer = new Organizer();
 		organizer.setEmail(email);
 		organizer.setPasswordHash(passwordEncoder.encode(request.password()));
 		organizer.setDisplayName(request.displayName().trim());
 		organizer.setRole(OrganizerRole.ORGANIZER);
+		organizer.setOrganization(organization);
+		organizer.setOrganizationRole(invite.getOrganizationRole());
 		organizer.setActive(true);
 		organizerRepository.save(organizer);
 
@@ -128,6 +139,9 @@ public class AuthService {
 		if (!organizer.isActive() || !passwordEncoder.matches(request.password(), organizer.getPasswordHash())) {
 			throw new ApiException("INVALID_CREDENTIALS", "Invalid email or password", HttpStatus.UNAUTHORIZED);
 		}
+		if (organizer.getOrganization() != null && !organizer.getOrganization().isActive()) {
+			throw new ApiException("ORGANIZATION_DISABLED", "Organization is disabled", HttpStatus.UNAUTHORIZED);
+		}
 		return issueTokens(organizer);
 	}
 
@@ -147,6 +161,9 @@ public class AuthService {
 		Organizer organizer = stored.getOrganizer();
 		if (!organizer.isActive()) {
 			throw new ApiException("ACCOUNT_DISABLED", "Account is disabled", HttpStatus.UNAUTHORIZED);
+		}
+		if (organizer.getOrganization() != null && !organizer.getOrganization().isActive()) {
+			throw new ApiException("ORGANIZATION_DISABLED", "Organization is disabled", HttpStatus.UNAUTHORIZED);
 		}
 		stored.setRevokedAt(Instant.now());
 		refreshTokenRepository.save(stored);
@@ -190,7 +207,6 @@ public class AuthService {
 	public OrganizerResponse updateProfile(UUID organizerId, UpdateProfileRequest request) {
 		Organizer organizer = requireOrganizer(organizerId);
 		organizer.setDisplayName(request.displayName().trim());
-		organizer.setDescription(blankToNull(request.description()));
 		organizerRepository.save(organizer);
 		return toOrganizerResponse(organizer);
 	}
@@ -232,7 +248,13 @@ public class AuthService {
 			token.setTokenHash(sha256Hex(rawToken));
 			token.setExpiresAt(Instant.now().plus(1, ChronoUnit.HOURS));
 			passwordResetTokenRepository.save(token);
-			emailService.sendPasswordReset(organizer.getEmail(), rawToken);
+			// Best-effort: this method always succeeds to avoid email enumeration, so a
+			// transient (or unconfigured) email provider must not surface as an error here.
+			try {
+				emailService.sendPasswordReset(organizer.getEmail(), rawToken);
+			} catch (Exception ex) {
+				log.error("Failed to email password reset to {}: {}", organizer.getEmail(), ex.getMessage());
+			}
 		});
 	}
 
@@ -266,28 +288,17 @@ public class AuthService {
 	 * @return response DTO
 	 */
 	public static OrganizerResponse toOrganizerResponse(Organizer organizer) {
+		Organization organization = organizer.getOrganization();
 		return new OrganizerResponse(
 				organizer.getId(),
 				organizer.getEmail(),
 				organizer.getDisplayName(),
-				organizer.getDescription(),
 				organizer.getRole(),
 				organizer.isActive(),
+				organization != null ? organization.getId() : null,
+				organization != null ? organization.getName() : null,
+				organizer.getOrganizationRole(),
 				organizer.getCreatedAt());
-	}
-
-	/**
-	 * Trims blank text to null.
-	 *
-	 * @param value raw text
-	 * @return trimmed text or null
-	 */
-	private static String blankToNull(String value) {
-		if (value == null) {
-			return null;
-		}
-		String trimmed = value.trim();
-		return trimmed.isEmpty() ? null : trimmed;
 	}
 
 	/**
@@ -297,7 +308,13 @@ public class AuthService {
 	 * @return token response
 	 */
 	private TokenResponse issueTokens(Organizer organizer) {
-		String accessToken = jwtService.createAccessToken(organizer.getId(), organizer.getEmail(), organizer.getRole());
+		Organization organization = organizer.getOrganization();
+		String accessToken = jwtService.createAccessToken(
+				organizer.getId(),
+				organizer.getEmail(),
+				organizer.getRole(),
+				organization != null ? organization.getId() : null,
+				organizer.getOrganizationRole());
 		String rawRefresh = UuidV7.generate() + "." + UuidV7.generate();
 		RefreshToken refreshToken = new RefreshToken();
 		refreshToken.setOrganizer(organizer);

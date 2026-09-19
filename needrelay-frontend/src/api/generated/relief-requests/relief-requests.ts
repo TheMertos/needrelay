@@ -7,6 +7,8 @@
  */
 import type {
   CreateReliefRequest,
+  ListOffersParams,
+  OfferPageResponse,
   OfferResponse,
   ReceiveOfferRequest,
   ReliefRequestResponse,
@@ -61,9 +63,11 @@ const listReliefRequests = (
     }
   const listOffers = (
     requestId: string,
- options?: SecondParameter<typeof customInstance<OfferResponse[]>>,) => {
-      return customInstance<OfferResponse[]>(
-      {url: `/api/relief-requests/${requestId}/offers`, method: 'GET'
+    params?: ListOffersParams,
+ options?: SecondParameter<typeof customInstance<OfferPageResponse>>,) => {
+      return customInstance<OfferPageResponse>(
+      {url: `/api/relief-requests/${requestId}/offers`, method: 'GET',
+        params
     },
       options);
     }

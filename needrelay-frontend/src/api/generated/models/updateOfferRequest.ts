@@ -5,9 +5,11 @@
  * Crisis and emergency resource coordination API
  * OpenAPI spec version: 0.1.0
  */
+import type { ProviderType } from './providerType';
 
 export interface UpdateOfferRequest {
   providerName: string;
+  providerType: ProviderType;
   quantity: number;
   /** @maxLength 100 */
   firstName: string;

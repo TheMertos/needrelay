@@ -11,3 +11,25 @@ databaseChangeLog:
       file: db/changelog/changes/005-offer-contact-fields.yaml
   - include:
       file: db/changelog/changes/006-offer-lifecycle.yaml
+  - include:
+      file: db/changelog/changes/007-offer-distance.yaml
+  - include:
+      file: db/changelog/changes/008-offer-provider-type.yaml
+  - include:
+      file: db/changelog/changes/009-organizer-contact-relief-request.yaml
+  - include:
+      file: db/changelog/changes/010-organizations.yaml
+  - include:
+      file: db/changelog/changes/011-relief-request-organization.yaml
+  - include:
+      file: db/changelog/changes/012-organizer-contact-organization.yaml
+  - include:
+      file: db/changelog/changes/013-invite-organization.yaml
+  - include:
+      file: db/changelog/changes/014-organization-active.yaml
+  - include:
+      file: db/changelog/changes/015-system-settings.yaml
+  - include:
+      file: db/changelog/changes/016-system-settings-timestamps.yaml
+  - include:
+      file: db/changelog/changes/017-invite-email-delivery.yaml
