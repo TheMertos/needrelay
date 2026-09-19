@@ -20,7 +20,9 @@ jobs:
           java-version: "25"
           cache: maven
       - name: Backend tests
-        run: ./mvnw -B -q test
+        run: |
+          chmod +x ./mvnw
+          ./mvnw -B -q test
 
   publish:
     needs: test
