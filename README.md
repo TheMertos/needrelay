@@ -86,7 +86,7 @@ cd needrelay-frontend && yarn test
 
 ## Releases
 
-`.\scripts\release.ps1` tags the next `vX.Y.Z` and pushes it. GitHub Actions publishes `themertos/needrelay:latest` from `main`, and `vX.Y.Z` from version tags. Repository secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`.
+`.\scripts\release.ps1` stages everything, commits (`Release vX.Y.Z` if there are changes), pushes the branch, then tags **latest** and the next **vX.Y.Z** and pushes those tags. GitHub Actions publishes `themertos/needrelay:latest` from `main`, and `vX.Y.Z` from version tags. Repository secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`.
 
 ## License
 

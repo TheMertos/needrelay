@@ -1,14 +1,18 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Stages all changes, commits, creates the next patch tag, and pushes branch + tag.
+  Commits and pushes the current branch, then tags latest and the next vX.Y.Z.
 
 .DESCRIPTION
   Run with no parameters:
     .\scripts\release.ps1
 
-  Finds the latest vMAJOR.MINOR.PATCH tag, bumps PATCH (or starts at v0.0.1),
-  commits with message "Release vX.Y.Z", creates an annotated tag, and pushes.
+  1. git add -A and commit (skipped if the working tree is already clean)
+  2. git push (branch first — GitHub Actions publishes Docker Hub :latest from main)
+  3. Annotated tags: moving "latest" and the next patch "vMAJOR.MINOR.PATCH"
+  4. Push those tags (vX.Y.Z is immutable; latest is force-updated)
+
+  Starts at v0.0.1 when no v* tags exist.
 #>
 # Prefer exit-code checks over treating git stderr as terminating errors.
 $ErrorActionPreference = "Continue"
@@ -90,18 +94,31 @@ if (-not [string]::IsNullOrWhiteSpace($existing)) {
 $message = "Release $versionTag"
 
 Write-Host "Releasing $versionTag on branch $branch ..."
+if ($branch -ne "main") {
+	Write-Host "Warning: Docker Hub :latest is published from main only. You are on '$branch'." -ForegroundColor Yellow
+}
 
+Write-Host "1/4 git add + commit"
 Invoke-Git @("add", "-A") | Out-Null
 
 $status = (& git status --porcelain 2>&1 | Out-String).Trim()
 if (-not [string]::IsNullOrWhiteSpace($status)) {
 	Invoke-Git @("commit", "-m", $message) | Out-Null
 } else {
-	Write-Host "Working tree clean; tagging current HEAD."
+	Write-Host "Working tree clean; pushing current HEAD."
 }
 
-Invoke-Git @("tag", "-a", $versionTag, "-m", $message) | Out-Null
+Write-Host "2/4 git push $branch"
 Invoke-Git @("push") | Out-Null
-Invoke-Git @("push", "origin", $versionTag) | Out-Null
 
-Write-Host "Done. Released $versionTag"
+Write-Host "3/4 tag latest and $versionTag"
+Invoke-Git @("tag", "-a", $versionTag, "-m", $message) | Out-Null
+Invoke-Git @("tag", "-fa", "latest", "-m", "Latest ($versionTag)") | Out-Null
+
+Write-Host "4/4 push tags"
+Invoke-Git @("push", "origin", $versionTag) | Out-Null
+# Moving pointer only — does not rewrite the branch.
+Invoke-Git @("push", "--force", "origin", "refs/tags/latest") | Out-Null
+
+Write-Host "Done. Pushed $branch, tags latest and $versionTag"
+Write-Host "Docker Hub: :latest from main, :$versionTag from the version tag."
