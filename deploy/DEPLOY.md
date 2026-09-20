@@ -5,7 +5,7 @@ Bring NeedRelay online on a single Linux VPS with Docker. All application traffi
 ## Architecture
 
 - **Caddy** — TLS (Let's Encrypt) + reverse proxy to `127.0.0.1:8080`
-- **App** — `themertos/needrelay` (UI + API in one image)
+- **App** — `ghcr.io/themertos/needrelay` (UI + API in one image)
 - **Postgres** — `127.0.0.1:5432`
 - All services use `network_mode: host` and `restart: always`
 
@@ -71,7 +71,7 @@ curl -fsS https://$DOMAIN/actuator/health/liveness
 
 ## 6. Update to a new image
 
-After CI publishes a new `themertos/needrelay` tag or `latest`:
+After CI publishes a new `ghcr.io/themertos/needrelay` tag or `latest`:
 
 ```bash
 cd deploy
@@ -79,17 +79,16 @@ docker compose pull app
 docker compose up -d app
 ```
 
-## GitHub Actions → Docker Hub
+## GitHub Actions → GHCR
 
 The workflow `.github/workflows/docker-publish.yml` builds the root `Dockerfile` and pushes:
 
-- `themertos/needrelay:latest` on pushes to `main`
-- `themertos/needrelay:<version>` (and `latest`) on tags `v*`
+- `ghcr.io/themertos/needrelay:latest` on pushes to `main`
+- `ghcr.io/themertos/needrelay:<version>` (and `latest`) on tags `v*`
 
-Repository secrets required:
+Auth is `GITHUB_TOKEN` (`packages: write`). No Docker Hub secrets.
 
-- `DOCKERHUB_USERNAME`
-- `DOCKERHUB_TOKEN` (Docker Hub access token)
+After the first successful publish, set the GHCR package visibility to **public** (GitHub → Packages → `needrelay` → Package settings) so a VPS can `docker compose pull` without `docker login`.
 
 ## Notes
 

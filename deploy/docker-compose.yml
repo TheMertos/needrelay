@@ -1,4 +1,5 @@
 # NeedRelay emergency stack (host network).
+# Image: ghcr.io/themertos/needrelay
 # Docs: DEPLOY.md
 # Usage: cp .env.example .env && docker compose up -d
 
@@ -21,7 +22,7 @@ services:
       retries: 10
 
   app:
-    image: themertos/needrelay:${APP_IMAGE_TAG:-latest}
+    image: ghcr.io/themertos/needrelay:${APP_IMAGE_TAG:-latest}
     container_name: needrelay-app
     network_mode: host
     restart: always
