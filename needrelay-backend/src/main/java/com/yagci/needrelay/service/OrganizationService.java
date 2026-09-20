@@ -11,6 +11,7 @@ import com.yagci.needrelay.web.dto.OrganizationMemberResponse;
 import com.yagci.needrelay.web.dto.OrganizationResponse;
 import com.yagci.needrelay.web.dto.UpdateMemberRoleRequest;
 import com.yagci.needrelay.web.dto.UpdateOrganizationRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,25 +24,12 @@ import java.util.UUID;
  * Organization profile and member management for the current organization.
  */
 @Service
+@AllArgsConstructor
 public class OrganizationService {
 
 	private final OrganizationRepository organizationRepository;
 	private final OrganizerRepository organizerRepository;
 	private final RefreshTokenRepository refreshTokenRepository;
-
-	/**
-	 * @param organizationRepository organizations
-	 * @param organizerRepository member accounts
-	 * @param refreshTokenRepository session revocation on member removal
-	 */
-	public OrganizationService(
-			OrganizationRepository organizationRepository,
-			OrganizerRepository organizerRepository,
-			RefreshTokenRepository refreshTokenRepository) {
-		this.organizationRepository = organizationRepository;
-		this.organizerRepository = organizerRepository;
-		this.refreshTokenRepository = refreshTokenRepository;
-	}
 
 	/**
 	 * Returns the current organization's profile.

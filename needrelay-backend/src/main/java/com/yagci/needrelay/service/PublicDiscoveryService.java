@@ -11,6 +11,7 @@ import com.yagci.needrelay.repository.ReliefRequestRepository;
 import com.yagci.needrelay.web.dto.DiscoveryNeedResponse;
 import com.yagci.needrelay.web.dto.DiscoveryPointResponse;
 import com.yagci.needrelay.web.dto.PageResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import java.util.UUID;
  * Builds the unauthenticated public discovery feed.
  */
 @Service
+@AllArgsConstructor
 public class PublicDiscoveryService {
 
 	private static final List<NeedStatus> DISCOVERABLE = List.of(
@@ -39,20 +41,6 @@ public class PublicDiscoveryService {
 	private final ReliefRequestRepository reliefRequestRepository;
 	private final NeedRepository needRepository;
 	private final OfferRepository offerRepository;
-
-	/**
-	 * @param reliefRequestRepository relief requests
-	 * @param needRepository needs
-	 * @param offerRepository pending quantity sums
-	 */
-	public PublicDiscoveryService(
-			ReliefRequestRepository reliefRequestRepository,
-			NeedRepository needRepository,
-			OfferRepository offerRepository) {
-		this.reliefRequestRepository = reliefRequestRepository;
-		this.needRepository = needRepository;
-		this.offerRepository = offerRepository;
-	}
 
 	/**
 	 * Pages ACTIVE help points, optionally matching a free-text query against a point's

@@ -10,6 +10,7 @@ import com.yagci.needrelay.repository.OfferRepository;
 import com.yagci.needrelay.web.dto.CreateNeedRequest;
 import com.yagci.needrelay.web.dto.NeedResponse;
 import com.yagci.needrelay.web.dto.UpdateNeedRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,25 +23,12 @@ import java.util.UUID;
  * Need CRUD for owned relief requests.
  */
 @Service
+@AllArgsConstructor
 public class NeedService {
 
 	private final NeedRepository needRepository;
 	private final ReliefRequestService reliefRequestService;
 	private final OfferRepository offerRepository;
-
-	/**
-	 * @param needRepository need persistence
-	 * @param reliefRequestService ownership checks
-	 * @param offerRepository pending quantity sums
-	 */
-	public NeedService(
-			NeedRepository needRepository,
-			ReliefRequestService reliefRequestService,
-			OfferRepository offerRepository) {
-		this.needRepository = needRepository;
-		this.reliefRequestService = reliefRequestService;
-		this.offerRepository = offerRepository;
-	}
 
 	/**
 	 * Creates a need under an owned relief request.

@@ -4,6 +4,7 @@ import com.yagci.needrelay.service.AdminOrganizerService;
 import com.yagci.needrelay.web.dto.CreateOrganizationRequest;
 import com.yagci.needrelay.web.dto.OrganizationResponse;
 import com.yagci.needrelay.web.dto.UpdateOrganizationRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,16 +32,10 @@ import java.util.UUID;
 @Tag(name = "admin")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
+@AllArgsConstructor
 public class AdminOrganizationController {
 
 	private final AdminOrganizerService adminOrganizerService;
-
-	/**
-	 * @param adminOrganizerService admin service
-	 */
-	public AdminOrganizationController(AdminOrganizerService adminOrganizerService) {
-		this.adminOrganizerService = adminOrganizerService;
-	}
 
 	/**
 	 * Creates a new, empty organization. The admin then creates a targeted invite

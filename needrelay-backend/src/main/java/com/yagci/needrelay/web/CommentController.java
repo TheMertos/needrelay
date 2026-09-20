@@ -5,6 +5,7 @@ import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.CommentService;
 import com.yagci.needrelay.web.dto.CommentResponse;
 import com.yagci.needrelay.web.dto.CreateCommentRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,16 +31,10 @@ import java.util.UUID;
 @RequestMapping("/api/relief-requests/{requestId}/comments")
 @Tag(name = "comments")
 @SecurityRequirement(name = "bearerAuth")
+@AllArgsConstructor
 public class CommentController {
 
 	private final CommentService commentService;
-
-	/**
-	 * @param commentService comment service
-	 */
-	public CommentController(CommentService commentService) {
-		this.commentService = commentService;
-	}
 
 	/**
 	 * Lists comments for an owned relief request.

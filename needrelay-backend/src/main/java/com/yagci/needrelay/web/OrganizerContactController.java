@@ -5,6 +5,7 @@ import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.OrganizerContactService;
 import com.yagci.needrelay.web.dto.OrganizerContactResponse;
 import com.yagci.needrelay.web.dto.UpsertOrganizerContactRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,16 +32,10 @@ import java.util.UUID;
 @RequestMapping("/api/me/contacts")
 @Tag(name = "contacts")
 @SecurityRequirement(name = "bearerAuth")
+@AllArgsConstructor
 public class OrganizerContactController {
 
 	private final OrganizerContactService contactService;
-
-	/**
-	 * @param contactService contact service
-	 */
-	public OrganizerContactController(OrganizerContactService contactService) {
-		this.contactService = contactService;
-	}
 
 	/**
 	 * Lists contacts for the current organizer.

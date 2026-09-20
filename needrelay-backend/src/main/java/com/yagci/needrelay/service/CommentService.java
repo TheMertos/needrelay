@@ -8,6 +8,7 @@ import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.repository.ReliefRequestCommentRepository;
 import com.yagci.needrelay.web.dto.CommentResponse;
 import com.yagci.needrelay.web.dto.CreateCommentRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,25 +20,12 @@ import java.util.UUID;
  * Notes/comments on relief requests for registered organizers.
  */
 @Service
+@AllArgsConstructor
 public class CommentService {
 
 	private final ReliefRequestCommentRepository commentRepository;
 	private final OrganizerRepository organizerRepository;
 	private final ReliefRequestService reliefRequestService;
-
-	/**
-	 * @param commentRepository comments
-	 * @param organizerRepository authors
-	 * @param reliefRequestService ownership
-	 */
-	public CommentService(
-			ReliefRequestCommentRepository commentRepository,
-			OrganizerRepository organizerRepository,
-			ReliefRequestService reliefRequestService) {
-		this.commentRepository = commentRepository;
-		this.organizerRepository = organizerRepository;
-		this.reliefRequestService = reliefRequestService;
-	}
 
 	/**
 	 * Lists comments for an owned relief request.

@@ -24,6 +24,7 @@ import com.yagci.needrelay.web.dto.RegisterRequest;
 import com.yagci.needrelay.web.dto.ResetPasswordRequest;
 import com.yagci.needrelay.web.dto.TokenResponse;
 import com.yagci.needrelay.web.dto.UpdateProfileRequest;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,7 @@ import java.util.UUID;
  * Registration, login, password flows, profile, and token lifecycle.
  */
 @Service
+@AllArgsConstructor
 public class AuthService {
 
 	private static final Logger log = LoggerFactory.getLogger(AuthService.class);
@@ -55,35 +57,6 @@ public class AuthService {
 	private final JwtService jwtService;
 	private final NeedRelayProperties properties;
 	private final EmailService emailService;
-
-	/**
-	 * @param organizerRepository organizers
-	 * @param inviteRepository invites
-	 * @param refreshTokenRepository refresh tokens
-	 * @param passwordResetTokenRepository password reset tokens
-	 * @param passwordEncoder BCrypt encoder
-	 * @param jwtService access JWT issuer
-	 * @param properties JWT and app settings
-	 * @param emailService Resend email sender
-	 */
-	public AuthService(
-			OrganizerRepository organizerRepository,
-			InviteRepository inviteRepository,
-			RefreshTokenRepository refreshTokenRepository,
-			PasswordResetTokenRepository passwordResetTokenRepository,
-			PasswordEncoder passwordEncoder,
-			JwtService jwtService,
-			NeedRelayProperties properties,
-			EmailService emailService) {
-		this.organizerRepository = organizerRepository;
-		this.inviteRepository = inviteRepository;
-		this.refreshTokenRepository = refreshTokenRepository;
-		this.passwordResetTokenRepository = passwordResetTokenRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.jwtService = jwtService;
-		this.properties = properties;
-		this.emailService = emailService;
-	}
 
 	/**
 	 * Registers a new ORGANIZER using a valid invite token.

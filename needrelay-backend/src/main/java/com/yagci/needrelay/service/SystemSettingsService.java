@@ -5,6 +5,7 @@ import com.yagci.needrelay.exception.ApiException;
 import com.yagci.needrelay.repository.SystemSettingsRepository;
 import com.yagci.needrelay.web.dto.SystemSettingsResponse;
 import com.yagci.needrelay.web.dto.UpdateSystemSettingsRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Set;
  * used for transactional emails until a user picks their own language.
  */
 @Service
+@AllArgsConstructor
 public class SystemSettingsService {
 
 	/** UI language codes supported by the frontend and email templates. */
@@ -28,13 +30,6 @@ public class SystemSettingsService {
 	private static final String DEFAULT_LANGUAGE = "en";
 
 	private final SystemSettingsRepository systemSettingsRepository;
-
-	/**
-	 * @param systemSettingsRepository settings persistence
-	 */
-	public SystemSettingsService(SystemSettingsRepository systemSettingsRepository) {
-		this.systemSettingsRepository = systemSettingsRepository;
-	}
 
 	/**
 	 * Returns the current platform-wide default language, "en" if never configured.

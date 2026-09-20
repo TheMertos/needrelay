@@ -2,6 +2,7 @@ package com.yagci.needrelay.service;
 
 import com.yagci.needrelay.common.UuidV7;
 import com.yagci.needrelay.repository.ReliefRequestRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
  * Builds unique public URL slugs from relief request titles.
  */
 @Service
+@AllArgsConstructor
 public class SlugService {
 
 	private static final Pattern NON_LATIN = Pattern.compile("[^\\w-]");
@@ -19,13 +21,6 @@ public class SlugService {
 	private static final Pattern MULTI_DASH = Pattern.compile("-{2,}");
 
 	private final ReliefRequestRepository reliefRequestRepository;
-
-	/**
-	 * @param reliefRequestRepository slug uniqueness checks
-	 */
-	public SlugService(ReliefRequestRepository reliefRequestRepository) {
-		this.reliefRequestRepository = reliefRequestRepository;
-	}
 
 	/**
 	 * Slugifies a title and appends a unique short UUID7 suffix.

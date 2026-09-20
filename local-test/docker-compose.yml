@@ -1,0 +1,72 @@
+# Local test of the published image (Postgres + NeedRelay).
+# From this folder: docker compose up -d
+# Optional demo data: docker compose --profile seed run --rm seed
+# Host ports 8081 (app) and 5433 (Postgres) avoid clashing with local Spring on 8080
+# and needrelay-db on 5432. The app still listens on 8080 inside the container.
+
+name: needrelay-local-test
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: needrelay-local-test-postgres
+    environment:
+      POSTGRES_DB: needrelay
+      POSTGRES_USER: needrelay
+      POSTGRES_PASSWORD: needrelay
+    ports:
+      - "5433:5432"
+    volumes:
+      - needrelay_local_test_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U needrelay -d needrelay"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: themertos/needrelay:${APP_IMAGE_TAG:-latest}
+    container_name: needrelay-local-test-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8080"
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/needrelay
+      DATABASE_USERNAME: needrelay
+      DATABASE_PASSWORD: needrelay
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-secret-at-least-32-chars}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@needrelay.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-ChangeMeAdmin123!}
+      ADMIN_DISPLAY_NAME: ${ADMIN_DISPLAY_NAME:-NeedRelay Admin}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:8081}
+      APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-http://localhost:8081}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-NeedRelay <onboarding@resend.dev>}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/actuator/health/readiness"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+  seed:
+    profiles: ["seed"]
+    build:
+      context: ../needrelay-db/seed
+    depends_on:
+      postgres:
+        condition: service_healthy
+      app:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: needrelay
+      DATABASE_USER: needrelay
+      DATABASE_PASSWORD: needrelay
+    restart: "no"
+
+volumes:
+  needrelay_local_test_pg_data:

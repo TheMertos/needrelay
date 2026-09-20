@@ -2,6 +2,7 @@ package com.yagci.needrelay.security;
 
 import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.OrganizerRole;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * Authenticated organizer principal for Spring Security.
  */
 @Getter
+@AllArgsConstructor
 public class OrganizerPrincipal implements UserDetails {
 
 	private final UUID id;
@@ -24,34 +26,6 @@ public class OrganizerPrincipal implements UserDetails {
 	private final boolean active;
 	private final UUID organizationId;
 	private final OrganizationRole organizationRole;
-
-	/**
-	 * Creates a principal from organizer fields.
-	 *
-	 * @param id organizer id
-	 * @param email email
-	 * @param passwordHash password hash
-	 * @param role platform role
-	 * @param active whether account is active
-	 * @param organizationId organization id, null for platform admins
-	 * @param organizationRole role within the organization, null for platform admins
-	 */
-	public OrganizerPrincipal(
-			UUID id,
-			String email,
-			String passwordHash,
-			OrganizerRole role,
-			boolean active,
-			UUID organizationId,
-			OrganizationRole organizationRole) {
-		this.id = id;
-		this.email = email;
-		this.passwordHash = passwordHash;
-		this.role = role;
-		this.active = active;
-		this.organizationId = organizationId;
-		this.organizationRole = organizationRole;
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

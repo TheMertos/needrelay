@@ -9,6 +9,7 @@ import com.yagci.needrelay.web.dto.OrganizationMemberResponse;
 import com.yagci.needrelay.web.dto.OrganizationResponse;
 import com.yagci.needrelay.web.dto.UpdateMemberRoleRequest;
 import com.yagci.needrelay.web.dto.UpdateOrganizationRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -35,16 +36,10 @@ import java.util.UUID;
 @RequestMapping("/api/me/organization")
 @Tag(name = "organization")
 @SecurityRequirement(name = "bearerAuth")
+@AllArgsConstructor
 public class OrganizationController {
 
 	private final OrganizationService organizationService;
-
-	/**
-	 * @param organizationService organization service
-	 */
-	public OrganizationController(OrganizationService organizationService) {
-		this.organizationService = organizationService;
-	}
 
 	/**
 	 * Returns the current organization's profile.

@@ -19,6 +19,7 @@ import com.yagci.needrelay.web.dto.OfferResponse;
 import com.yagci.needrelay.web.dto.OrganizerContactResponse;
 import com.yagci.needrelay.web.dto.PageResponse;
 import com.yagci.needrelay.web.dto.PublicReliefRequestResponse;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +45,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/public")
 @Tag(name = "Public")
+@AllArgsConstructor
 public class PublicController {
 
 	private final ReliefRequestService reliefRequestService;
@@ -53,32 +55,6 @@ public class PublicController {
 	private final PublicDiscoveryService publicDiscoveryService;
 	private final OfferRateLimiter offerRateLimiter;
 	private final ClientIpResolver clientIpResolver;
-
-	/**
-	 * @param reliefRequestService relief lookup by slug
-	 * @param needService need listing
-	 * @param offerService public offers
-	 * @param contactService organization contacts
-	 * @param publicDiscoveryService public discovery feed
-	 * @param offerRateLimiter public offer IP rate limiter
-	 * @param clientIpResolver client IP resolver
-	 */
-	public PublicController(
-			ReliefRequestService reliefRequestService,
-			NeedService needService,
-			OfferService offerService,
-			OrganizerContactService contactService,
-			PublicDiscoveryService publicDiscoveryService,
-			OfferRateLimiter offerRateLimiter,
-			ClientIpResolver clientIpResolver) {
-		this.reliefRequestService = reliefRequestService;
-		this.needService = needService;
-		this.offerService = offerService;
-		this.contactService = contactService;
-		this.publicDiscoveryService = publicDiscoveryService;
-		this.offerRateLimiter = offerRateLimiter;
-		this.clientIpResolver = clientIpResolver;
-	}
 
 	/**
 	 * Pages ACTIVE help points for the public map/list (max 50 per page), optionally

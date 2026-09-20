@@ -3,6 +3,7 @@ package com.yagci.needrelay.web;
 import com.yagci.needrelay.service.SystemSettingsService;
 import com.yagci.needrelay.web.dto.SystemSettingsResponse;
 import com.yagci.needrelay.web.dto.UpdateSystemSettingsRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,16 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "admin")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
+@AllArgsConstructor
 public class AdminSettingsController {
 
 	private final SystemSettingsService systemSettingsService;
-
-	/**
-	 * @param systemSettingsService settings service
-	 */
-	public AdminSettingsController(SystemSettingsService systemSettingsService) {
-		this.systemSettingsService = systemSettingsService;
-	}
 
 	/**
 	 * Updates the platform's default UI language.

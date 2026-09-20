@@ -4,6 +4,7 @@ import com.yagci.needrelay.config.NeedRelayProperties;
 import com.yagci.needrelay.domain.Organizer;
 import com.yagci.needrelay.domain.OrganizerRole;
 import com.yagci.needrelay.repository.OrganizerRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
  * Creates the bootstrap ADMIN organizer when the database has none.
  */
 @Component
+@AllArgsConstructor
 public class AdminBootstrap implements ApplicationRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(AdminBootstrap.class);
@@ -22,20 +24,6 @@ public class AdminBootstrap implements ApplicationRunner {
 	private final OrganizerRepository organizerRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final NeedRelayProperties properties;
-
-	/**
-	 * @param organizerRepository organizer persistence
-	 * @param passwordEncoder password hasher
-	 * @param properties admin bootstrap settings
-	 */
-	public AdminBootstrap(
-			OrganizerRepository organizerRepository,
-			PasswordEncoder passwordEncoder,
-			NeedRelayProperties properties) {
-		this.organizerRepository = organizerRepository;
-		this.passwordEncoder = passwordEncoder;
-		this.properties = properties;
-	}
 
 	/**
 	 * Seeds an ADMIN account from {@code needrelay.admin.*} when organizer count is zero.

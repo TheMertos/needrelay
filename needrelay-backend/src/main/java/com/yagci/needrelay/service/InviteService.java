@@ -12,6 +12,7 @@ import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerRepository;
 import com.yagci.needrelay.web.dto.CreateInviteRequest;
 import com.yagci.needrelay.web.dto.InviteResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,25 +27,12 @@ import java.util.UUID;
  * by {@link InviteEmailDispatchService}.
  */
 @Service
+@AllArgsConstructor
 public class InviteService {
 
 	private final InviteRepository inviteRepository;
 	private final OrganizerRepository organizerRepository;
 	private final OrganizationRepository organizationRepository;
-
-	/**
-	 * @param inviteRepository invite persistence
-	 * @param organizerRepository organizer lookup
-	 * @param organizationRepository organization lookup
-	 */
-	public InviteService(
-			InviteRepository inviteRepository,
-			OrganizerRepository organizerRepository,
-			OrganizationRepository organizationRepository) {
-		this.inviteRepository = inviteRepository;
-		this.organizerRepository = organizerRepository;
-		this.organizationRepository = organizationRepository;
-	}
 
 	/**
 	 * Creates an invite and, when an address is given, queues it for async email delivery.

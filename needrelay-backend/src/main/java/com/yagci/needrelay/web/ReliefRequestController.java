@@ -18,6 +18,7 @@ import com.yagci.needrelay.web.dto.ReliefRequestSummaryResponse;
 import com.yagci.needrelay.web.dto.UpdateOfferRequest;
 import com.yagci.needrelay.web.dto.UpdateReliefRequest;
 import com.yagci.needrelay.web.dto.UpsertOrganizerContactRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,25 +45,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/relief-requests")
 @Tag(name = "Relief Requests")
+@AllArgsConstructor
 public class ReliefRequestController {
 
 	private final ReliefRequestService reliefRequestService;
 	private final OfferService offerService;
 	private final OrganizerContactService contactService;
-
-	/**
-	 * @param reliefRequestService relief request service
-	 * @param offerService offer listing
-	 * @param contactService relief-request-specific contact persons
-	 */
-	public ReliefRequestController(
-			ReliefRequestService reliefRequestService,
-			OfferService offerService,
-			OrganizerContactService contactService) {
-		this.reliefRequestService = reliefRequestService;
-		this.offerService = offerService;
-		this.contactService = contactService;
-	}
 
 	/**
 	 * Creates a relief request for the current organizer.

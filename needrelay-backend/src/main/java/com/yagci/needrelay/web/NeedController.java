@@ -6,6 +6,7 @@ import com.yagci.needrelay.service.NeedService;
 import com.yagci.needrelay.web.dto.CreateNeedRequest;
 import com.yagci.needrelay.web.dto.NeedResponse;
 import com.yagci.needrelay.web.dto.UpdateNeedRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,16 +31,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/relief-requests/{requestId}/needs")
 @Tag(name = "Needs")
+@AllArgsConstructor
 public class NeedController {
 
 	private final NeedService needService;
-
-	/**
-	 * @param needService need service
-	 */
-	public NeedController(NeedService needService) {
-		this.needService = needService;
-	}
 
 	/**
 	 * Creates a need under an owned relief request.

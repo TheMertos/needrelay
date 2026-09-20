@@ -12,6 +12,7 @@ import com.yagci.needrelay.web.dto.CreateOrganizationRequest;
 import com.yagci.needrelay.web.dto.OrganizationResponse;
 import com.yagci.needrelay.web.dto.OrganizerResponse;
 import com.yagci.needrelay.web.dto.UpdateOrganizationRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,25 +25,12 @@ import java.util.UUID;
  * Admin account management: list/ban/unban organizers, create/list organizations.
  */
 @Service
+@AllArgsConstructor
 public class AdminOrganizerService {
 
 	private final OrganizerRepository organizerRepository;
 	private final OrganizationRepository organizationRepository;
 	private final RefreshTokenRepository refreshTokenRepository;
-
-	/**
-	 * @param organizerRepository organizers
-	 * @param organizationRepository organizations
-	 * @param refreshTokenRepository session revocation
-	 */
-	public AdminOrganizerService(
-			OrganizerRepository organizerRepository,
-			OrganizationRepository organizationRepository,
-			RefreshTokenRepository refreshTokenRepository) {
-		this.organizerRepository = organizerRepository;
-		this.organizationRepository = organizationRepository;
-		this.refreshTokenRepository = refreshTokenRepository;
-	}
 
 	/**
 	 * Creates a new, empty organization.

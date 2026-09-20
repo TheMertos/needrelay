@@ -1,4 +1,4 @@
-# Production stack (host network).
+# Emergency production stack (host network).
 # Image: themertos/needrelay
 # Docs: DEPLOY.md
 # Usage: cp .env.example .env && docker compose up -d

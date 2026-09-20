@@ -4,6 +4,7 @@ import pg from 'pg';
 const { Client } = pg;
 
 const IDS = {
+  organization: '11111111-1111-1111-1111-111111111100',
   admin: '11111111-1111-1111-1111-111111111101',
   org: '11111111-1111-1111-1111-111111111102',
   contact1: '22222222-2222-2222-2222-222222222201',
@@ -46,12 +47,13 @@ async function wipe(client) {
     'offers',
     'relief_request_comments',
     'needs',
-    'relief_requests',
     'organizer_contacts',
+    'invites',
     'refresh_tokens',
     'password_reset_tokens',
-    'invites',
+    'relief_requests',
     'organizers',
+    'organizations',
   ];
   for (const table of tables) {
     await client.query(`DELETE FROM ${table}`);
@@ -59,7 +61,7 @@ async function wipe(client) {
 }
 
 /**
- * Inserts demo organizers, contacts, requests, needs, and one offer.
+ * Inserts demo organization, accounts, contacts, requests, needs, and one offer.
  *
  * @param {import('pg').Client} client open client
  * @returns {Promise<void>}
@@ -70,25 +72,10 @@ async function seed(client) {
   const orgHash = bcrypt.hashSync('Org1234!', 10);
 
   await client.query(
-    `INSERT INTO organizers (id, email, password_hash, display_name, description, role, active, created_at)
-     VALUES ($1,$2,$3,$4,$5,'ADMIN',true,$6)`,
+    `INSERT INTO organizations (id, name, description, active, created_at)
+     VALUES ($1,$2,$3,true,$4)`,
     [
-      IDS.admin,
-      'admin@needrelay.local',
-      adminHash,
-      'NeedRelay Admin',
-      'Seeded admin account for local development.',
-      now,
-    ],
-  );
-
-  await client.query(
-    `INSERT INTO organizers (id, email, password_hash, display_name, description, role, active, created_at)
-     VALUES ($1,$2,$3,$4,$5,'ORGANIZER',true,$6)`,
-    [
-      IDS.org,
-      'org@needrelay.local',
-      orgHash,
+      IDS.organization,
       'Aleppo Relief Org',
       'Community organizers coordinating water and shelter needs.',
       now,
@@ -96,22 +83,49 @@ async function seed(client) {
   );
 
   await client.query(
+    `INSERT INTO organizers
+      (id, email, password_hash, display_name, role, organization_id, organization_role, active, created_at)
+     VALUES ($1,$2,$3,$4,'ADMIN',NULL,NULL,true,$5)`,
+    [
+      IDS.admin,
+      'admin@needrelay.local',
+      adminHash,
+      'NeedRelay Admin',
+      now,
+    ],
+  );
+
+  await client.query(
+    `INSERT INTO organizers
+      (id, email, password_hash, display_name, role, organization_id, organization_role, active, created_at)
+     VALUES ($1,$2,$3,$4,'ORGANIZER',$5,'ADMIN',true,$6)`,
+    [
+      IDS.org,
+      'org@needrelay.local',
+      orgHash,
+      'Aleppo Relief Org',
+      IDS.organization,
+      now,
+    ],
+  );
+
+  await client.query(
     `INSERT INTO organizer_contacts
-      (id, organizer_id, name, role, phone, email, note, sort_order, created_at)
+      (id, organization_id, relief_request_id, name, role, phone, email, note, sort_order, created_at)
      VALUES
-      ($1,$2,'Sara Khalil','Coordinator','+963-11-0000001','sara@example.local','Primary contact',0,$3),
-      ($4,$2,'Omar Haddad','Logistics','+963-11-0000002','omar@example.local',NULL,1,$3)`,
-    [IDS.contact1, IDS.org, now, IDS.contact2],
+      ($1,$2,NULL,'Sara Khalil','Coordinator','+963-11-0000001','sara@example.local','Primary contact',0,$3),
+      ($4,$2,NULL,'Omar Haddad','Logistics','+963-11-0000002','omar@example.local',NULL,1,$3)`,
+    [IDS.contact1, IDS.organization, now, IDS.contact2],
   );
 
   await client.query(
     `INSERT INTO relief_requests
-      (id, organizer_id, title, description, location_label, latitude, longitude, public_slug, status, created_at, updated_at)
+      (id, organization_id, title, description, location_label, latitude, longitude, public_slug, status, created_at, updated_at)
      VALUES
       ($1,$2,'Aleppo North Camp','Urgent water and shelter.','Aleppo North',36.2021,37.1343,'aleppo-north','ACTIVE',$3,$3),
       ($4,$2,'Damascus Hub','Blankets and food staging.','Damascus Center',33.5138,36.2765,'damascus-hub','ACTIVE',$3,$3),
       ($5,$2,'Old Site (archived)','No longer active.','Homs',34.7268,36.7234,'homs-archived','ARCHIVED',$3,$3)`,
-    [IDS.activeA, IDS.org, now, IDS.activeB, IDS.archived],
+    [IDS.activeA, IDS.organization, now, IDS.activeB, IDS.archived],
   );
 
   await client.query(
@@ -139,8 +153,12 @@ async function seed(client) {
   );
 
   await client.query(
-    `INSERT INTO offers (id, need_id, provider_name, quantity, quantity_received, status, first_name, last_name, phone, email, note, created_at)
-     VALUES ($1,$2,'Local Donor',10,NULL,'PENDING','Local','Donor','+963-11-9999999','donor@example.local','Partial water delivery',$3)`,
+    `INSERT INTO offers
+      (id, need_id, provider_name, quantity, quantity_received, status, provider_type,
+       first_name, last_name, phone, email, note, distance_km, created_at)
+     VALUES
+      ($1,$2,'Local Donor',10,NULL,'PENDING','PERSON','Local','Donor',
+       '+963-11-9999999','donor@example.local','Partial water delivery',NULL,$3)`,
     [IDS.offer, IDS.needOpenA, now],
   );
 }

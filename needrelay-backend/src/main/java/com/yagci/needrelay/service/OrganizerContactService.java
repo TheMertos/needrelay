@@ -8,6 +8,7 @@ import com.yagci.needrelay.repository.OrganizationRepository;
 import com.yagci.needrelay.repository.OrganizerContactRepository;
 import com.yagci.needrelay.web.dto.OrganizerContactResponse;
 import com.yagci.needrelay.web.dto.UpsertOrganizerContactRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import java.util.UUID;
  * CRUD for organizer organization contacts, both organization-wide and relief-request-specific.
  */
 @Service
+@AllArgsConstructor
 public class OrganizerContactService {
 
 	private static final int MAX_CONTACTS = 20;
@@ -27,20 +29,6 @@ public class OrganizerContactService {
 	private final OrganizerContactRepository contactRepository;
 	private final OrganizationRepository organizationRepository;
 	private final ReliefRequestService reliefRequestService;
-
-	/**
-	 * @param contactRepository contact persistence
-	 * @param organizationRepository organization persistence
-	 * @param reliefRequestService relief request ownership lookup
-	 */
-	public OrganizerContactService(
-			OrganizerContactRepository contactRepository,
-			OrganizationRepository organizationRepository,
-			ReliefRequestService reliefRequestService) {
-		this.contactRepository = contactRepository;
-		this.organizationRepository = organizationRepository;
-		this.reliefRequestService = reliefRequestService;
-	}
 
 	/**
 	 * Lists organization-wide contacts for an organization.

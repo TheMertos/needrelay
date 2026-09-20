@@ -5,6 +5,7 @@ import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.InviteService;
 import com.yagci.needrelay.web.dto.CreateInviteRequest;
 import com.yagci.needrelay.web.dto.InviteResponse;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,16 +29,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/invites")
 @Tag(name = "Invites")
+@AllArgsConstructor
 public class InviteController {
 
 	private final InviteService inviteService;
-
-	/**
-	 * @param inviteService invite service
-	 */
-	public InviteController(InviteService inviteService) {
-		this.inviteService = inviteService;
-	}
 
 	/**
 	 * Creates a new invite.

@@ -12,6 +12,7 @@ import com.yagci.needrelay.web.dto.CreateReliefRequest;
 import com.yagci.needrelay.web.dto.ReliefRequestResponse;
 import com.yagci.needrelay.web.dto.ReliefRequestSummaryResponse;
 import com.yagci.needrelay.web.dto.UpdateReliefRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.UUID;
  * Owned relief request CRUD and dashboard summary counts.
  */
 @Service
+@AllArgsConstructor
 public class ReliefRequestService {
 
 	private static final List<NeedStatus> OPEN_STATUSES = List.of(NeedStatus.OPEN, NeedStatus.PARTIALLY_COVERED);
@@ -31,23 +33,6 @@ public class ReliefRequestService {
 	private final OrganizationRepository organizationRepository;
 	private final NeedRepository needRepository;
 	private final SlugService slugService;
-
-	/**
-	 * @param reliefRequestRepository relief requests
-	 * @param organizationRepository organizations
-	 * @param needRepository needs for dashboard counts
-	 * @param slugService unique slug generator
-	 */
-	public ReliefRequestService(
-			ReliefRequestRepository reliefRequestRepository,
-			OrganizationRepository organizationRepository,
-			NeedRepository needRepository,
-			SlugService slugService) {
-		this.reliefRequestRepository = reliefRequestRepository;
-		this.organizationRepository = organizationRepository;
-		this.needRepository = needRepository;
-		this.slugService = slugService;
-	}
 
 	/**
 	 * Creates a relief request owned by the given organization.

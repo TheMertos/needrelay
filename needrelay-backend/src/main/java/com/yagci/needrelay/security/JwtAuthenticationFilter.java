@@ -2,6 +2,7 @@ package com.yagci.needrelay.security;
 
 import com.yagci.needrelay.domain.OrganizationRole;
 import com.yagci.needrelay.domain.OrganizerRole;
+import lombok.AllArgsConstructor;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,16 +22,10 @@ import java.util.UUID;
  * Reads Bearer JWT and populates the security context.
  */
 @Component
+@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtService jwtService;
-
-	/**
-	 * @param jwtService JWT parser
-	 */
-	public JwtAuthenticationFilter(JwtService jwtService) {
-		this.jwtService = jwtService;
-	}
 
 	@Override
 	protected void doFilterInternal(

@@ -17,6 +17,7 @@ import com.yagci.needrelay.web.dto.OfferResponse;
 import com.yagci.needrelay.web.dto.PageResponse;
 import com.yagci.needrelay.web.dto.ReceiveOfferRequest;
 import com.yagci.needrelay.web.dto.UpdateOfferRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ import java.util.UUID;
  * Public offer creation and organizer offer management.
  */
 @Service
+@AllArgsConstructor
 public class OfferService {
 
 	private static final List<OfferStatus> PENDING_STATUSES = List.of(OfferStatus.PENDING, OfferStatus.COMING);
@@ -41,20 +43,6 @@ public class OfferService {
 	private final OfferRepository offerRepository;
 	private final NeedRepository needRepository;
 	private final ReliefRequestService reliefRequestService;
-
-	/**
-	 * @param offerRepository offer persistence
-	 * @param needRepository need locking/persistence
-	 * @param reliefRequestService ownership checks
-	 */
-	public OfferService(
-			OfferRepository offerRepository,
-			NeedRepository needRepository,
-			ReliefRequestService reliefRequestService) {
-		this.offerRepository = offerRepository;
-		this.needRepository = needRepository;
-		this.reliefRequestService = reliefRequestService;
-	}
 
 	/**
 	 * Creates a PENDING public offer (does not change need received totals).

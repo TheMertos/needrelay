@@ -5,6 +5,7 @@ import com.yagci.needrelay.security.SecurityUtils;
 import com.yagci.needrelay.service.AdminOrganizerService;
 import com.yagci.needrelay.web.dto.OrganizerResponse;
 import com.yagci.needrelay.web.dto.UpdateMemberRoleRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,16 +31,10 @@ import java.util.UUID;
 @Tag(name = "admin")
 @SecurityRequirement(name = "bearerAuth")
 @PreAuthorize("hasRole('ADMIN')")
+@AllArgsConstructor
 public class AdminOrganizerController {
 
 	private final AdminOrganizerService adminOrganizerService;
-
-	/**
-	 * @param adminOrganizerService admin service
-	 */
-	public AdminOrganizerController(AdminOrganizerService adminOrganizerService) {
-		this.adminOrganizerService = adminOrganizerService;
-	}
 
 	/**
 	 * Lists all organizer accounts.

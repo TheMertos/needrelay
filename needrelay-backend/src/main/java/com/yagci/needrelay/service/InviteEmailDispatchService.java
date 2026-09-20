@@ -2,6 +2,7 @@ package com.yagci.needrelay.service;
 
 import com.yagci.needrelay.domain.Invite;
 import com.yagci.needrelay.repository.InviteRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * failing email provider never blocks the request that created the invite.
  */
 @Service
+@AllArgsConstructor
 public class InviteEmailDispatchService {
 
 	private static final Logger log = LoggerFactory.getLogger(InviteEmailDispatchService.class);
@@ -22,15 +24,6 @@ public class InviteEmailDispatchService {
 
 	private final InviteRepository inviteRepository;
 	private final EmailService emailService;
-
-	/**
-	 * @param inviteRepository invite persistence
-	 * @param emailService invite email sender
-	 */
-	public InviteEmailDispatchService(InviteRepository inviteRepository, EmailService emailService) {
-		this.inviteRepository = inviteRepository;
-		this.emailService = emailService;
-	}
 
 	/**
 	 * Sends every queued invite email, oldest first. Runs on the scheduler thread, not

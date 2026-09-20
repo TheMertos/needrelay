@@ -16,6 +16,7 @@ import com.yagci.needrelay.web.dto.RegisterRequest;
 import com.yagci.needrelay.web.dto.ResetPasswordRequest;
 import com.yagci.needrelay.web.dto.TokenResponse;
 import com.yagci.needrelay.web.dto.UpdateProfileRequest;
+import lombok.AllArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,25 +38,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "auth")
+@AllArgsConstructor
 public class AuthController {
 
 	private final AuthService authService;
 	private final LoginRateLimiter loginRateLimiter;
 	private final ClientIpResolver clientIpResolver;
-
-	/**
-	 * @param authService authentication service
-	 * @param loginRateLimiter login IP rate limiter
-	 * @param clientIpResolver client IP resolver
-	 */
-	public AuthController(
-			AuthService authService,
-			LoginRateLimiter loginRateLimiter,
-			ClientIpResolver clientIpResolver) {
-		this.authService = authService;
-		this.loginRateLimiter = loginRateLimiter;
-		this.clientIpResolver = clientIpResolver;
-	}
 
 	/**
 	 * Registers a new organizer with an invite token.
