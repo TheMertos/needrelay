@@ -88,7 +88,7 @@ The workflow `.github/workflows/docker-publish.yml` builds the root `Dockerfile`
 
 Repository secrets required:
 
-- `DOCKERHUB_USERNAME` (same value as lv-s3, e.g. `TheMertos`)
+- `DOCKERHUB_USERNAME`
 - `DOCKERHUB_TOKEN` (Docker Hub **access token**, not the account password)
 
 ## Notes
