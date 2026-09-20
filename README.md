@@ -40,7 +40,7 @@ Summary:
 3. Copy `deploy/.env.example` → `deploy/.env` and set `DOMAIN` + secrets.
 4. `cd deploy && docker compose pull && docker compose up -d`
 
-Image: [`ghcr.io/themertos/needrelay`](https://github.com/TheMertos/needrelay/pkgs/container/needrelay) (published by GitHub Actions).
+Image: [`themertos/needrelay`](https://hub.docker.com/r/themertos/needrelay) (published by GitHub Actions).
 
 ## Local development
 
@@ -128,7 +128,7 @@ Publish the next patch version (auto bump from the latest `v*` tag), commit, tag
 .\scripts\release.ps1
 ```
 
-GitHub Actions builds the image and pushes `ghcr.io/themertos/needrelay` (`latest` on `main`, version tags on `v*`) using `GITHUB_TOKEN`. No Docker Hub secrets.
+GitHub Actions builds the image and pushes `${DOCKERHUB_USERNAME}/needrelay` (`latest` on `main`, version tags on `v*`). Set the same repository secrets as lv-s3: `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (Hub access token, not the account password).
 
 ## License
 
