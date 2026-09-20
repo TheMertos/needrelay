@@ -128,7 +128,7 @@ Publish the next patch version (auto bump from the latest `v*` tag), commit, tag
 .\scripts\release.ps1
 ```
 
-GitHub Actions builds the image and pushes `${DOCKERHUB_USERNAME}/needrelay` (`latest` on `main`, version tags on `v*`). Configure repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (Hub access token, not the account password).
+GitHub Actions builds the image and pushes `${DOCKERHUB_USERNAME}/needrelay`. Pushes to `main` update `latest`. A git tag `v0.0.1` also publishes `v0.0.1` and `v0.0`. Configure repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (Hub access token, not the account password).
 
 ## License
 

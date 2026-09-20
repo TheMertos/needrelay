@@ -71,10 +71,11 @@ curl -fsS https://$DOMAIN/actuator/health/liveness
 
 ## 6. Update to a new image
 
-After CI publishes a new `themertos/needrelay` tag or `latest`:
+After CI publishes a new `themertos/needrelay:v0.0.1` (or `latest`):
 
 ```bash
 cd deploy
+# optional: pin in .env  APP_IMAGE_TAG=v0.0.1
 docker compose pull app
 docker compose up -d app
 ```
@@ -84,7 +85,7 @@ docker compose up -d app
 The workflow `.github/workflows/docker-publish.yml` builds the root `Dockerfile` and pushes:
 
 - `themertos/needrelay:latest` on pushes to `main`
-- `themertos/needrelay:<version>` (and `latest`) on tags `v*`
+- `themertos/needrelay:v0.0.1` (and `v0.0`, plus `latest`) on git tags `v0.0.1`
 
 Repository secrets required:
 

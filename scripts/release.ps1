@@ -7,7 +7,7 @@
   Run with no parameters:
     .\scripts\release.ps1
 
-  Finds the latest vMAJOR.MINOR.PATCH tag, bumps PATCH (or starts at v0.1.0),
+  Finds the latest vMAJOR.MINOR.PATCH tag, bumps PATCH (or starts at v0.0.1),
   commits with message "Release vX.Y.Z", creates an annotated tag, and pushes.
 #>
 # Prefer exit-code checks over treating git stderr as terminating errors.
@@ -60,7 +60,7 @@ function Get-NextVersionTag {
 	}
 
 	if ($parsed.Count -eq 0) {
-		return "v0.1.0"
+		return "v0.0.1"
 	}
 
 	$latest = $parsed | Sort-Object Major, Minor, Patch | Select-Object -Last 1
