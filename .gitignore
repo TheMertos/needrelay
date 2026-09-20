@@ -10,3 +10,6 @@
 graphify-out/
 *.iml
 .DS_Store
+docs/superpowers/
+gh-out.txt
+gh-err.txt

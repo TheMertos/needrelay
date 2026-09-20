@@ -1,135 +1,58 @@
 # NeedRelay
 
-Connecting urgent needs with available resources.
+Coordinate urgent needs with people and organizations who can help. Organizers publish requests; the public can discover them and offer support.
 
-**License:** [MIT](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Docker Hub](https://img.shields.io/badge/docker-themertos%2Fneedrelay-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/themertos/needrelay)
 
-## Screenshots
-
-Add images under [`docs/screenshots/`](docs/screenshots/) and embed them here, for example:
-
-```markdown
-![Public discovery map](docs/screenshots/public-map.png)
-![Organizer inbox](docs/screenshots/organizer-inbox.png)
-```
-
-## Structure
-
-| Folder | Role |
-|--------|------|
-| `needrelay-backend/` | Spring Boot API (JWT, Liquibase, OpenAPI) |
-| `needrelay-frontend/` | React + Vite + Mantine (Orval client) |
-| `needrelay-db/` | PostgreSQL Docker stack (local) |
-| `deploy/` | Emergency production stack (Caddy + app image + Postgres, host network) |
-| `scripts/` | Helper scripts (e.g. release) |
-
-## Prerequisites
-
-- Java 25+, Maven Wrapper
-- Node.js 22+
-- Docker
-
-## Emergency production deploy
-
-For a fast VPS bring-up (UFW ports **22 / 80 / 443** only, host networking, `restart: always`), see **[`deploy/DEPLOY.md`](deploy/DEPLOY.md)**.
-
-Summary:
-
-1. Point DNS at the server.
-2. Configure UFW (22, 80, 443).
-3. Copy `deploy/.env.example` → `deploy/.env` and set `DOMAIN` + secrets.
-4. `cd deploy && docker compose pull && docker compose up -d`
-
-Image: [`themertos/needrelay`](https://hub.docker.com/r/themertos/needrelay) (published by GitHub Actions).
-
-## Local development
-
-### Start infrastructure
-
-```bash
-cd needrelay-db && docker compose up -d
-```
-
-Or all-in-one app + Postgres (build locally):
+## Quick start
 
 ```bash
 docker compose up -d --build
 ```
 
-Or run API/UI on the host:
+Open [http://localhost:8080](http://localhost:8080). Bootstrap admin (empty database only): `admin@needrelay.local` / `ChangeMeAdmin123!`
+
+Change the admin password immediately.
+
+## Production
+
+See [`deploy/DEPLOY.md`](deploy/DEPLOY.md). The published image is [`themertos/needrelay`](https://hub.docker.com/r/themertos/needrelay).
+
+## Local development
+
+| Path | Role |
+|------|------|
+| `needrelay-backend/` | Spring Boot 4 API (JWT, Liquibase, OpenAPI) |
+| `needrelay-frontend/` | React, Vite, Mantine |
+| `needrelay-db/` | Local PostgreSQL |
+| `deploy/` | Production Compose (Caddy, app image, Postgres) |
 
 ```bash
-# DB
 cd needrelay-db && docker compose up -d
 
-# API (http://localhost:8080, Swagger at /swagger-ui.html)
-cd needrelay-backend
-cp .env.example .env   # optional
-./mvnw spring-boot:run
-
-# UI (http://localhost:5173)
-cd needrelay-frontend
-cp .env.example .env
-yarn install
-yarn generate:api   # from openapi/openapi.yaml
-yarn dev
+cd needrelay-backend && ./mvnw spring-boot:run   # http://localhost:8080
+cd needrelay-frontend && yarn install && yarn dev  # http://localhost:5173
 ```
 
-Frontend tests:
+Registration is invite-only (`/invites`, then `/register?invite=<token>`). Optional email (invites and password reset) uses `RESEND_API_KEY` and `APP_PUBLIC_BASE_URL`.
 
-```bash
-cd needrelay-frontend
-yarn test          # Vitest unit tests
-yarn test:e2e      # Playwright (optional E2E_PUBLIC_SLUG for public page layout)
-```
-
-Bootstrap admin (created on first start if DB is empty):
-
-- Email: `admin@needrelay.local`
-- Password: `ChangeMeAdmin123!`
-
-Invite-only registration: create invites in the UI (`/invites`) or via `POST /api/invites`, then open `/register?invite=<token>`.
-If the invite includes an email, Resend sends the invite link (requires `RESEND_API_KEY`).
-
-## Email (Resend)
-
-Set in `needrelay-backend/.env`:
-
-- `RESEND_API_KEY` — Resend API key
-- `RESEND_FROM_EMAIL` — verified sender (default Resend onboarding address for tests)
-- `APP_PUBLIC_BASE_URL` — frontend origin used in email links (e.g. `http://localhost:5173`)
-
-Without `RESEND_API_KEY`, invite/reset emails are skipped (logged), but password-reset tokens are still created.
-
-## Account management
-
-- `/account` — update display name, change password
-- `/forgot-password` + `/reset-password` — password reset via email
-- `/admin/organizers` — ADMIN only: ban / unban organizers
-
-## OpenAPI → frontend client
-
-1. Keep `needrelay-frontend/openapi/openapi.yaml` in sync with the backend (or export from `/v3/api-docs`).
-2. Regenerate: `yarn generate:api` in `needrelay-frontend`.
-
-## Tests
+Regenerate the TypeScript API client after OpenAPI changes: `yarn generate:api` in `needrelay-frontend`.
 
 ```bash
 cd needrelay-backend && ./mvnw test
+cd needrelay-frontend && yarn test
 ```
 
-Uses in-memory H2 (PostgreSQL mode). Production schema is applied by Liquibase against PostgreSQL.
+## Releases
 
-## Releasing
+`.\scripts\release.ps1` creates the next `vMAJOR.MINOR.PATCH` git tag (first tag: `v0.0.1`) and pushes it. GitHub Actions publishes:
 
-Publish the next patch version (auto bump from the latest `v*` tag), commit, tag, and push:
+- `themertos/needrelay:latest` on `main`
+- `themertos/needrelay:vX.Y.Z` and `vX.Y` on version tags
 
-```powershell
-.\scripts\release.ps1
-```
-
-GitHub Actions builds the image and pushes `${DOCKERHUB_USERNAME}/needrelay`. Pushes to `main` update `latest`. A git tag `v0.0.1` also publishes `v0.0.1` and `v0.0`. Configure repository secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (Hub access token, not the account password).
+Repository secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN` (Docker Hub access token).
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+[MIT](LICENSE)
